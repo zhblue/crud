@@ -9,7 +9,27 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-
+	public static String toSelect(String tbname){
+		StringBuffer ret=new StringBuffer();
+		String nameFD=JspGenerator.getFirstCharFieldName(tbname);
+		String sql="select id,"+nameFD+" from `"+tbname+"`";
+		List<List> data=DAO.queryList(sql,false);
+		ret.append("<select");
+		ret.append(" name='");
+		ret.append(tbname);
+		ret.append("'>");
+		
+		for(List row:data){
+			ret.append("<option value='");
+			ret.append(row.get(0));
+			ret.append("'>");
+			ret.append(row.get(1));
+			ret.append("</option>");
+		}
+		ret.append("</select>");
+		return ret.toString();
+		
+	}
 	public static String toHTML(String text) {
 		return StringEscapeUtils.escapeHtml4(text);
 	}

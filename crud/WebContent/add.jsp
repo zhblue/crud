@@ -11,6 +11,7 @@
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
 		if (tbname != null) {
+			tbname=tbname.replace("`", "");
 			Enumeration<String> names=request.getParameterNames();
 			Map <String,String>values=new HashMap<String,String>();
 			while(names.hasMoreElements()){

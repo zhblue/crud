@@ -4,17 +4,19 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Del</title>
+<title>Select</title>
 </head>
 <body>
 	<%
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
+	
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
-			String id=request.getParameter("id");
-			DAO.update("delete from `"+tbname+"` where id=?", id);
-		}
-		%>
+			out.println(Tools.toSelect(tbname));
+		} 
+		
+	%>
+	
 </body>
 </html>

@@ -117,7 +117,11 @@ public class DAO {
 	}
 
 	public static String translate(String value) {
+		value=value.replace("'", "\\'");
 		String ret = value;
+		if(value.endsWith("_id")) {
+			value=value.substring(0,value.length()-3);
+		}
 		ret = queryString("select name from datadic where field=?", value);
 		if (ret == null) {
 			return value;
@@ -127,14 +131,14 @@ public class DAO {
 	}
 
 	public static List<List> getList(String tbname) {
-		tbname = tbname.replace("'", "\\'");
+		tbname = tbname.replace("`", "");
 		String sql = "select * from `" + tbname + "`";
 		sql = JspGenerator.getJoinTableSQL(tbname, true);
 		return queryList(sql, true);
 
 	}
 
-	private static List<List> queryList(String sql, boolean title,
+	public static List<List> queryList(String sql, boolean title,
 			String... values) {
 		// TODO Auto-generated method stub
 		Connection conn = DB.getConnection();

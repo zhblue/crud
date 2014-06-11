@@ -6,8 +6,8 @@
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Home</title>
 <link rel=stylesheet href='bs/css/bootstrap.min.css' type='text/css'>
-<script src="bs/js/bootstrap.js"></script>
 <script src="jq/jquery.min.js"></script>
+<script src="bs/js/bootstrap.js"></script>
 </head>
 <body>
 
@@ -59,7 +59,17 @@
 			del(dbid(evt));
 		});
 	}
-	
+	function loadSelect(input){
+		var input_name=input.attr("name");
+		var tbname=input_name.substring(0,input_name.length-3);
+		input.parent().load("select.jsp?tbname="+tbname);
+		
+	}
+	function showSelect(){
+		$("input[name$=_id]").each(function(){
+			loadSelect($(this));
+		});
+	}
 	function mainLoad(tbname){
 		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){
 			
@@ -67,7 +77,7 @@
 				addButton($("#main"));
 				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'></span>");
 				$("#addrow").click(function(){
-					$("#main").load("add.jsp",{tb:tbname});
+					$("#main").load("add.jsp",{tb:tbname},showSelect);
 				});
 			}
 		});

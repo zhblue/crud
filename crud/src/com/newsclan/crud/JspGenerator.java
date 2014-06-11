@@ -93,7 +93,7 @@ public class JspGenerator {
 		return ret;
 	}
 
-	private static String getFirstCharFieldName(String tbname) {
+	public static String getFirstCharFieldName(String tbname) {
 		// TODO Auto-generated method stub
 		String ret = "name";
 		Connection conn = DB.getConnection();
