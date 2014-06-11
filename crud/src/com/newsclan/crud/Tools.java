@@ -22,7 +22,9 @@ public class Tools {
 		}
 		ret.append("'>");
 		boolean title = true;
+		
 		for (List row : list) {
+			boolean dbid=true;
 			if (title) {
 				ret.append("<thead>");
 			} 
@@ -31,7 +33,14 @@ public class Tools {
 				if (title) {
 					ret.append("<th>");
 				} else {
-					ret.append("<td>");
+					ret.append("<td");
+					if(dbid){
+						ret.append(" class='dbid'");
+						dbid=false;
+					}else{
+						ret.append(" class='dbdata'");
+					}
+					ret.append(">");
 				}
 				ret.append(String.valueOf(object));
 				if (title) {

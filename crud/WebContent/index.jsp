@@ -39,10 +39,37 @@
 	
 </body>
 <script>
+	function dbid(evt){
+		var data=$(evt.target).parent().parent().find(":first-child");
+		return (data.text());
+	}
+	function del(rowid){
+		var ans=confirm('确定删除编号'+rowid);
+		if(ans){
+			alert('未实现!');
+		}
+	}
+	function addButton(main){
+		//$("#main tr :last-child").css("background","#eeeeee");
+		$("#main tr :last-child").after("<td><span id='delButton' class='glyphicon glyphicon-trash' /></td>");
+		$(".glyphicon").bind("click",function(evt){
+			del(dbid(evt));
+		});
+	}
 	function mainLoad(tbname){
-		$("#main").load("list.jsp?tb="+tbname);
+		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){
+			
+			if(status=="success"){
+				addButton($("#main"));
+				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'></span>");
+				$("#addrow").click(function(){
+					$("#main").load("add.jsp",{tb:tbname});
+				});
+			}
+		});
 		
 	}
+	
 
 </script>
 </html>

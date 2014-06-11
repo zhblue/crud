@@ -10,6 +10,67 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class DAO {
+	public static Field[] getFieldsOfTable(String tbname) {
+		List<Field> ret = new LinkedList<Field>();
+		Connection conn = DB.getConnection();
+		ResultSet rs = null;
+		try {
+			rs = conn.getMetaData().getColumns(null, null, tbname, null);
+			while (rs.next()) {
+				Field fd = new Field();
+				fd.name = rs.getString("COLUMN_NAME");
+				fd.type = rs.getInt("DATA_TYPE");
+				fd.label = translate(fd.name);
+				fd.table = rs.getString("TABLE_NAME");
+				ret.add(fd);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DB.close(rs);
+		DB.close(conn);
+		return ret.toArray(new Field[0]);
+	}
+
+	public static List<List> getForm(String tbname, boolean edit) {
+		List<List> ret = new LinkedList<List>();
+		List title=new LinkedList();
+		title.add("Ãû³Æ");
+		title.add("Öµ");
+		
+		ret.add(title);
+		
+		Field[] fds = getFieldsOfTable(tbname);
+		for (Field field : fds) {
+			if (!edit && "id".equals(field.name))
+				continue;
+			List row = new LinkedList();
+			row.add(field.label);
+			row.add(getInputForm(field));
+			ret.add(row);
+		}
+		return ret;
+
+	}
+
+	private static String getInputForm(Field field) {
+		// TODO Auto-generated method stub
+		StringBuffer ret = new StringBuffer();
+		ret.append("<input name='");
+		ret.append(field.name);
+		ret.append("' ");
+		ret.append("type='");
+		ret.append(getFormType(field.type));
+		ret.append("'>");
+		return ret.toString();
+	}
+
+	private static String getFormType(int type) {
+		// TODO Auto-generated method stub
+		return "text";
+	}
+
 	public static List<String> getTables() {
 		List<String> ret = new LinkedList<String>();
 		Connection conn = DB.getConnection();

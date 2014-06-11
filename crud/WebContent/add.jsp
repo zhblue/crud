@@ -4,10 +4,15 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>List</title>
-</head> 
+<title>Add</title>
+</head>
 <body>
-<span id='tbname'><%=Tools.toHTML(DAO.translate(request.getParameter("tb"))) %></span>
-<%=Tools.toTable(DAO.getList(request.getParameter("tb")),"table table-striped table-hover") %>
+<%
+	String tbname=request.getParameter("tb");
+	tbname=tbname.replace("'", "");
+	
+
+%>
+<%=Tools.toTable(DAO.getForm(tbname,false),"table table-striped table-hover") %>
 </body>
-</html>
+</html> 

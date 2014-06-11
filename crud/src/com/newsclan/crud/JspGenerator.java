@@ -24,12 +24,12 @@ public class JspGenerator {
 		// TODO Auto-generated method stub
 		args = "users,news".split(",");
 		Connection conn = DB.getConnection();
-		Statement stmt=null;
+		Statement stmt = null;
 		Vector<String> v = new Vector<String>();
-		ResultSet rs=null;
+		ResultSet rs = null;
 		try {
 			stmt = conn.createStatement();
-			 rs = stmt.executeQuery("show tables");
+			rs = stmt.executeQuery("show tables");
 			while (rs.next()) {
 				v.add(rs.getString(1));
 			}
@@ -67,7 +67,7 @@ public class JspGenerator {
 		return Tools.shortString(s, len);
 	}
 
-	public static String getJoinTableSQL(String tbname,boolean ... withoutID) {
+	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
 		String ret = "select ";
@@ -76,8 +76,9 @@ public class JspGenerator {
 		for (int i = 1; i < fds.length; i++) {
 			if (fds[i].name.endsWith("_id")) {
 				String join = fds[i].name.split("_")[0];
-				fields += "," + join + "."+getFirstCharFieldName(join)+" as `" + join + "`";
-				if(withoutID.length==0||!withoutID[0]){
+				fields += "," + join + "." + getFirstCharFieldName(join)
+						+ " as `" + join + "`";
+				if (withoutID.length == 0 || !withoutID[0]) {
 					fields += "," + join + ".id as `" + fds[i].name + "_value`";
 				}
 				tables += " left join " + join + " on " + tbname + "."
@@ -94,14 +95,15 @@ public class JspGenerator {
 
 	private static String getFirstCharFieldName(String tbname) {
 		// TODO Auto-generated method stub
-		String ret="name";
-		Connection conn=DB.getConnection();
-		ResultSetMetaData rsmd = getRecordSetMetaDataOfSQL("select * from `"+tbname+"`", conn);
+		String ret = "name";
+		Connection conn = DB.getConnection();
+		ResultSetMetaData rsmd = getRecordSetMetaDataOfSQL("select * from `"
+				+ tbname + "`", conn);
 		try {
-			for(int i=1;i<=rsmd.getColumnCount();i++){
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				int type = rsmd.getColumnType(i);
-				if(DB.isChar(type)){
-					ret=rsmd.getColumnName(i);
+				if (DB.isChar(type)) {
+					ret = rsmd.getColumnName(i);
 					break;
 				}
 			}
@@ -110,7 +112,7 @@ public class JspGenerator {
 			e.printStackTrace();
 		}
 		DB.close(conn);
-		
+
 		return ret;
 	}
 
@@ -365,17 +367,21 @@ public class JspGenerator {
 	}
 
 	private static boolean isFieldNumber(Field f) {
-		if (f.type.toLowerCase().indexOf("int") != -1) {
+		switch (f.type) {
+		case Types.BIGINT:
+		case Types.DECIMAL:
+		case Types.DOUBLE:
+		case Types.FLOAT:
+		case Types.INTEGER:
+		case Types.NUMERIC:
+		case Types.REAL:
+		case Types.SMALLINT:
+		case Types.TINYINT:
 			return true;
-		} else if (f.type.toLowerCase().indexOf("decimal") != -1) {
-			return true;
-		} else if (f.type.toLowerCase().indexOf("float") != -1) {
-			return true;
-		}
-		{
-			// debug(f.type);
+		default:
 			return false;
 		}
+
 	}
 
 	private static void debug(String msg) {
@@ -402,7 +408,7 @@ public class JspGenerator {
 		ret.append("sql+=\" where \";");
 
 		for (int i = 1; i < fs.length; i++) {
-			if (fs[i].type.contains("date") || fs[i].type.contains("time"))
+			if (isFieldDate(fs[i]))
 				continue;
 			ret.append("sql+=\" ");
 
@@ -661,9 +667,15 @@ public class JspGenerator {
 		return ret.toString();
 	}
 
-	private static boolean isFieldDate(Field field) {
-
-		return field.type.toUpperCase().startsWith("DATE");
+	private static boolean isFieldDate(Field f) {
+		switch (f.type) {
+		case Types.DATE:
+		case Types.TIME:
+		case Types.TIMESTAMP:
+			return true;
+		default:
+			return false;
+		}
 	}
 
 	private static String getStringCode(Field[] fs) {
@@ -759,7 +771,7 @@ public class JspGenerator {
 			for (int i = 0; i < c; i++) {
 				f[i] = new Field();
 				f[i].name = rsmd.getColumnName(i + 1);
-				f[i].type = rsmd.getColumnTypeName(i + 1);
+				f[i].type = rsmd.getColumnType(i + 1);
 				f[i].label = getDataDict(rsmd.getColumnLabel(i + 1));
 				f[i].table = rsmd.getTableName(i + 1);
 				// System.out.println(f[i].type);
