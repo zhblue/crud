@@ -17,7 +17,7 @@ public class Tools {
 		ret.append("<select");
 		ret.append(" name='");
 		ret.append(tbname);
-		ret.append("'>");
+		ret.append("_id'>");
 		
 		for(List row:data){
 			ret.append("<option value='");

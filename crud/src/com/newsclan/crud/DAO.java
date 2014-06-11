@@ -21,7 +21,13 @@ public class DAO {
 		for (Field field : fds) {
 			if ("id".equals(field.name))
 				continue;
-			data.add(values.get(field.name));
+			String d=values.get(field.name);
+			if(JspGenerator.isFieldNumber(field)){
+				if("".equals(d)){
+					d="0";
+				}
+			}
+			data.add(d);
 			sql.append(field.name);
 			sql.append(",");
 			value.append("?,");
