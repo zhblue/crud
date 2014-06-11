@@ -366,7 +366,7 @@ public class JspGenerator {
 		return sql.toString();
 	}
 
-	private static boolean isFieldNumber(Field f) {
+	public static boolean isFieldNumber(Field f) {
 		switch (f.type) {
 		case Types.BIGINT:
 		case Types.DECIMAL:

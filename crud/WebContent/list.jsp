@@ -7,7 +7,8 @@
 <title>List</title>
 </head> 
 <body>
-<span id='tbname'><%=Tools.toHTML(DAO.translate(request.getParameter("tb"))) %></span>
+<input id='tbname' type=hidden value='<%=Tools.toHTML(request.getParameter("tb")) %>' >
+<%=Tools.toHTML(DAO.translate(request.getParameter("tb"))) %>
 <%=Tools.toTable(DAO.getList(request.getParameter("tb")),"table table-striped table-hover") %>
 </body>
 </html>

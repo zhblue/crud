@@ -16,7 +16,7 @@ public class Tools {
 
 	public static String toTable(List<List> list, String... css) {
 		StringBuffer ret = new StringBuffer();
-		ret.append("<table class='");
+		ret.append("<table id='dataForm' class='");
 		for (String css1 : css) {
 			ret.append(css1);
 		}

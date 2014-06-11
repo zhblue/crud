@@ -45,8 +45,11 @@
 	}
 	function del(rowid){
 		var ans=confirm('确定删除编号'+rowid);
+		var tbname=$("#tbname").val();
 		if(ans){
-			alert('未实现!');
+			$.post("del.jsp",{"tbname":tbname,"id":rowid},new function(){
+				 mainLoad(tbname);
+			});
 		}
 	}
 	function addButton(main){
@@ -56,6 +59,7 @@
 			del(dbid(evt));
 		});
 	}
+	
 	function mainLoad(tbname){
 		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){
 			
@@ -68,6 +72,12 @@
 			}
 		});
 		
+	}
+	function submitAdd(tbname){
+		var data=$("#addForm").serialize();
+		$.post("add.jsp",data,new function(){
+			 mainLoad(tbname);
+		});
 	}
 	
 

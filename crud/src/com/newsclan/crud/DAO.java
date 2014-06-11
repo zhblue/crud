@@ -6,10 +6,35 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
+import java.util.Enumeration;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class DAO {
+	public static int insert(String tbname, Map<String, String> values) {
+		Field[] fds = getFieldsOfTable(tbname);
+		StringBuffer sql = new StringBuffer("insert into " + tbname + "(");
+		StringBuffer value = new StringBuffer(" values(");
+		
+		List<String> data = new LinkedList();
+		for (Field field : fds) {
+			if ("id".equals(field.name))
+				continue;
+			data.add(values.get(field.name));
+			sql.append(field.name);
+			sql.append(",");
+			value.append("?,");
+		}
+		sql.deleteCharAt(sql.length() - 1);
+		value.deleteCharAt(value.length() - 1);
+		sql.append(") ");
+		sql.append(value);
+		sql.append(") ");
+		return update(sql.toString(), data.toArray());
+
+	}
+
 	public static Field[] getFieldsOfTable(String tbname) {
 		List<Field> ret = new LinkedList<Field>();
 		Connection conn = DB.getConnection();
@@ -35,12 +60,12 @@ public class DAO {
 
 	public static List<List> getForm(String tbname, boolean edit) {
 		List<List> ret = new LinkedList<List>();
-		List title=new LinkedList();
+		List title = new LinkedList();
 		title.add("Ãû³Æ");
 		title.add("Öµ");
-		
+
 		ret.add(title);
-		
+
 		Field[] fds = getFieldsOfTable(tbname);
 		for (Field field : fds) {
 			if (!edit && "id".equals(field.name))
@@ -161,5 +186,27 @@ public class DAO {
 			}
 		}
 		return null;
+	}
+
+	public static int update(String sql, Object... values) {
+		int ret = 0;
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			int i = 1;
+			for (Object object : values) {
+				pstmt.setObject(i++, object);
+			}
+			ret = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB.close(pstmt);
+		}
+
+		DB.close(conn);
+		return ret;
 	}
 }
