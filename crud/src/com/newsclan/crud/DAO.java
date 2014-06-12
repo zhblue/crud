@@ -14,7 +14,7 @@ import java.util.*;
 public class DAO {
 	public static int insert(String tbname, Map<String, String> values) {
 		Field[] fds = getFieldsOfTable(tbname);
-		StringBuffer sql = new StringBuffer("insert into " + tbname + "(");
+		StringBuffer sql = new StringBuffer("insert into `" + tbname + "`(");
 		StringBuffer value = new StringBuffer(" values(");
 		
 		List<String> data = new LinkedList();
@@ -37,6 +37,32 @@ public class DAO {
 		sql.append(") ");
 		sql.append(value);
 		sql.append(") ");
+		return update(sql.toString(), data.toArray());
+
+	}
+	public static int update(String tbname,int id, Map<String, String> values) {
+		Field[] fds = getFieldsOfTable(tbname);
+		StringBuffer sql = new StringBuffer("update  `" + tbname + "` set ");
+		
+		List<String> data = new LinkedList();
+		for (Field field : fds) {
+			if ("id".equals(field.name))
+				continue;
+			sql.append(field.name);
+			sql.append("=?,");
+			
+			String d=values.get(field.name);
+			if(JspGenerator.isFieldNumber(field)){
+				if("".equals(d)){
+					d="0";
+				}
+			}
+			data.add(d);
+			
+		}
+		sql.deleteCharAt(sql.length() - 1);
+		sql.append(" where id=?");
+		data.add(String .valueOf(id));
 		return update(sql.toString(), data.toArray());
 
 	}
@@ -64,7 +90,7 @@ public class DAO {
 		return ret.toArray(new Field[0]);
 	}
 
-	public static List<List> getForm(String tbname, boolean edit) {
+	public static List<List> getForm(String tbname, boolean edit,List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
 		title.add("Ãû³Æ");
@@ -73,25 +99,32 @@ public class DAO {
 		ret.add(title);
 
 		Field[] fds = getFieldsOfTable(tbname);
+		int i=0;
 		for (Field field : fds) {
 			if (!edit && "id".equals(field.name))
 				continue;
 			List row = new LinkedList();
 			row.add(field.label);
-			row.add(getInputForm(field));
+			if(values.length>0){
+				row.add(getInputForm(field,values[0].get(i++)));
+			}else{
+				row.add(getInputForm(field));
+			}
 			ret.add(row);
 		}
 		return ret;
 
 	}
 
-	private static String getInputForm(Field field) {
+	private static String getInputForm(Field field,String... value) {
 		// TODO Auto-generated method stub
 		StringBuffer ret = new StringBuffer();
 		ret.append("<input name='");
 		ret.append(field.name);
 		ret.append("' ");
-		ret.append("type='");
+		ret.append("value='");
+		if(value.length>0)ret.append(Tools.toHTML(value[0]));
+		ret.append("' type='");
 		ret.append(getFormType(field.type));
 		ret.append("'>");
 		return ret.toString();

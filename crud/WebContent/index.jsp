@@ -43,6 +43,10 @@
 		var data=$(evt.target).parent().parent().find(":first-child");
 		return (data.text());
 	}
+	function edit(rowid){
+		var tbname=$("#tbname").val();
+		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},showSelect);
+	}
 	function del(rowid){
 		var ans=confirm('确定删除编号'+rowid);
 		var tbname=$("#tbname").val();
@@ -54,10 +58,15 @@
 	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr :last-child").after("<td><span id='delButton' class='glyphicon glyphicon-trash' /></td>");
-		$(".glyphicon").bind("click",function(evt){
+		$("#main tr :last-child").after("<td><span id='delButton' class='glyphicon glyphicon-edit' />"
+										+"<span id='delButton' class='glyphicon glyphicon-trash' /></td>");
+		$(".glyphicon-trash").bind("click",function(evt){
 			del(dbid(evt));
 		});
+		$(".glyphicon-edit").bind("click",function(evt){
+			edit(dbid(evt));
+		});
+		
 	}
 	function loadSelect(input){
 		var input_name=input.attr("name");

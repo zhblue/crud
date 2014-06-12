@@ -10,18 +10,34 @@
 	<%
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
-		if (tbname != null) {
-			tbname=tbname.replace("`", "");
-			Enumeration<String> names=request.getParameterNames();
-			Map <String,String>values=new HashMap<String,String>();
-			while(names.hasMoreElements()){
-				String name=names.nextElement();
-				values.put(name,request.getParameter(name));
+		String sid = request.getParameter("id");
+		int id = -1;
+		if (sid != null) {
+			try {
+				id = Integer.parseInt(sid);
+			} catch (Exception e) {
 			}
-			if(DAO.insert(tbname,values)>0)
-				response.sendRedirect("list.jsp?tb="+tbname); 
-			else
-				out.println("fail");
+		}
+		if (tbname != null) {
+			tbname = tbname.replace("`", "");
+
+			Enumeration<String> names = request.getParameterNames();
+			Map<String, String> values = new HashMap<String, String>();
+			while (names.hasMoreElements()) {
+				String name = names.nextElement();
+				values.put(name, request.getParameter(name));
+			}
+			if (sid != null && id != -1) {
+				if (DAO.update(tbname, id, values) > 0)
+					response.sendRedirect("list.jsp?tb=" + tbname);
+				else
+					out.println("fail");
+			} else {
+				if (DAO.insert(tbname, values) > 0)
+					response.sendRedirect("list.jsp?tb=" + tbname);
+				else
+					out.println("fail");
+			}
 		}
 		tbname = request.getParameter("tb");
 		if (tbname == null)
@@ -30,12 +46,31 @@
 		tbname = Tools.toHTML(tbname);
 	%>
 	<form id=addForm action=add.jsp method=post>
+
 		<input type=hidden name=tbname value="<%=tbname%>">
+		<%
+			if (id == -1) {
+		%>
 		<%=Tools.toTable(DAO.getForm(tbname, false),
-					"table table-striped table-hover")%>
+						"table table-striped table-hover")%>
+		<%
+			} else {
+				List<List> values=DAO.queryList("select * from `"+tbname+"` where id=?", false, String.valueOf(id));
+				List<String> value=null;
+				if(values.size()>0){
+					value=values.get(0);
+					value.remove(0);
+				}
+				
+		%><input type=hidden name=id value="<%=id%>">
+		<%=Tools.toTable(DAO.getForm(tbname, false,value),
+						"table table-striped table-hover")%>
+		<%
+ 			}
+		%>
 		<input id='buttonOK' class="btn" onclick="submitAdd('<%=tbname%>');"
 			type=button value="确定">
 	</form>
-	
+
 </body>
 </html>
