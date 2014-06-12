@@ -70,8 +70,10 @@
 	}
 	function loadSelect(input){
 		var input_name=input.attr("name");
+		var default_value=input.val();
 		var tbname=input_name.substring(0,input_name.length-3);
-		input.parent().load("select.jsp?tbname="+tbname);
+		var td=input.parent();
+		td.load("select.jsp?tbname="+tbname+"&value="+default_value);
 		
 	}
 	function showSelect(){

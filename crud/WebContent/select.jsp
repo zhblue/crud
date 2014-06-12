@@ -10,10 +10,10 @@
 	<%
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
-	
+		String value=request.getParameter("value");
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
-			out.println(Tools.toSelect(tbname));
+			out.println(Tools.toSelect(tbname,value)); 
 		} 
 		
 	%>

@@ -9,7 +9,7 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-	public static String toSelect(String tbname){
+	public static String toSelect(String tbname,String value){
 		StringBuffer ret=new StringBuffer();
 		String nameFD=JspGenerator.getFirstCharFieldName(tbname);
 		String sql="select id,"+nameFD+" from `"+tbname+"`";
@@ -22,7 +22,10 @@ public class Tools {
 		for(List row:data){
 			ret.append("<option value='");
 			ret.append(row.get(0));
-			ret.append("'>");
+			ret.append("'");
+			if(String.valueOf(row.get(0)).equals(value))
+				ret.append(" selected");
+			ret.append(">");
 			ret.append(row.get(1));
 			ret.append("</option>");
 		}
