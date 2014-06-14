@@ -58,8 +58,8 @@
 	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr :last-child").after("<td><a href='' id='delButton' class='glyphicon glyphicon-edit' />"
-										+"<a href='' id='delButton' class='glyphicon glyphicon-trash' /></td>");
+		$("#main tr :last-child").after("<td><a href='' id='delButton' class='glyphicon glyphicon-edit' ></a>"
+										+"<a href='' id='delButton' class='glyphicon glyphicon-trash' ></a></td>");
 		$(".glyphicon-trash").bind("click",function(evt){
 			del(dbid(evt));
 		});
@@ -86,7 +86,7 @@
 			
 			if(status=="success"){
 				addButton($("#main"));
-				$("#tbname").after("<a href='' id='addrow' class='glyphicon glyphicon-plus'></a>");
+				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'><a href=''></a></span>");
 				$("#addrow").click(function(){
 					$("#main").load("add.jsp",{tb:tbname},showSelect);
 				});
