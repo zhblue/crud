@@ -2695,6 +2695,7 @@ input[type="button"].btn-block {
   font-weight: normal;
   line-height: 1;
   -moz-osx-font-smoothing: grayscale;
+  cursor:pointer;
 }
 
 .glyphicon:empty {

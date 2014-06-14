@@ -29,6 +29,7 @@ public class Config implements ServletContextListener{
 		try {
 			Tools.log("loading..."+path);
 			prop.load(new FileInputStream(path));
+			DB.pool="true".equalsIgnoreCase(prop.getProperty("db.pool"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

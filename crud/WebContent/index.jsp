@@ -5,7 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Home</title>
-<link rel=stylesheet href='bs/css/bootstrap.min.css' type='text/css'>
+<link rel=stylesheet href='bs/css/bootstrap.css' type='text/css'>
 <script src="jq/jquery.min.js"></script>
 <script src="bs/js/bootstrap.js"></script>
 </head>
@@ -14,12 +14,11 @@
 
 <nav class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
-  <div class="navbar-header">
-    <a class="navbar-brand" href="#"><%=Config.get("system.name") %></a>
-  </div>
+  
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="collapse navbar-collapse" >
     <ul class="nav navbar-nav navbar-left">
+    <li >  <a class="navbar-brand" href="#"><%=Config.get("system.name") %></a></li>
       <%
       	List<String> tables=com.newsclan.crud.DAO.getTables();
 		Iterator<String> it=tables.iterator();
@@ -58,14 +57,15 @@
 	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr :last-child").after("<td><a href='' id='delButton' class='glyphicon glyphicon-edit' ></a>"
-										+"<a href='' id='delButton' class='glyphicon glyphicon-trash' ></a></td>");
+		$("#main tr :last-child").after("<td><span id='delButton' class='glyphicon glyphicon-edit'></span>"
+										+"<span id='delButton' class='glyphicon glyphicon-trash' ></span></td>");
 		$(".glyphicon-trash").bind("click",function(evt){
 			del(dbid(evt));
 		});
 		$(".glyphicon-edit").bind("click",function(evt){
 			edit(dbid(evt));
 		});
+		
 		
 	}
 	function loadSelect(input){
@@ -86,7 +86,7 @@
 			
 			if(status=="success"){
 				addButton($("#main"));
-				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'><a href=''></a></span>");
+				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'></span>");
 				$("#addrow").click(function(){
 					$("#main").load("add.jsp",{tb:tbname},showSelect);
 				});
