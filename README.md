@@ -19,7 +19,7 @@ datadic表用于翻译英文表名列名到中文,建表语句在db.sql。
 
 数据库配置文件在WEB-INF/db.prop
 
-(https://github.com/zhblue/crud/blob/master/crud/crud.png)
+![image](https://github.com/zhblue/crud/blob/master/crud/crud.png)
 
 
 
