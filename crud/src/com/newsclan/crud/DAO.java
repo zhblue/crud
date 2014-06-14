@@ -6,9 +6,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
-import java.util.Enumeration;
-import java.util.Iterator;
-import java.util.LinkedList;
+import java.sql.Statement;
+import java.sql.Types;
 import java.util.*;
 
 public class DAO {
@@ -22,7 +21,7 @@ public class DAO {
 			if ("id".equals(field.name))
 				continue;
 			String d=values.get(field.name);
-			if(JspGenerator.isFieldNumber(field)){
+			if(DAO.isFieldNumber(field)){
 				if("".equals(d)){
 					d="0";
 				}
@@ -52,7 +51,7 @@ public class DAO {
 			sql.append("=?,");
 			
 			String d=values.get(field.name);
-			if(JspGenerator.isFieldNumber(field)){
+			if(DAO.isFieldNumber(field)){
 				if("".equals(d)){
 					d="0";
 				}
@@ -116,7 +115,7 @@ public class DAO {
 
 	}
 
-	private static String getInputForm(Field field,String... value) {
+	public static String getInputForm(Field field,String... value) {
 		// TODO Auto-generated method stub
 		StringBuffer ret = new StringBuffer();
 		ret.append("<input name='");
@@ -130,7 +129,7 @@ public class DAO {
 		return ret.toString();
 	}
 
-	private static String getFormType(int type) {
+	public static String getFormType(int type) {
 		// TODO Auto-generated method stub
 		return "text";
 	}
@@ -172,7 +171,7 @@ public class DAO {
 	public static List<List> getList(String tbname) {
 		tbname = tbname.replace("`", "");
 		String sql = "select * from `" + tbname + "`";
-		sql = JspGenerator.getJoinTableSQL(tbname, true);
+		sql = DAO.getJoinTableSQL(tbname, true);
 		return queryList(sql, true);
 
 	}
@@ -220,7 +219,7 @@ public class DAO {
 		return ret;
 	}
 
-	private static String queryString(String sql, String... values) {
+	public static String queryString(String sql, String... values) {
 		List<List> ll = queryList(sql, false, values);
 		if (ll != null && ll.size() > 0) {
 			List l = ll.get(0);
@@ -250,6 +249,124 @@ public class DAO {
 		}
 
 		DB.close(conn);
+		return ret;
+	}
+	public static Field[] getFields(String sql) {
+		Connection conn = DB.getConnection();
+		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL(sql, conn);
+	
+		Field[] f = null;
+		try {
+			int c = rsmd.getColumnCount();
+			f = new Field[c];
+			for (int i = 0; i < c; i++) {
+				f[i] = new Field();
+				f[i].name = rsmd.getColumnName(i + 1);
+				f[i].type = rsmd.getColumnType(i + 1);
+				f[i].label = translate(rsmd.getColumnLabel(i + 1));
+				f[i].table = rsmd.getTableName(i + 1);
+				// System.out.println(f[i].type);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB.close(conn);
+		}
+		return f;
+	}
+	public static String getFirstCharFieldName(String tbname) {
+		// TODO Auto-generated method stub
+		String ret = "name";
+		Connection conn = DB.getConnection();
+		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL("select * from `"
+				+ tbname + "`", conn);
+		try {
+			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+				int type = rsmd.getColumnType(i);
+				if (DB.isChar(type)) {
+					ret = rsmd.getColumnName(i);
+					break;
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DB.close(conn);
+	
+		return ret;
+	}
+	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
+		// TODO Auto-generated method stub
+		Field[] fds = getFields("select * from " + tbname);
+		String ret = "select ";
+		String fields = tbname + ".id as id";
+		String tables = tbname;
+		for (int i = 1; i < fds.length; i++) {
+			if (fds[i].name.endsWith("_id")) {
+				String join = fds[i].name.split("_")[0];
+				fields += "," + join + "." + getFirstCharFieldName(join)
+						+ " as `" + join + "`";
+				if (withoutID.length == 0 || !withoutID[0]) {
+					fields += "," + join + ".id as `" + fds[i].name + "_value`";
+				}
+				tables += " left join " + join + " on " + tbname + "."
+						+ fds[i].name + "=" + join + ".id";
+				;
+			} else {
+				fields += "," + tbname + "." + fds[i].name + " as `"
+						+ fds[i].name + "`";
+			}
+		}
+		ret += fields + " from " + tables + " ";
+		return ret;
+	}
+	public static boolean isFieldNumber(Field f) {
+		switch (f.type) {
+		case Types.BIGINT:
+		case Types.DECIMAL:
+		case Types.DOUBLE:
+		case Types.FLOAT:
+		case Types.INTEGER:
+		case Types.NUMERIC:
+		case Types.REAL:
+		case Types.SMALLINT:
+		case Types.TINYINT:
+			return true;
+		default:
+			return false;
+		}
+	
+	}
+	public static boolean isFieldDate(Field f) {
+		switch (f.type) {
+		case Types.DATE:
+		case Types.TIME:
+		case Types.TIMESTAMP:
+			return true;
+		default:
+			return false;
+		}
+	}
+	public static ResultSetMetaData getRecordSetMetaDataOfSQL(String sql,
+			Connection conn) {
+	
+		ResultSetMetaData ret = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			stmt = conn.createStatement();
+			rs = stmt.executeQuery(sql);
+			ret = rs.getMetaData();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			DB.close(rs);
+			DB.close(stmt);
+		}
+	
 		return ret;
 	}
 }

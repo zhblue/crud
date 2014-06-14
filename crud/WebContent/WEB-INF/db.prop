@@ -1,6 +1,6 @@
 system.name=CRUD
 db.driver =com.mysql.jdbc.Driver
-db.connectString = jdbc:mysql://localhost:3306/1_powermanager?useUnicode=true&characterEncoding=UTF-8
+db.connectString = jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8
 db.username=root
 db.password=
 abnormal.fast=true

@@ -11,7 +11,7 @@ public class Tools {
 	}
 	public static String toSelect(String tbname,String value){
 		StringBuffer ret=new StringBuffer();
-		String nameFD=JspGenerator.getFirstCharFieldName(tbname);
+		String nameFD=DAO.getFirstCharFieldName(tbname);
 		String sql="select id,"+nameFD+" from `"+tbname+"`";
 		List<List> data=DAO.queryList(sql,false);
 		ret.append("<select");
