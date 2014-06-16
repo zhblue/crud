@@ -14,6 +14,7 @@ public class Config implements ServletContextListener{
 
 	private static String configFilePath=null;
 	private static Properties prop=new Properties();
+	public static boolean debug;
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
@@ -30,6 +31,8 @@ public class Config implements ServletContextListener{
 			Tools.log("loading..."+path);
 			prop.load(new FileInputStream(path));
 			DB.pool="true".equalsIgnoreCase(prop.getProperty("db.pool"));
+			Config.debug="true".equalsIgnoreCase(prop.getProperty("system.debug"));
+			
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -46,7 +46,8 @@ public class DB {
 				try {
 					if(pool&&toClose instanceof Connection){
 						 queue.add((Connection)toClose);
-						 System.err.println(queue.size());
+						 if(Config.debug)
+							 	System.err.println(queue.size());
 					}else{
 						close.invoke(toClose);
 					}

@@ -123,15 +123,17 @@ public class DAO {
 		ret.append("' ");
 		ret.append("value='");
 		if(value.length>0)ret.append(Tools.toHTML(value[0]));
-		ret.append("' type='");
-		ret.append(getFormType(field.type));
+		ret.append("' type='text' class='");
+		ret.append(getFormType(field));
 		ret.append("'>");
 		return ret.toString();
 	}
 
-	public static String getFormType(int type) {
+	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
-		return "text";
+		if(f.type==Types.DATE||f.type==Types.TIMESTAMP||f.name.endsWith("_date"))
+			return "input_date";
+		return "input_text";
 	}
 
 	public static List<String> getTables() {

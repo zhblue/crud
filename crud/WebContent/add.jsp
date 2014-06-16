@@ -5,6 +5,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Add</title>
+
 </head>
 <body>
 	<%
@@ -46,7 +47,6 @@
 		tbname = Tools.toHTML(tbname);
 	%>
 	<form id=addForm action=add.jsp method=post>
-
 		<input type=hidden name=tbname value="<%=tbname%>">
 		<%
 			if (id == -1) {

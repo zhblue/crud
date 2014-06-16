@@ -8,6 +8,9 @@
 <link rel=stylesheet href='bs/css/bootstrap.css' type='text/css'>
 <script src="jq/jquery.min.js"></script>
 <script src="bs/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="jq/css/jquery-ui.min.css" />
+<script type="text/javascript" src="jq/jquery-ui.min.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-datepicker.js"></script>
 </head>
 <body>
 
@@ -44,7 +47,7 @@
 	}
 	function edit(rowid){
 		var tbname=$("#tbname").val();
-		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},showSelect);
+		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
 	function del(rowid){
 		var ans=confirm('确定删除编号'+rowid);
@@ -76,10 +79,12 @@
 		td.load("select.jsp?tbname="+tbname+"&value="+default_value);
 		
 	}
-	function showSelect(){
+	function reformatform(){
 		$("input[name$=_id]").each(function(){
 			loadSelect($(this));
 		});
+		$(".input_date").datepicker();
+		
 	}
 	function mainLoad(tbname){
 		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){
@@ -88,7 +93,7 @@
 				addButton($("#main"));
 				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'></span>");
 				$("#addrow").click(function(){
-					$("#main").load("add.jsp",{tb:tbname},showSelect);
+					$("#main").load("add.jsp",{tb:tbname},reformatform);
 				});
 			}
 		});
