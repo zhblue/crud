@@ -9,8 +9,14 @@
 <script src="jq/jquery.min.js"></script>
 <script src="bs/js/bootstrap.js"></script>
 <link rel="stylesheet" type="text/css" href="jq/css/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="jq/css/jquery.wysiwyg.css" />
+
 <script type="text/javascript" src="jq/jquery-ui.min.js"></script>
 <script type="text/javascript" src="jq/jquery-ui-datepicker.js"></script>
+<script type="text/javascript" src="jq/jquery.wysiwyg.js"></script>
+<script type="text/javascript" src="jq/wysiwyg.image.js"></script>
+<script type="text/javascript" src="jq/wysiwyg.link.js"></script>
+<script type="text/javascript" src="jq/wysiwyg.table.js"></script>
 </head>
 <body>
 
@@ -42,8 +48,8 @@
 </body>
 <script>
 	function dbid(evt){
-		var data=$(evt.target).parent().parent().find(":first-child");
-		return (data.text());
+		var data=$(evt.target).parent().parent().attr("id");
+		return parseInt(data);
 	}
 	function edit(rowid){
 		var tbname=$("#tbname").val();
@@ -60,8 +66,8 @@
 	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr :last-child").after("<td><span id='delButton' class='glyphicon glyphicon-edit'></span>"
-										+"<span id='delButton' class='glyphicon glyphicon-trash' ></span></td>");
+		$("#main tr").append("<td><span class='glyphicon glyphicon-edit'></span>"
+										+"<span class='glyphicon glyphicon-trash' ></span></td>");
 		$(".glyphicon-trash").bind("click",function(evt){
 			del(dbid(evt));
 		});
@@ -84,7 +90,7 @@
 			loadSelect($(this));
 		});
 		$(".input_date").datepicker();
-		
+		$("textarea").wysiwyg();
 	}
 	function mainLoad(tbname){
 		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){

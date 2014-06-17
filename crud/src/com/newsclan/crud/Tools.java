@@ -51,7 +51,7 @@ public class Tools {
 			if (title) {
 				ret.append("<thead>");
 			} 
-			ret.append("<tr>");
+			ret.append("<tr id='"+String.valueOf(row.get(0))+"'>");
 			for (Object object : row) {
 				if (title) {
 					ret.append("<th>");

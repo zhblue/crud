@@ -15,15 +15,15 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("insert into `" + tbname + "`(");
 		StringBuffer value = new StringBuffer(" values(");
-		
+
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
 			if ("id".equals(field.name))
 				continue;
-			String d=values.get(field.name);
-			if(DAO.isFieldNumber(field)){
-				if("".equals(d)){
-					d="0";
+			String d = values.get(field.name);
+			if (DAO.isFieldNumber(field)) {
+				if ("".equals(d)) {
+					d = "0";
 				}
 			}
 			data.add(d);
@@ -39,29 +39,30 @@ public class DAO {
 		return update(sql.toString(), data.toArray());
 
 	}
-	public static int update(String tbname,int id, Map<String, String> values) {
+
+	public static int update(String tbname, int id, Map<String, String> values) {
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("update  `" + tbname + "` set ");
-		
+
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
 			if ("id".equals(field.name))
 				continue;
 			sql.append(field.name);
 			sql.append("=?,");
-			
-			String d=values.get(field.name);
-			if(DAO.isFieldNumber(field)){
-				if("".equals(d)){
-					d="0";
+
+			String d = values.get(field.name);
+			if (DAO.isFieldNumber(field)) {
+				if ("".equals(d)) {
+					d = "0";
 				}
 			}
 			data.add(d);
-			
+
 		}
 		sql.deleteCharAt(sql.length() - 1);
 		sql.append(" where id=?");
-		data.add(String .valueOf(id));
+		data.add(String.valueOf(id));
 		return update(sql.toString(), data.toArray());
 
 	}
@@ -89,7 +90,8 @@ public class DAO {
 		return ret.toArray(new Field[0]);
 	}
 
-	public static List<List> getForm(String tbname, boolean edit,List<String>... values) {
+	public static List<List> getForm(String tbname, boolean edit,
+			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
 		title.add("Ãû³Æ");
@@ -98,15 +100,15 @@ public class DAO {
 		ret.add(title);
 
 		Field[] fds = getFieldsOfTable(tbname);
-		int i=0;
+		int i = 0;
 		for (Field field : fds) {
 			if (!edit && "id".equals(field.name))
 				continue;
 			List row = new LinkedList();
 			row.add(field.label);
-			if(values.length>0){
-				row.add(getInputForm(field,values[0].get(i++)));
-			}else{
+			if (values.length > 0) {
+				row.add(getInputForm(field, String.valueOf(values[0].get(i++))));
+			} else {
 				row.add(getInputForm(field));
 			}
 			ret.add(row);
@@ -115,23 +117,50 @@ public class DAO {
 
 	}
 
-	public static String getInputForm(Field field,String... value) {
+	public static String getInputForm(Field field, String... value) {
 		// TODO Auto-generated method stub
 		StringBuffer ret = new StringBuffer();
+		if (isFieldLongText(field))
+			getTextArea(field, ret, value);
+		else
+			getInputText(field, ret, value);
+		return ret.toString();
+	}
+
+	private static void getTextArea(Field field, StringBuffer ret,
+			String[] value) {
+		ret.append("<textarea name='");
+		ret.append(field.name);
+		ret.append("' ");
+		ret.append(">");
+		if (value.length > 0)
+			ret.append(Tools.toHTML(value[0]));
+		ret.append("</textarea>");
+	}
+
+	private static boolean isFieldLongText(Field field) {
+		// TODO Auto-generated method stub
+		return field.type == Types.LONGVARCHAR
+				|| field.type == Types.LONGNVARCHAR;
+	}
+
+	public static void getInputText(Field field, StringBuffer ret,
+			String... value) {
 		ret.append("<input name='");
 		ret.append(field.name);
 		ret.append("' ");
 		ret.append("value='");
-		if(value.length>0)ret.append(Tools.toHTML(value[0]));
+		if (value.length > 0)
+			ret.append(Tools.toHTML(value[0]));
 		ret.append("' type='text' class='");
 		ret.append(getFormType(field));
 		ret.append("'>");
-		return ret.toString();
 	}
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
-		if(f.type==Types.DATE||f.type==Types.TIMESTAMP||f.name.endsWith("_date"))
+		if (f.type == Types.DATE || f.type == Types.TIMESTAMP
+				|| f.name.endsWith("_date"))
 			return "input_date";
 		return "input_text";
 	}
@@ -157,10 +186,10 @@ public class DAO {
 	}
 
 	public static String translate(String value) {
-		value=value.replace("'", "\\'");
+		value = value.replace("'", "\\'");
 		String ret = value;
-		if(value.endsWith("_id")) {
-			value=value.substring(0,value.length()-3);
+		if (value.endsWith("_id")) {
+			value = value.substring(0, value.length() - 3);
 		}
 		ret = queryString("select name from datadic where field=?", value);
 		if (ret == null) {
@@ -253,10 +282,11 @@ public class DAO {
 		DB.close(conn);
 		return ret;
 	}
+
 	public static Field[] getFields(String sql) {
 		Connection conn = DB.getConnection();
 		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL(sql, conn);
-	
+
 		Field[] f = null;
 		try {
 			int c = rsmd.getColumnCount();
@@ -277,12 +307,13 @@ public class DAO {
 		}
 		return f;
 	}
+
 	public static String getFirstCharFieldName(String tbname) {
 		// TODO Auto-generated method stub
 		String ret = "name";
 		Connection conn = DB.getConnection();
-		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL("select * from `"
-				+ tbname + "`", conn);
+		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL(
+				"select * from `" + tbname + "`", conn);
 		try {
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				int type = rsmd.getColumnType(i);
@@ -296,9 +327,10 @@ public class DAO {
 			e.printStackTrace();
 		}
 		DB.close(conn);
-	
+
 		return ret;
 	}
+
 	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
@@ -324,6 +356,7 @@ public class DAO {
 		ret += fields + " from " + tables + " ";
 		return ret;
 	}
+
 	public static boolean isFieldNumber(Field f) {
 		switch (f.type) {
 		case Types.BIGINT:
@@ -339,8 +372,9 @@ public class DAO {
 		default:
 			return false;
 		}
-	
+
 	}
+
 	public static boolean isFieldDate(Field f) {
 		switch (f.type) {
 		case Types.DATE:
@@ -351,9 +385,10 @@ public class DAO {
 			return false;
 		}
 	}
+
 	public static ResultSetMetaData getRecordSetMetaDataOfSQL(String sql,
 			Connection conn) {
-	
+
 		ResultSetMetaData ret = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -368,7 +403,7 @@ public class DAO {
 			DB.close(rs);
 			DB.close(stmt);
 		}
-	
+
 		return ret;
 	}
 }

@@ -17,6 +17,7 @@
 			try {
 				id = Integer.parseInt(sid);
 			} catch (Exception e) {
+				e.printStackTrace();
 			}
 		}
 		if (tbname != null) {
@@ -47,8 +48,10 @@
 		tbname = Tools.toHTML(tbname);
 	%>
 	<form id=addForm action=add.jsp method=post>
+		
 		<input type=hidden name=tbname value="<%=tbname%>">
 		<%
+		System.err.println(id);
 			if (id == -1) {
 		%>
 		<%=Tools.toTable(DAO.getForm(tbname, false),
