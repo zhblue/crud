@@ -1,7 +1,7 @@
 /**
- * WYSIWYG – jQuery plugin 0.98.dev
+ * WYSIWYG 鈥�jQuery plugin 0.98.dev
  *
- * Copyright © 2008–2009 Juan M Martinez, 2010–2013 Akzhan Abdulin and all contributors
+ * Copyright 漏 2008鈥�009 Juan M Martinez, 2010鈥�013 Akzhan Abdulin and all contributors
  * https://github.com/jwysiwyg/jwysiwyg
  *
  * Dual licensed under the MIT and GPL licenses:
@@ -548,7 +548,7 @@ html: '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.o
 			formHeight: 270,
 			formWidth: 440,
 			iFrameClass: null,
-			initialContent: "<p>Initial content</p>",
+			initialContent: "<p></p>",
 			maxHeight: 10000,			// see autoGrow
 			maxLength: 0,
 			messages: {
