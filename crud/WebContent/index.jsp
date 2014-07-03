@@ -13,10 +13,10 @@
 
 <script type="text/javascript" src="jq/jquery-ui.min.js"></script>
 <script type="text/javascript" src="jq/jquery-ui-datepicker.js"></script>
-<script type="text/javascript" src="jq/jquery.wysiwyg.js"></script>
-<script type="text/javascript" src="jq/wysiwyg.image.js"></script>
-<script type="text/javascript" src="jq/wysiwyg.link.js"></script>
-<script type="text/javascript" src="jq/wysiwyg.table.js"></script>
+
+<script src="ckeditor/ckeditor.js"></script>
+<script src="ckeditor/adapters/jquery.js"></script>
+
 </head>
 <body>
 
@@ -90,7 +90,7 @@
 			loadSelect($(this));
 		});
 		$(".input_date").datepicker();
-		$("textarea").wysiwyg();
+		$("textarea").ckeditor();
 	}
 	function mainLoad(tbname){
 		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){

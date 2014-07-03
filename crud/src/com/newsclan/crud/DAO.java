@@ -129,7 +129,7 @@ public class DAO {
 
 	private static void getTextArea(Field field, StringBuffer ret,
 			String[] value) {
-		ret.append("<textarea name='");
+		ret.append("<textarea class=ckeditor name='");
 		ret.append(field.name);
 		ret.append("' ");
 		ret.append(">");
