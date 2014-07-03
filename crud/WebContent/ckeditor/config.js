@@ -35,4 +35,14 @@ CKEDITOR.editorConfig = function( config ) {
 
 	// Simplify the dialog windows.
 	config.removeDialogTabs = 'image:advanced;link:advanced';
+	
+    config.language = 'zh-cn';  
+    config.filebrowserBrowseUrl = 'ckeditor/uploader/browse.jsp';  
+    config.filebrowserImageBrowseUrl = 'ckeditor/uploader/browse.jsp?type=Images';  
+    config.filebrowserFlashBrowseUrl = 'ckeditor/uploader/browse.jsp?type=Flashs';  
+    config.filebrowserUploadUrl = 'ckeditor/uploader/upload.jsp';  
+    config.filebrowserImageUploadUrl = 'ckeditor/uploader/upload.jsp?type=Images';  
+    config.filebrowserFlashUploadUrl = 'ckeditor/uploader/upload.jsp?type=Flashs';  
+    config.filebrowserWindowWidth = '640';  
+    config.filebrowserWindowHeight = '480';
 };
