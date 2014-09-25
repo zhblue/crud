@@ -21,27 +21,25 @@
 <body>
 
 
-<nav class="navbar navbar-default" role="navigation">
+<div class="navbar navbar-default" role="navigation">
   <!-- Brand and toggle get grouped for better mobile display -->
   
   <!-- Collect the nav links, forms, and other content for toggling -->
-  <div class="collapse navbar-collapse" >
-    <ul class="nav navbar-nav navbar-left">
-    <li >  <a class="navbar-brand" href="#"><%=Config.get("system.name") %></a></li>
+  <div class="navbar bs-navbar" >
+    <a class="navbar-brand" href="#"><%=Config.get("system.name") %></a>
       <%
       	List<String> tables=com.newsclan.crud.DAO.getTables();
 		Iterator<String> it=tables.iterator();
 		while(it.hasNext()){
 			String table=it.next();
-			out.println("<li><a href=\"#"+table+"\" onclick='mainLoad(\""+table+"\")'>"
-			+DAO.translate(table)+"</a></li>");
+			out.println("<a class=\"btn navbar-brand\" href=\"#"+table+"\" onclick='mainLoad(\""+table+"\")'>"
+			+DAO.translate(table)+"</a>");
 		}
       %>
      
-    </ul>
    
   </div><!-- /.navbar-collapse -->
-</nav>
+</div>
 
 <div id=main class="container"></div>
 	
