@@ -36,7 +36,7 @@
 			+DAO.translate(table)+"</a>");
 		}
       %>
-     
+     <a class="btn navbar-brand" href="#" onclick='addTable();'>+</a>;
    
   </div><!-- /.navbar-collapse -->
 </div>
@@ -45,6 +45,7 @@
 	
 </body>
 <script>
+    
 	function dbid(evt){
 		var data=$(evt.target).parent().parent().attr("id");
 		return parseInt(data);
@@ -108,6 +109,29 @@
 		$.post("add.jsp",data,new function(){
 			 mainLoad(tbname);
 		});
+	}
+	function submitTable(){
+		var data=$("#frmAddTable").serialize();
+		
+		$.post("addTable.jsp",data,new function(){
+			// mainLoad(tbname);
+		});
+	}
+	function addTable(){
+		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding'></table></form>");
+		$("#tb_adding").append("<tr><td>表名<input type=text name=tb_name value='tb_'></td></tr>");
+		$("#tb_adding").append("<tr><td>列名</td><td>类型</td><td>中文</td><td><a href=# onclick='addColumn();'>+</a></td></tr>");
+		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='确定'><input type=reset value='重置'>");
+		addColumn();
+		
+	}
+	function addColumn(){
+		var row="<tr>";
+		row+="<td><input name=fd_name type=text></td>";
+		row+="<td><input name=fd_type type=text value='varchar(32)'></td>";
+		row+="<td><input name=fd_title type=text></td>";
+		row+="</tr>";
+		$("#tb_adding").append(row);
 	}
 	
 
