@@ -359,7 +359,7 @@ public class DAO {
 		String tables = tbname;
 		for (int i = 1; i < fds.length; i++) {
 			if (fds[i].name.endsWith("_id")) {
-				String join = fds[i].name.split("_")[0];
+				String join = fds[i].name.substring(0,fds[i].name.length()-3);
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
