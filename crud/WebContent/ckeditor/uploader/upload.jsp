@@ -30,7 +30,8 @@ if(ServletFileUpload.isMultipartContent(request)){
     List<FileItem> fileItemsList = servletFileUpload.parseRequest(request);  
     for (FileItem item : fileItemsList) {  
         if (!item.isFormField()) {  
-            String fileName = item.getName();  
+            String fileName = item.getName(); 
+            fileName=fileName.replace("..", ".");
             String ext=fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
             if(".jsp".equals(ext)) continue;
             fileName = "file" + System.currentTimeMillis() + ext;  
