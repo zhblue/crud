@@ -1,6 +1,7 @@
 package com.newsclan.crud;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import org.apache.commons.lang3.StringEscapeUtils;
@@ -9,21 +10,43 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-	public static String toSelect(String tbname,String value){
-		StringBuffer ret=new StringBuffer();
-		String nameFD=DAO.getFirstCharFieldName(tbname);
-		String sql="select id,"+nameFD+" from `"+tbname+"`";
-		List<List> data=DAO.queryList(sql,false);
+
+	public static void addTable(String tb_name, String tb_title,
+			String[] fd_names, String[] fd_types, String[] fd_titles) {
+		StringBuffer sql = new StringBuffer("create table " + tb_name + "(");
+		sql.append("id int(10) unsigned NOT NULL auto_increment");
+
+		String dict = "INSERT INTO `datadic` (`field`,`name`) VALUES (?,?)";
+
+		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
+
+		for (int i = 0; i < fd_names.length; i++) {
+			String[] values = { fd_names[i], fd_titles[i] };
+			DAO.executeUpdate(dict, values);
+
+			sql.append(",`" + fd_names[i] + "` " + fd_types[i] + "");
+
+		}
+		sql.append(",PRIMARY KEY  (`id`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
+		DAO.executeUpdate(sql.toString(), new String[] {});
+
+	}
+
+	public static String toSelect(String tbname, String value) {
+		StringBuffer ret = new StringBuffer();
+		String nameFD = DAO.getFirstCharFieldName(tbname);
+		String sql = "select id," + nameFD + " from `" + tbname + "`";
+		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
 		ret.append(tbname);
 		ret.append("_id'>");
-		
-		for(List row:data){
+
+		for (List row : data) {
 			ret.append("<option value='");
 			ret.append(row.get(0));
 			ret.append("'");
-			if(String.valueOf(row.get(0)).equals(value))
+			if (String.valueOf(row.get(0)).equals(value))
 				ret.append(" selected");
 			ret.append(">");
 			ret.append(row.get(1));
@@ -31,8 +54,9 @@ public class Tools {
 		}
 		ret.append("</select>");
 		return ret.toString();
-		
+
 	}
+
 	public static String toHTML(String text) {
 		return StringEscapeUtils.escapeHtml4(text);
 	}
@@ -45,22 +69,22 @@ public class Tools {
 		}
 		ret.append("'>");
 		boolean title = true;
-		
+
 		for (List row : list) {
-			boolean dbid=true;
+			boolean dbid = true;
 			if (title) {
 				ret.append("<thead>");
-			} 
-			ret.append("<tr id='"+String.valueOf(row.get(0))+"'>");
+			}
+			ret.append("<tr id='" + String.valueOf(row.get(0)) + "'>");
 			for (Object object : row) {
 				if (title) {
 					ret.append("<th>");
 				} else {
 					ret.append("<td");
-					if(dbid){
+					if (dbid) {
 						ret.append(" class='dbid'");
-						dbid=false;
-					}else{
+						dbid = false;
+					} else {
 						ret.append(" class='dbdata'");
 					}
 					ret.append(">");
@@ -73,13 +97,13 @@ public class Tools {
 				}
 
 			}
-			
+
 			ret.append("</tr>");
 			if (title) {
 				ret.append("</thead>");
 				ret.append("<tbody>");
-			} 
-			title=false;
+			}
+			title = false;
 		}
 		ret.append("</tbody></table>");
 		return ret.toString();

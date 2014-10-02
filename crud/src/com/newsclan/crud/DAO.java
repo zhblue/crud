@@ -249,7 +249,27 @@ public class DAO {
 		}
 		return ret;
 	}
-
+	public static int executeUpdate(String sql,String ...values ){
+		System.out.println(sql);
+		Connection conn = DB.getConnection();
+		PreparedStatement pstmt = null;
+		int ret = -1;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			for (int i = 0; i < values.length; i++) {
+				pstmt.setString(i+1, values[i]);
+			}
+			ret=pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			
+			DB.close(pstmt);
+			DB.close(conn);
+		}
+		return ret;
+	}
 	public static String queryString(String sql, String... values) {
 		List<List> ll = queryList(sql, false, values);
 		if (ll != null && ll.size() > 0) {

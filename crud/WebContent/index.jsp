@@ -33,10 +33,10 @@
 		while(it.hasNext()){
 			String table=it.next();
 			out.println("<a class=\"btn navbar-brand\" href=\"#"+table+"\" onclick='mainLoad(\""+table+"\")'>"
-			+DAO.translate(table)+"</a>");
+			 +DAO.translate(table)+"</a>");
 		}
       %>
-     <a class="btn navbar-brand" href="#" onclick='addTable();'>+</a>;
+     <a class="btn navbar-brand" href="#" onclick='addTable();'><span class='glyphicon glyphicon-plus'></span></a>;
    
   </div><!-- /.navbar-collapse -->
 </div>
@@ -112,15 +112,17 @@
 	}
 	function submitTable(){
 		var data=$("#frmAddTable").serialize();
+		var tbname=$("#tb_name").val();
 		
 		$.post("addTable.jsp",data,new function(){
-			// mainLoad(tbname);
+			 window.setTimeout("mainLoad('"+tbname+"')",500);
 		});
 	}
 	function addTable(){
-		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding'></table></form>");
-		$("#tb_adding").append("<tr><td>表名<input type=text name=tb_name value='tb_'></td></tr>");
-		$("#tb_adding").append("<tr><td>列名</td><td>类型</td><td>中文</td><td><a href=# onclick='addColumn();'>+</a></td></tr>");
+		$("#main").empty();
+		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding' class='table table-striped table-hover'></table></form>");
+		$("#tb_adding").append("<tr><td>表名<input type=text id=tb_name name=tb_name value='tb_'></td><td>中文<input type=text name=tb_title value='信息'></td></tr>");
+		$("#tb_adding").append("<tr><td>列名</td><td>类型</td><td>中文</td><td><a href=# onclick='addColumn();'><span class='glyphicon glyphicon-plus'></span></a></td></tr>");
 		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='确定'><input type=reset value='重置'>");
 		addColumn();
 		

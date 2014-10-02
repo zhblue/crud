@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8" import="com.newsclan.crud.*"%>
+	pageEncoding="UTF-8" import="com.newsclan.crud.*"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -7,13 +7,14 @@
 <title></title>
 </head>
 <body>
-<%
-	request.setCharacterEncoding("UTF-8");
-	String []fdnames=request.getParameterValues("fd_name");
-	for(String fdname:fdnames){
-		System.out.println(fdname);
-	}
-
-%>
+	<%
+		request.setCharacterEncoding("UTF-8");
+		String tb_name = request.getParameter("tb_name");
+		String tb_title = request.getParameter("tb_title");
+		String[] fd_names = request.getParameterValues("fd_name");
+		String[] fd_types = request.getParameterValues("fd_type");
+		String[] fd_titles = request.getParameterValues("fd_title");
+		Tools.addTable(tb_name,tb_title, fd_names, fd_types, fd_titles);
+	%> 
 </body>
 </html>
