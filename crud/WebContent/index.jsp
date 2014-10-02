@@ -26,7 +26,7 @@
   
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="navbar bs-navbar" >
-    <a class="navbar-brand" href="#"><%=Config.get("system.name") %></a>
+    <a class="navbar-brand" href="https://github.com/zhblue/crud" target='_blank'><%=Config.get("system.name") %></a>
       <%
       	List<String> tables=com.newsclan.crud.DAO.getTables();
 		Iterator<String> it=tables.iterator();
