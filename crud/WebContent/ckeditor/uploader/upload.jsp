@@ -31,7 +31,9 @@ if(ServletFileUpload.isMultipartContent(request)){
     for (FileItem item : fileItemsList) {  
         if (!item.isFormField()) {  
             String fileName = item.getName();  
-            fileName = "file" + System.currentTimeMillis() + fileName.substring(fileName.lastIndexOf("."));  
+            String ext=fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
+            if(".jsp".equals(ext)) continue;
+            fileName = "file" + System.currentTimeMillis() + ext;  
             //定义文件路径，根据你的文件夹结构，可能需要做修改  
             String clientPath = "ckeditor/uploader/upload/" + type + fileName;  
   
