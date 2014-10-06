@@ -21,6 +21,8 @@ public class Tools {
 		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
 
 		for (int i = 0; i < fd_names.length; i++) {
+			fd_names[i]= filteSQL(fd_names[i]);
+			fd_titles[i]=filteSQL(fd_titles[i]);
 			String[] values = { fd_names[i], fd_titles[i] };
 			DAO.executeUpdate(dict, values);
 
@@ -30,6 +32,11 @@ public class Tools {
 		sql.append(",PRIMARY KEY  (`id`)) ENGINE=MyISAM AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;");
 		DAO.executeUpdate(sql.toString(), new String[] {});
 
+	}
+
+	private static String filteSQL(String sql) {
+		// TODO Auto-generated method stub
+		return sql.replace("'", "\\'");
 	}
 
 	public static String toSelect(String tbname, String value) {
