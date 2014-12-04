@@ -7,8 +7,15 @@
 <title>List</title>
 </head> 
 <body>
+<%
+int pageNum=Tools.getRequestInt(request,"pageNum");
+String tbname=request.getParameter("tb").replace("`", "");
+%>
 <input id='tbname' type=hidden value='<%=Tools.toHTML(request.getParameter("tb").replace("'", "")) %>' >
-<%=Tools.toHTML(DAO.translate(request.getParameter("tb").replace("`", ""))) %>
-<%=Tools.toTable(DAO.getList(request.getParameter("tb").replace("`", "")),"table table-striped table-hover") %>
+<%=Tools.toHTML(DAO.translate(tbname)) %>
+<a href="javascript:pageUp('<%=tbname %>',<%=pageNum %>);" >上一页</a> 
+<a href="javascript:pageDown('<%=tbname %>',<%=pageNum %>);" >下一页</a> 
+
+<%=Tools.toTable(DAO.getList(tbname,pageNum,Config.pageSize),"table table-striped table-hover") %>	
 </body>
 </html>

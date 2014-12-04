@@ -4,11 +4,23 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
+	}
+
+	public static int getRequestInt(HttpServletRequest req, String paraName) {
+		int ret = 0;
+		try {
+			ret = Integer.parseInt(req.getParameter(paraName));
+		} catch (Exception e) {
+		}
+		return ret;
+
 	}
 
 	public static void addTable(String tb_name, String tb_title,
@@ -21,8 +33,8 @@ public class Tools {
 		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
 
 		for (int i = 0; i < fd_names.length; i++) {
-			fd_names[i]= filteSQL(fd_names[i]);
-			fd_titles[i]=filteSQL(fd_titles[i]);
+			fd_names[i] = filteSQL(fd_names[i]);
+			fd_titles[i] = filteSQL(fd_titles[i]);
 			String[] values = { fd_names[i], fd_titles[i] };
 			DAO.executeUpdate(dict, values);
 
@@ -128,6 +140,12 @@ public class Tools {
 			s = "";
 		}
 		return s;
+	}
+
+	public static void debug(String msg) {
+		// TODO Auto-generated method stub
+		if (Config.debug)
+			System.out.println(msg);
 	}
 
 }

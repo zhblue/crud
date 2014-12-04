@@ -32,7 +32,7 @@
 		Iterator<String> it=tables.iterator();
 		while(it.hasNext()){
 			String table=it.next();
-			out.println("<a class=\"btn navbar-brand\" href=\"#"+table+"\" onclick='mainLoad(\""+table+"\")'>"
+			out.println("<a class=\"btn navbar-brand\" href=\"#"+table+"\" onclick='mainLoad(\""+table+"\",0)'>"
 			 +DAO.translate(table)+"</a>");
 		}
       %>
@@ -91,8 +91,8 @@
 		$(".input_date").datepicker();
 		$("textarea").ckeditor();
 	}
-	function mainLoad(tbname){
-		$("#main").load("list.jsp?tb="+tbname,function(text,status,http){
+	function mainLoad(tbname,pageNum){
+		$("#main").load("list.jsp?tb="+tbname+"&pageNum="+pageNum,function(text,status,http){
 			
 			if(status=="success"){
 				addButton($("#main"));
@@ -103,6 +103,12 @@
 			}
 		});
 		
+	}
+	function pageUp(tbname,pageNum){
+		mainLoad(tbname,pageNum-1);
+	}
+	function pageDown(tbname,pageNum){
+		mainLoad(tbname,pageNum+1);
 	}
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();

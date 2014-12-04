@@ -198,11 +198,16 @@ public class DAO {
 			return ret;
 		}
 	}
-
 	public static List<List> getList(String tbname) {
+		return getList(tbname,0,Config.pageSize);
+	}
+	public static List<List> getList(String tbname,int pageNum,int pageSize) {
+		
 		tbname = tbname.replace("`", "");
-		String sql = "select * from `" + tbname + "`";
+		String sql = "select * from `" + tbname+"`" ;
 		sql = DAO.getJoinTableSQL(tbname, true);
+		sql+= " limit "+(pageNum*pageSize)+","+pageSize;
+		Tools.debug(sql);
 		return queryList(sql, true);
 
 	}
