@@ -17,6 +17,7 @@ public class Config implements ServletContextListener{
 	private static Properties prop=new Properties();
 	public static boolean debug;
 	public static int pageSize;
+	public static boolean loginCheck;
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
@@ -34,6 +35,7 @@ public class Config implements ServletContextListener{
 			prop.load(new FileInputStream(configFilePath));
 			DB.pool="true".equalsIgnoreCase(prop.getProperty("db.pool"));
 			Config.debug="true".equalsIgnoreCase(prop.getProperty("system.debug"));
+			Config.loginCheck="true".equalsIgnoreCase(prop.getProperty("login.check"));
 			pageSize=Integer.parseInt(prop.getProperty("page.size"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

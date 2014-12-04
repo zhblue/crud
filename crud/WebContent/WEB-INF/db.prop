@@ -8,3 +8,4 @@ db.pool=true
 abnormal.fast=true
 text.shortLen=60
 page.size=10
+login.check=false

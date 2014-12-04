@@ -1,5 +1,12 @@
 package com.newsclan.crud;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -8,11 +15,69 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
+
 public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
+	public static boolean login(String username,String password){
+		boolean ret=false;
+		Connection conn=DB.getConnection();
+		String sql="select password from user where name=? ";
+		PreparedStatement pstmt=null;
+		ResultSet rs=null;
+		try {
+			pstmt=conn.prepareStatement(sql);
+			pstmt.setString(1, username);
+			rs=pstmt.executeQuery();
+			if(rs.next()){
+				String dbhash=rs.getString("password");
+				String salt=dbhash.substring(32);
+				String thishash=getHash(password,salt);
+				ret=thishash.equals(dbhash);
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DB.close(rs);
+		DB.close(pstmt);
+		DB.close(conn);
+		return ret;
+	}
+	public static String getHash(String origin,String salt){
+		return Md5(origin+salt)+salt;
+	}
+	public static String getRandomSalt(){
+		return Md5(new Date().toString()).substring(0,8);
+	}
+	private static String Md5(String plainText) {
+		String ret=plainText;
+		try {
+			MessageDigest md = MessageDigest.getInstance("MD5");
+			md.update(plainText.getBytes());
+			byte b[] = md.digest();
 
+			int i;
+
+			StringBuffer buf = new StringBuffer("");
+			for (int offset = 0; offset < b.length; offset++) {
+				i = b[offset];
+				if (i < 0)
+					i += 256;
+				if (i < 16)
+					buf.append("0");
+				buf.append(Integer.toHexString(i));
+			}
+			ret=buf.toString();
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+		}
+		return ret;
+	}
 	public static int getRequestInt(HttpServletRequest req, String paraName) {
 		int ret = 0;
 		try {
