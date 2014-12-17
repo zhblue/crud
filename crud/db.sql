@@ -71,6 +71,32 @@ INSERT INTO `news` (`id`,`title`,`content`) VALUES
 /*!40000 ALTER TABLE `news` ENABLE KEYS */;
 
 
+CREATE TABLE `user` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) collate utf8_bin default NULL,
+  `password` varchar(45) collate utf8_bin default NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+--
+-- Dumping data for table `user`
+--
+
+
+/*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` (`id`,`name`,`password`) VALUES
+ (1,0x61646D696E,0x36633061363235376634393063633535663163666565366262353638623332363437323130336466)
+ ;
+/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+
+CREATE TABLE `privilege` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL,
+  `user_id` int(10) unsigned NOT NULL,
+  `right` varchar(45) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

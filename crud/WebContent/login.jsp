@@ -1,4 +1,5 @@
-<%@ page import="com.newsclan.crud.*,java.sql.*"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8" import="java.sql.*,java.util.*,com.newsclan.crud.*"%>
 <%
 	String username, passwd, sql;
 	Connection conn=DB.getConnection();
@@ -30,14 +31,36 @@
 			}
 			DB.close(rs);
 			DB.close(pstmt);
-			response.sendRedirect("main.jsp");
+			response.sendRedirect("index.jsp");
 		}else{
 			session.invalidate();
-			response.sendRedirect("../index.jsp");
+			response.sendRedirect("login.jsp");
 		}
 	} else {
-		session.invalidate();
-		response.sendRedirect("../index.jsp");
+		System.out.println(1);
+		%>
+		<form method="post" action="login.jsp">
+		<table align=center>
+
+			<tr>
+				<td>账号:</td>
+				<td><input name="username" size="15"></td>
+			</tr>
+			<tr>
+
+				<td>密码:</td>
+				<td><input name="passwd" size="15" type=password> </td>
+			</tr>
+			<tr>
+
+				<td><img src="rand.jsp"></td>
+				<td><input name="rand" size="15" type=password> <input
+					type="submit" value="进入" name="B1"></td>
+			</tr>
+
+		</table>
+		</form>
+		<%
 	}
 
 	DB.close(conn);
