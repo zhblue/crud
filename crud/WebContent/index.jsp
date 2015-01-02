@@ -37,7 +37,7 @@
 			 +DAO.translate(table)+"</a>");
 		}
       %>
-     <a class="btn navbar-brand" href="#" onclick='addTable();'><span class='glyphicon glyphicon-plus'></span></a>;
+     <a class="btn navbar-brand" href="#" onclick='addTable();'><span class='glyphicon glyphicon-plus'></span></a>
    
   </div><!-- /.navbar-collapse -->
 </div>
