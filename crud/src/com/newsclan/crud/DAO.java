@@ -18,8 +18,8 @@ public class DAO {
 
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
-			if ("id".equals(field.name))
-				continue;
+//			if ("id".equals(field.name))
+//				continue;
 			String d = values.get(field.name);
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {

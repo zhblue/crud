@@ -30,10 +30,9 @@
 				values.put(name, request.getParameter(name));
 			}
 			if (sid != null && id != -1) {
-				if (DAO.update(tbname, id, values) > 0)
-					response.sendRedirect("list.jsp?tb=" + tbname);
-				else
-					out.println("fail");
+				if (DAO.update(tbname, id, values) ==0)
+					DAO.insert(tbname, values);
+				response.sendRedirect("list.jsp?tb=" + tbname);
 			} else {
 				if (DAO.insert(tbname, values) > 0)
 					response.sendRedirect("list.jsp?tb=" + tbname);
