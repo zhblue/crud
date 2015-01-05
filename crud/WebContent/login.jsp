@@ -54,7 +54,7 @@
 			<tr>
 
 				<td><img src="rand.jsp"></td>
-				<td><input name="rand" size="15" type=password> <input
+				<td><input name="rand" size="15" type=text> <input
 					type="submit" value="进入" name="B1"></td>
 			</tr>
 
