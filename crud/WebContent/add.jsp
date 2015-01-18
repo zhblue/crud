@@ -4,8 +4,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Add</title>
-
+<title>Add/Edit</title>
 </head>
 <body>
 	<%
