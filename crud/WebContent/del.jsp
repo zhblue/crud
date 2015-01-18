@@ -10,10 +10,12 @@
 	<%
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
+		int user_id=(Integer)session.getAttribute("user_id");
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
 			String id=request.getParameter("id");
-			DAO.update("delete from `"+tbname+"` where id=?", id);
+			if(Auth.canDeleteTable(user_id, tbname))
+				DAO.update("delete from `"+tbname+"` where id=?", id);
 		}
 		%>
 </body>

@@ -29,9 +29,9 @@
   <div class="navbar bs-navbar" >
     <a class="navbar-brand" href="https://github.com/zhblue/crud" target='_blank'><%=Config.get("system.name") %></a>
       <%
-      	List<String> tables=com.newsclan.crud.DAO.getTables();
-		Iterator<String> it=tables.iterator();
-		while(it.hasNext()){
+      	List<String> tables=com.newsclan.crud.DAO.getTables((Integer)session.getAttribute("user_id"));
+		Iterator<String> it=tables.iterator(); 
+		while(it.hasNext()){ 
 			String table=it.next();
 			out.println("<a class=\"btn navbar-brand\" href=\"#"+table+"\" onclick='mainLoad(\""+table+"\",0)'>"
 			 +DAO.translate(table)+"</a>");
@@ -60,7 +60,7 @@
 		var tbname=$("#tbname").val();
 		if(ans){
 			$.post("del.jsp",{"tbname":tbname,"id":rowid},new function(){
-				 mainLoad(tbname);
+				 window.setTimeout("mainLoad('"+tbname+"')",1000);
 			});
 		}
 	}
@@ -122,7 +122,7 @@
 		var tbname=$("#tb_name").val();
 		
 		$.post("addTable.jsp",data,new function(){
-			 window.setTimeout("mainLoad('"+tbname+"')",500);
+			 window.setTimeout("mainLoad('"+tbname+"')",1000);
 		});
 	}
 	function addTable(){

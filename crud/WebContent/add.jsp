@@ -12,6 +12,7 @@
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
 		String sid = request.getParameter("id");
+		int user_id=(Integer)session.getAttribute("user_id");
 		int id = -1;
 		if (sid != null) {
 			try {
@@ -30,11 +31,11 @@
 				values.put(name, request.getParameter(name));
 			}
 			if (sid != null && id != -1) {
-				if (DAO.update(tbname, id, values) ==0)
-					DAO.insert(tbname, values);
+				if (DAO.update(user_id,tbname, id, values) ==0)
+					DAO.insert(user_id,tbname, values);
 				response.sendRedirect("list.jsp?tb=" + tbname);
-			} else {
-				if (DAO.insert(tbname, values) > 0)
+			} else { 
+				if (DAO.insert(user_id,tbname, values) > 0)
 					response.sendRedirect("list.jsp?tb=" + tbname);
 				else
 					out.println("fail");
@@ -52,10 +53,10 @@
 		<%
 		System.err.println(id);
 			if (id == -1) {
-		%>
-		<%=Tools.toTable(DAO.getForm(tbname, false),
+		%> 
+		<%=Tools.toTable(DAO.getForm(user_id,tbname, false),
 						"table table-striped table-hover")%>
-		<%
+		<% 
 			} else {
 				List<List> values=DAO.queryList("select * from `"+tbname+"` where id=?", false, String.valueOf(id));
 				List<String> value=null;
@@ -65,7 +66,7 @@
 				}
 				
 		%><input type=hidden name=id value="<%=id%>">
-		<%=Tools.toTable(DAO.getForm(tbname, false,value),
+		<%=Tools.toTable(DAO.getForm(user_id,tbname, false,value),
 						"table table-striped table-hover")%>
 		<%
  			}

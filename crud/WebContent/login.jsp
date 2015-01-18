@@ -14,7 +14,7 @@
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
 			if (rs.next()) {
-				session.setAttribute("user_id", rs.getString("id"));
+				session.setAttribute("user_id", rs.getInt("id"));
 				session.setAttribute("user_name", username);
 			}
 			sql = "SELECT  `right` from privilege where user_id=?";

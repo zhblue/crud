@@ -11,15 +11,24 @@ import java.sql.Types;
 import java.util.*;
 
 public class DAO {
-	public static int insert(String tbname, Map<String, String> values) {
+	public static int insert(int user_id, String tbname,
+			Map<String, String> values) {
+		if (Auth.canInsertTable(user_id, tbname)) {
+			return insert(tbname, values);
+		} else {
+			return -1;
+		}
+	}
+
+	private static int insert(String tbname, Map<String, String> values) {
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("insert into `" + tbname + "`(");
 		StringBuffer value = new StringBuffer(" values(");
 
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
-//			if ("id".equals(field.name))
-//				continue;
+			// if ("id".equals(field.name))
+			// continue;
 			String d = values.get(field.name);
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {
@@ -40,7 +49,17 @@ public class DAO {
 
 	}
 
-	public static int update(String tbname, int id, Map<String, String> values) {
+	public static int update(int user_id, String tbname, int id,
+			Map<String, String> values) {
+		if (Auth.canUpdateTable(user_id, tbname)) {
+			return update(tbname, id, values);
+		} else {
+			return -1;
+		}
+
+	}
+
+	private static int update(String tbname, int id, Map<String, String> values) {
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("update  `" + tbname + "` set ");
 
@@ -90,7 +109,16 @@ public class DAO {
 		return ret.toArray(new Field[0]);
 	}
 
-	public static List<List> getForm(String tbname, boolean edit,
+	public static List<List> getForm(int user_id, String tbname, boolean edit,
+			List<String>... values) {
+		if (Auth.canReadTable(user_id, tbname)) {
+			return getForm(tbname, edit, values);
+		} else {
+			return null;
+		}
+	}
+
+	private static List<List> getForm(String tbname, boolean edit,
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
@@ -165,7 +193,19 @@ public class DAO {
 		return "input_text";
 	}
 
-	public static List<String> getTables() {
+	public static List<String> getTables(int user_id) {
+
+		List ret = getTables();
+		for (Iterator tbit = ret.iterator(); tbit.hasNext();) {
+			String tbname = (String) tbit.next();
+			if (!Auth.canReadTable(user_id, tbname)) {
+				tbit.remove();
+			}
+		}
+		return ret;
+	}
+
+	private static List<String> getTables() {
 		List<String> ret = new LinkedList<String>();
 		Connection conn = DB.getConnection();
 		try {
@@ -198,15 +238,22 @@ public class DAO {
 			return ret;
 		}
 	}
+
 	public static List<List> getList(String tbname) {
-		return getList(tbname,0,Config.pageSize);
+		return getList(tbname, 0, Config.pageSize);
 	}
-	public static List<List> getList(String tbname,int pageNum,int pageSize) {
-		
+
+	public static List<List> getList(int user_id, String tbname, int pageNum,
+			int pageSize) {
+		return getList(tbname, pageNum, pageSize);
+	}
+
+	private static List<List> getList(String tbname, int pageNum, int pageSize) {
+
 		tbname = tbname.replace("`", "");
-		String sql = "select * from `" + tbname+"`" ;
+		String sql = "select * from `" + tbname + "`";
 		sql = DAO.getJoinTableSQL(tbname, true);
-		sql+= " limit "+(pageNum*pageSize)+","+pageSize;
+		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
 		return queryList(sql, true);
 
@@ -254,7 +301,8 @@ public class DAO {
 		}
 		return ret;
 	}
-	public static int executeUpdate(String sql,String ...values ){
+
+	public static int executeUpdate(String sql, String... values) {
 		System.out.println(sql);
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -262,19 +310,20 @@ public class DAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			for (int i = 0; i < values.length; i++) {
-				pstmt.setString(i+1, values[i]);
+				pstmt.setString(i + 1, values[i]);
 			}
-			ret=pstmt.executeUpdate();
+			ret = pstmt.executeUpdate();
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			
+
 			DB.close(pstmt);
 			DB.close(conn);
 		}
 		return ret;
 	}
+
 	public static String queryString(String sql, String... values) {
 		List<List> ll = queryList(sql, false, values);
 		if (ll != null && ll.size() > 0) {
@@ -364,7 +413,8 @@ public class DAO {
 		String tables = tbname;
 		for (int i = 1; i < fds.length; i++) {
 			if (fds[i].name.endsWith("_id")) {
-				String join = fds[i].name.substring(0,fds[i].name.length()-3);
+				String join = fds[i].name
+						.substring(0, fds[i].name.length() - 3);
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {

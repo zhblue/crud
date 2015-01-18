@@ -16,6 +16,6 @@ String tbname=request.getParameter("tb").replace("`", "");
 <a href="javascript:pageUp('<%=tbname %>',<%=pageNum %>);" >上一页</a> 
 <a href="javascript:pageDown('<%=tbname %>',<%=pageNum %>);" >下一页</a> 
 
-<%=Tools.toTable(DAO.getList(tbname,pageNum,Config.pageSize),"table table-striped table-hover") %>	
+<%=Tools.toTable(DAO.getList((Integer)session.getAttribute("user_id"), tbname,pageNum,Config.pageSize),"table table-striped table-hover") %>	
 </body>
 </html>
