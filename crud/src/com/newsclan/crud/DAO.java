@@ -27,8 +27,8 @@ public class DAO {
 
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
-			// if ("id".equals(field.name))
-			// continue;
+			if ("id".equals(field.name))
+			 continue;
 			String d = values.get(field.name);
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {
@@ -36,8 +36,9 @@ public class DAO {
 				}
 			}
 			data.add(d);
+			sql.append("`");
 			sql.append(field.name);
-			sql.append(",");
+			sql.append("`,");
 			value.append("?,");
 		}
 		sql.deleteCharAt(sql.length() - 1);

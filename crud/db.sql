@@ -71,6 +71,36 @@ INSERT INTO `news` (`id`,`title`,`content`) VALUES
 /*!40000 ALTER TABLE `news` ENABLE KEYS */;
 
 
+--
+-- Definition of table `privilege`
+--
+
+DROP TABLE IF EXISTS `privilege`;
+CREATE TABLE `privilege` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `user_id` int(10) unsigned NOT NULL,
+  `right` varchar(45) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `privilege`
+--
+
+/*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
+INSERT INTO `privilege` (`id`,`user_id`,`right`) VALUES 
+ (8,1,'[privilege]read'),
+ (9,1,'[user]read'),
+ (10,1,'[datadic]read'),
+ (11,1,'[news]read');
+/*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
+
+
+--
+-- Definition of table `user`
+--
+
+DROP TABLE IF EXISTS `user`;
 CREATE TABLE `user` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(45) collate utf8_bin default NULL,
@@ -82,20 +112,11 @@ CREATE TABLE `user` (
 -- Dumping data for table `user`
 --
 
-
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`id`,`name`,`password`) VALUES
- (1,0x61646D696E,0x36633061363235376634393063633535663163666565366262353638623332363437323130336466)
- ;
+INSERT INTO `user` (`id`,`name`,`password`) VALUES 
+ (1,0x61646D696E,0x36633061363235376634393063633535663163666565366262353638623332363437323130336466);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
-CREATE TABLE `privilege` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL,
-  `user_id` int(10) unsigned NOT NULL,
-  `right` varchar(45) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
 
 
