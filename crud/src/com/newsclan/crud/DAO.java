@@ -118,6 +118,40 @@ public class DAO {
 			return null;
 		}
 	}
+	public static List<List<String>> getView(int user_id, String tbname, boolean edit,
+			List<String>... values) {
+		if (Auth.canReadTable(user_id, tbname)) {
+			return getView(tbname, edit, values);
+		} else {
+			return null;
+		}
+	}
+	private static List<List<String>> getView(String tbname, boolean edit,
+			List<String>... values) {
+		List<List<String>> ret = new LinkedList<List<String>>();
+		List title = new LinkedList();
+		title.add("Ãû³Æ");
+		title.add("Öµ");
+
+		ret.add(title);
+
+		Field[] fds = getFieldsOfTable(tbname);
+		int i = 0;
+		for (Field field : fds) {
+			if (!edit && "id".equals(field.name))
+				continue;
+			List row = new LinkedList();
+			row.add(field.label);
+			if (values.length > 0) {
+				row.add(String.valueOf(values[0].get(i++)));
+			} else {
+				row.add("");
+			}
+			ret.add(row);
+		}
+		return ret;
+
+	}
 
 	private static List<List> getForm(String tbname, boolean edit,
 			List<String>... values) {
