@@ -17,6 +17,8 @@ datadic表用于翻译英文表名列名到中文,建表语句在db.sql。
 
 支持超文本编辑、文件上传。
 
+新增权限管理，guest用户，显示内容单页含二维码。
+
 数据库配置文件在WEB-INF/db.prop
 
 [image](https://github.com/zhblue/crud/blob/master/crud/crud.png)
