@@ -118,7 +118,7 @@ public class DAO {
 			return null;
 		}
 	}
-	public static List<List<String>> getView(int user_id, String tbname, boolean edit,
+	public static List<List> getView(int user_id, String tbname, boolean edit,
 			List<String>... values) {
 		if (Auth.canReadTable(user_id, tbname)) {
 			return getView(tbname, edit, values);
@@ -126,9 +126,9 @@ public class DAO {
 			return null;
 		}
 	}
-	private static List<List<String>> getView(String tbname, boolean edit,
+	private static List<List> getView(String tbname, boolean edit,
 			List<String>... values) {
-		List<List<String>> ret = new LinkedList<List<String>>();
+		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
 		title.add("Ãû³Æ");
 		title.add("Öµ");

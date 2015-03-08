@@ -48,9 +48,14 @@
 		<%=Tools.toTable(DAO.getView(user_id,tbname, false,value),
 						"table table-striped table-hover")%>
 		<%
- 			}
+ 			} 
 		%>
 		
-
+<img width="150px" height="150px" id="qc" src="http://qr.liantu.com/api.php?text=x"/>
+<script>
+   //alert(document.getElementById("qc").src);
+   document.getElementById("qc").src="http://qr.liantu.com/api.php?text="+window.location.href;
+   
+</script>
 </body>
 </html>
