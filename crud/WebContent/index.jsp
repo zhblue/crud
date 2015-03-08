@@ -51,6 +51,10 @@
 		var data=$(evt.target).parent().parent().attr("id");
 		return parseInt(data);
 	}
+	function view(rowid){
+		var tbname=$("#tbname").val();
+		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatform);
+	}
 	function edit(rowid){
 		var tbname=$("#tbname").val();
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
@@ -66,8 +70,13 @@
 	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr").append("<td><span class='glyphicon glyphicon-edit'></span>"
+		$("#main tr").append("<td>"+
+				"<span class='glyphicon glyphicon-eye-open'></span>"+
+				"<span class='glyphicon glyphicon-edit'></span>"
 										+"<span class='glyphicon glyphicon-trash' ></span></td>");
+		$(".glyphicon-eye-open").bind("click",function(evt){
+			view(dbid(evt));
+		});
 		$(".glyphicon-trash").bind("click",function(evt){
 			del(dbid(evt));
 		});
