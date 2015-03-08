@@ -53,7 +53,7 @@
 	}
 	function view(rowid){
 		var tbname=$("#tbname").val();
-		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatform);
+		window.open("view.jsp?tb="+tbname+"&id="+rowid);
 	}
 	function edit(rowid){
 		var tbname=$("#tbname").val();

@@ -54,7 +54,8 @@
 <img width="150px" height="150px" id="qc" src="http://qr.liantu.com/api.php?text=x"/>
 <script>
    //alert(document.getElementById("qc").src);
-   document.getElementById("qc").src="http://qr.liantu.com/api.php?text="+window.location.href;
+   document.getElementById("qc").src="http://qr.liantu.com/api.php?text="+
+		   encodeURIComponent(window.location.href);
    
 </script>
 </body>
