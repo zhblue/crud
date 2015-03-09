@@ -77,6 +77,9 @@ public class DAO {
 					d = "0";
 				}
 			}
+			if("password".equals(field.name)){
+				d=Tools.getHash(d, Tools.getRandomSalt());
+			}
 			data.add(d);
 
 		}
