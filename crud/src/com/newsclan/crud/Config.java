@@ -3,6 +3,7 @@ package com.newsclan.crud;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Properties;
 
 import javax.servlet.ServletContext;
@@ -32,7 +33,7 @@ public class Config implements ServletContextListener{
 		Config.configFilePath = path+"/WEB-INF/db.prop";
 		try {
 			Tools.log("loading..."+path);
-			prop.load(new FileInputStream(configFilePath));
+			prop.load(new InputStreamReader(new FileInputStream(configFilePath),"UTF-8"));
 			DB.pool="true".equalsIgnoreCase(prop.getProperty("db.pool"));
 			Config.debug="true".equalsIgnoreCase(prop.getProperty("system.debug"));
 			Config.loginCheck="true".equalsIgnoreCase(prop.getProperty("login.check"));
