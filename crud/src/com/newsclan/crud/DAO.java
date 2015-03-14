@@ -28,7 +28,7 @@ public class DAO {
 		List<String> data = new LinkedList();
 		for (Field field : fds) {
 			if ("id".equals(field.name))
-			 continue;
+				continue;
 			String d = values.get(field.name);
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {
@@ -77,8 +77,8 @@ public class DAO {
 					d = "0";
 				}
 			}
-			if("password".equals(field.name)){
-				d=Tools.getHash(d, Tools.getRandomSalt());
+			if ("password".equals(field.name)) {
+				d = Tools.getHash(d, Tools.getRandomSalt());
 			}
 			data.add(d);
 
@@ -121,6 +121,7 @@ public class DAO {
 			return null;
 		}
 	}
+
 	public static List<List> getView(int user_id, String tbname, boolean edit,
 			List<String>... values) {
 		if (Auth.canReadTable(user_id, tbname)) {
@@ -129,6 +130,7 @@ public class DAO {
 			return null;
 		}
 	}
+
 	private static List<List> getView(String tbname, boolean edit,
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
@@ -278,24 +280,46 @@ public class DAO {
 	}
 
 	public static List<List> getList(String tbname) {
+
 		return getList(tbname, 0, Config.pageSize);
 	}
 
 	public static List<List> getList(int user_id, String tbname, int pageNum,
 			int pageSize) {
-		return getList(tbname, pageNum, pageSize);
+		return getList(user_id, tbname, "", pageNum, pageSize);
+	}
+
+	public static List<List> getList(int user_id, String tbname,
+			String keyword, int pageNum, int pageSize) {
+		if (Auth.canReadTable(user_id, tbname)) {
+			if("".equals(keyword)){
+				return getList(tbname, pageNum, pageSize);
+			}else{
+				return getList(tbname,keyword, pageNum, pageSize);
+			}
+		} else
+			return null;
 	}
 
 	private static List<List> getList(String tbname, int pageNum, int pageSize) {
+		// TODO Auto-generated method stub
+		return getList(tbname,"", pageNum, pageSize);
+	}
+
+	private static List<List> getList(String tbname,String keyword, int pageNum, int pageSize) {
 
 		tbname = tbname.replace("`", "");
 		String sql = "select * from `" + tbname + "`";
 		sql = DAO.getJoinTableSQL(tbname, true);
+		if(!"".equals(keyword))
+			sql+=" where "+ DAO.getKeywordLike(tbname, keyword);
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
 		return queryList(sql, true);
 
 	}
+
+	
 
 	public static List<List> queryList(String sql, boolean title,
 			String... values) {
@@ -442,13 +466,25 @@ public class DAO {
 
 		return ret;
 	}
-
+	private static String getKeywordLike(String tbname, String keyword) {
+		// TODO Auto-generated method stub
+		StringBuilder sb=new StringBuilder();
+		Field[] fds = getFields("select * from " + tbname);
+		for (Field field : fds) {
+			if("password".equals(field.name))
+				continue;				
+			sb.append(String.format(" %s.%s like '%%%s%%' or", field.table,field.name,keyword));
+		}
+		if(sb.length()>2) sb.delete(sb.length()-2, sb.length());
+		
+		return sb.toString(); 
+	}
 	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
 		String ret = "select ";
 		String fields = tbname + ".id as id";
-		String tables = tbname;
+		String tables = String.format("`%s` `%s`", tbname,tbname) ;
 		for (int i = 1; i < fds.length; i++) {
 			if (fds[i].name.endsWith("_id")) {
 				String join = fds[i].name
@@ -458,7 +494,7 @@ public class DAO {
 				if (withoutID.length == 0 || !withoutID[0]) {
 					fields += "," + join + ".id as `" + fds[i].name + "_value`";
 				}
-				tables += " left join " + join + " on " + tbname + "."
+				tables += " left join `" + join + "` `"+join+"` on " + tbname + "."
 						+ fds[i].name + "=" + join + ".id";
 				;
 			} else {
