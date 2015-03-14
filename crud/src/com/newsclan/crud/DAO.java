@@ -1,6 +1,5 @@
 package com.newsclan.crud;
 
-
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -69,10 +68,13 @@ public class DAO {
 		for (Field field : fds) {
 			if ("id".equals(field.name))
 				continue;
+			String d = values.get(field.name);
+			if ("password".equals(field.name)&&"".equals(d)) 
+				continue;
 			sql.append(field.name);
 			sql.append("=?,");
 
-			String d = values.get(field.name);
+			
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {
 					d = "0";
