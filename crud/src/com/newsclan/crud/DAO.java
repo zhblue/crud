@@ -485,7 +485,14 @@ public class DAO {
 		for (Field field : fds) {
 			if("password".equals(field.name))
 				continue;				
-			sb.append(String.format(" %s.%s like ? or", field.table,field.name));
+			if(field.name.endsWith("_id")){
+				String subtable=field.name.substring(0,field.name.length()-3);
+				sb.append(String.format(" `%s`.`%s` like ? or", subtable,getFirstCharFieldName(subtable)));
+
+			}else{
+				sb.append(String.format(" `%s`.`%s` like ? or", field.table,field.name));
+
+			}
 		}
 		if(sb.length()>2) sb.delete(sb.length()-2, sb.length());
 		
