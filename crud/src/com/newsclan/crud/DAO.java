@@ -1,5 +1,6 @@
 package com.newsclan.crud;
 
+
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.PreparedStatement;
@@ -311,11 +312,20 @@ public class DAO {
 		tbname = tbname.replace("`", "");
 		String sql = "select * from `" + tbname + "`";
 		sql = DAO.getJoinTableSQL(tbname, true);
-		if(!"".equals(keyword))
-			sql+=" where "+ DAO.getKeywordLike(tbname, keyword);
+		String []values={};
+		if(!"".equals(keyword)){
+			String where=DAO.getKeywordLike(tbname);
+			sql+=" where "+ where;
+			int k=where.split("\\?").length-1;
+			Vector v=new Vector();
+			for (int i = 0; i < k; i++) {
+				v.add(String.format("%%%s%%", keyword));
+			}
+			values=(String[]) v.toArray(values);
+		}
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
-		return queryList(sql, true);
+		return queryList(sql, true,values);
 
 	}
 
@@ -466,14 +476,14 @@ public class DAO {
 
 		return ret;
 	}
-	private static String getKeywordLike(String tbname, String keyword) {
+	private static String getKeywordLike(String tbname) {
 		// TODO Auto-generated method stub
 		StringBuilder sb=new StringBuilder();
 		Field[] fds = getFields("select * from " + tbname);
 		for (Field field : fds) {
 			if("password".equals(field.name))
 				continue;				
-			sb.append(String.format(" %s.%s like '%%%s%%' or", field.table,field.name,keyword));
+			sb.append(String.format(" %s.%s like ? or", field.table,field.name));
 		}
 		if(sb.length()>2) sb.delete(sb.length()-2, sb.length());
 		
