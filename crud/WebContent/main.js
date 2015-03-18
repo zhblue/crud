@@ -65,8 +65,10 @@
 	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
-		if (pageNum=='undefined') pageNum=0;
-		if (keyword=='undefined') keyword='';
+		if (typeof(pageNum)=='undefined') pageNum=thepage;
+		if (typeof(keyword)=='undefined') keyword=searchKeyword;
+		thepage=pageNum;
+		searchKeyword=keyword;
 		window.clearInterval(inter);
 		$("#main").load("list.jsp",{"tb":tbname,"pageNum":pageNum,"keyword":keyword},function(text,status,http){
 			
@@ -130,4 +132,4 @@
 	var stid=null;
 	var tableName="room";
 	var searchKeyword="";
-	
+	var thepage=0;
