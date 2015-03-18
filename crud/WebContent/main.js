@@ -1,4 +1,7 @@
-
+ function viewroom(roomid){
+    	window.clearInterval(inter);
+		$("#main").load("view.jsp",{"tb":"room","id":roomid},reformatform);
+    }
 	function dbid(evt){
 		var data=$(evt.target).parent().parent().attr("id");
 		return parseInt(data);
@@ -14,7 +17,7 @@
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
 	function del(rowid){
-		var ans=confirm('ȷ��ɾ�����'+rowid);
+		var ans=confirm('确定删除编号'+rowid);
 		var tbname=$("#tbname").val();
 		if(ans){
 			$.post("del.jsp",{"tbname":tbname,"id":rowid},new function(){
@@ -53,13 +56,17 @@
 			loadSelect($(this));
 		});
 		$(".input_date").datepicker();
-		$("textarea").ckeditor();
+		if(tableName!='config')
+				$("textarea").ckeditor();
 	}
-
+	function loadReport(){
+		window.clearInterval(inter);
+		$("#main").load("jsp/report_select.jsp?"+Math.random());
+	}
 	function mainLoad(tbname,pageNum,keyword){
+		tableName=tbname; 
 		if (pageNum=='undefined') pageNum=0;
 		if (keyword=='undefined') keyword='';
-		tableName=tbname; 
 		window.clearInterval(inter);
 		$("#main").load("list.jsp",{"tb":tbname,"pageNum":pageNum,"keyword":keyword},function(text,status,http){
 			
@@ -79,10 +86,15 @@
 	function pageDown(tbname,pageNum){
 		mainLoad(tbname,pageNum+1,searchKeyword);
 	}
+	function showReport(frm){
+		var data=$(frm).serialize();
+		$("#main").load("jsp/report_select.jsp?"+Math.random(),data);
+		return false;
+	}
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
 		$.post("add.jsp",data,new function(){
-			 mainLoad(tbname);
+			 mainLoad(tbname,0,searchKeyword);
 		});
 	}
 	function submitTable(){
@@ -90,15 +102,15 @@
 		var tbname=$("#tb_name").val();
 		
 		$.post("addTable.jsp",data,new function(){
-			 window.setTimeout("mainLoad('"+tbname+"')",1000);
+			 window.setTimeout("mainLoad('"+tbname+"',0,'"+searchKeyword+"')",1000);
 		});
 	}
 	function addTable(){
 		$("#main").empty();
 		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding' class='table table-striped table-hover'></table></form>");
-		$("#tb_adding").append("<tr><td>����<input type=text id=tb_name name=tb_name value='tb_'></td><td>����<input type=text name=tb_title value='��Ϣ'></td></tr>");
-		$("#tb_adding").append("<tr><td>����</td><td>����</td><td>����</td><td><a href=# onclick='addColumn();'><span class='glyphicon glyphicon-plus'></span></a></td></tr>");
-		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='ȷ��'><input type=reset value='����'>");
+		$("#tb_adding").append("<tr><td>表名<input type=text id=tb_name name=tb_name value='tb_'></td><td>中文<input type=text name=tb_title value='信息'></td></tr>");
+		$("#tb_adding").append("<tr><td>列名</td><td>类型</td><td>中文</td><td><a href=# onclick='addColumn();'><span class='glyphicon glyphicon-plus'></span></a></td></tr>");
+		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='确定'><input type=reset value='重置'>");
 		addColumn();
 		
 	}
@@ -116,5 +128,6 @@
 		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
 	var stid=null;
-	var tableName="user";
+	var tableName="room";
 	var searchKeyword="";
+	

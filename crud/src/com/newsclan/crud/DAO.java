@@ -138,7 +138,7 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("Ãû³Æ");
+		title.add("ï¿½ï¿½ï¿½ï¿½");
 		title.add("Öµ");
 
 		ret.add(title);
@@ -165,7 +165,7 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("Ãû³Æ");
+		title.add("ï¿½ï¿½ï¿½ï¿½");
 		title.add("Öµ");
 
 		ret.add(title);
@@ -325,6 +325,7 @@ public class DAO {
 			}
 			values=(String[]) v.toArray(values);
 		}
+		if(tbname.endsWith("log")) sql+=" order by id desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
 		return queryList(sql, true,values);
