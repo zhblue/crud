@@ -14,7 +14,7 @@
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
 	function del(rowid){
-		var ans=confirm('È·¶¨É¾³ý±àºÅ'+rowid);
+		var ans=confirm('È·ï¿½ï¿½É¾ï¿½ï¿½ï¿½ï¿½ï¿½'+rowid);
 		var tbname=$("#tbname").val();
 		if(ans){
 			$.post("del.jsp",{"tbname":tbname,"id":rowid},new function(){
@@ -57,6 +57,8 @@
 	}
 
 	function mainLoad(tbname,pageNum,keyword){
+		if (pageNum=='undefined') pageNum=0;
+		if (keyword=='undefined') keyword='';
 		tableName=tbname; 
 		window.clearInterval(inter);
 		$("#main").load("list.jsp",{"tb":tbname,"pageNum":pageNum,"keyword":keyword},function(text,status,http){
@@ -72,10 +74,10 @@
 		
 	}
 	function pageUp(tbname,pageNum){
-		mainLoad(tbname,pageNum-1);
+		mainLoad(tbname,pageNum-1,searchKeyword);
 	}
 	function pageDown(tbname,pageNum){
-		mainLoad(tbname,pageNum+1);
+		mainLoad(tbname,pageNum+1,searchKeyword);
 	}
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
@@ -94,9 +96,9 @@
 	function addTable(){
 		$("#main").empty();
 		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding' class='table table-striped table-hover'></table></form>");
-		$("#tb_adding").append("<tr><td>±íÃû<input type=text id=tb_name name=tb_name value='tb_'></td><td>ÖÐÎÄ<input type=text name=tb_title value='ÐÅÏ¢'></td></tr>");
-		$("#tb_adding").append("<tr><td>ÁÐÃû</td><td>ÀàÐÍ</td><td>ÖÐÎÄ</td><td><a href=# onclick='addColumn();'><span class='glyphicon glyphicon-plus'></span></a></td></tr>");
-		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='È·¶¨'><input type=reset value='ÖØÖÃ'>");
+		$("#tb_adding").append("<tr><td>ï¿½ï¿½ï¿½ï¿½<input type=text id=tb_name name=tb_name value='tb_'></td><td>ï¿½ï¿½ï¿½ï¿½<input type=text name=tb_title value='ï¿½ï¿½Ï¢'></td></tr>");
+		$("#tb_adding").append("<tr><td>ï¿½ï¿½ï¿½ï¿½</td><td>ï¿½ï¿½ï¿½ï¿½</td><td>ï¿½ï¿½ï¿½ï¿½</td><td><a href=# onclick='addColumn();'><span class='glyphicon glyphicon-plus'></span></a></td></tr>");
+		$("#frmAddTable").append("<input type=button onclick='submitTable()' value='È·ï¿½ï¿½'><input type=reset value='ï¿½ï¿½ï¿½ï¿½'>");
 		addColumn();
 		
 	}
@@ -110,8 +112,9 @@
 	}
 	function search(keyword){
 		window.clearTimeout(stid);
+		searchKeyword=keyword;
 		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
 	var stid=null;
 	var tableName="user";
-	
+	var searchKeyword="";
