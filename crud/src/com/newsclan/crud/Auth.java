@@ -2,7 +2,8 @@ package com.newsclan.crud;
 
 public class Auth {
 	public static boolean isAdmin(int user_id) {
-		return user_id == 1;
+		if( user_id == 1) return true;
+		return checkPrivilegeForRightOfTable(user_id,"","admin");
 	}
 	private static boolean checkPrivilegeForRightOfTable(int user_id, String tbname,
 			String right) {
