@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -206,7 +207,22 @@ public class Tools {
 		}
 		return s;
 	}
+	public static String lastMonthFirstDay() {
 
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.MONTH, -1);
+		cal.set(cal.DATE, 1);
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+	}
+
+	public static String lastMonthLastDay() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.MONTH, -1);
+		cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+	}
 	public static void debug(String msg) {
 		// TODO Auto-generated method stub
 		if (Config.debug)

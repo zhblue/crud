@@ -1,7 +1,19 @@
- function viewroom(roomid){
+ function showBatchWork(keyword){
     	window.clearInterval(inter);
-		$("#main").load("view.jsp",{"tb":"room","id":roomid},reformatform);
+		$("#main").load("remote/batch.jsp",{"tb":"room","keyword":keyword});
     }
+ function doBatchWork(frm){
+	 window.clearInterval(inter);
+		var data=$(frm).serialize();
+		
+		$("#main").load("remote/batch.jsp#"+Math.random(),data);
+		return false;
+	}
+	
+ function viewroom(roomid){
+ 	window.clearInterval(inter);
+		$("#main").load("view.jsp",{"tb":"room","id":roomid},reformatform);
+ }
 	function dbid(evt){
 		var data=$(evt.target).parent().parent().attr("id");
 		return parseInt(data);
@@ -61,7 +73,7 @@
 	}
 	function loadReport(){
 		window.clearInterval(inter);
-		$("#main").load("jsp/report_select.jsp?"+Math.random());
+		$("#main").load("report_select.jsp?"+Math.random());
 	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
@@ -90,7 +102,7 @@
 	}
 	function showReport(frm){
 		var data=$(frm).serialize();
-		$("#main").load("jsp/report_select.jsp?"+Math.random(),data);
+		$("#main").load("report_select.jsp?"+Math.random(),data);
 		return false;
 	}
 	function submitAdd(tbname){
@@ -130,6 +142,7 @@
 		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
 	var stid=null;
+	var inter=null;
 	var tableName="room";
 	var searchKeyword="";
 	var thepage=0;

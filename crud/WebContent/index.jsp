@@ -37,6 +37,8 @@
 			 +DAO.translate(table)+"</a>");
 		}
       %>
+       <a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
+   
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input placeholder="查找" class="nav-brand form-control" onkeyup="search(this.value)" type="text">
