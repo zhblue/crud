@@ -119,6 +119,14 @@ INSERT INTO `user` (`id`,`name`,`password`) VALUES
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
 
+DROP TABLE IF EXISTS `config`;
+CREATE TABLE `config` (
+  `id` int(10) unsigned NOT NULL auto_increment,
+  `name` varchar(45) NOT NULL,
+  `value` text NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
