@@ -39,7 +39,7 @@
 		}
       %>
       <%
-      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "report")){
+      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "report")||Auth.isAdmin(user_id)){
       %>
       	 <a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
       <%} %>

@@ -13,9 +13,12 @@
  
 <body background="bg2.jpg" > 
 <%
-	if (session.getAttribute("admin") == null
-			&& session.getAttribute("report") == null)
-		return;
+int user_id=(Integer)session.getAttribute("user_id");
+if (!(
+		Auth.isAdmin(user_id)||
+		Auth.checkPrivilegeForRightOfTable(user_id, "", "report")
+	))
+	return;
 %>
 <%
 String id=request.getParameter("id");
