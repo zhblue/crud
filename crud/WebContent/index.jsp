@@ -29,7 +29,8 @@
   <div class="navbar bs-navbar" >
     <a class="navbar-brand" href="https://github.com/zhblue/crud" target='_blank'><%=Config.get("system.name") %></a>
       <%
-      	List<String> tables=com.newsclan.crud.DAO.getTables((Integer)session.getAttribute("user_id"));
+      int user_id=(Integer)session.getAttribute("user_id");
+      	List<String> tables=com.newsclan.crud.DAO.getTables(user_id);
 		Iterator<String> it=tables.iterator(); 
 		while(it.hasNext()){ 
 			String table=it.next();
@@ -37,8 +38,11 @@
 			 +DAO.translate(table)+"</a>");
 		}
       %>
-       <a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
-   
+      <%
+      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "report")){
+      %>
+      	 <a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
+      <%} %>
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input placeholder="查找" class="nav-brand form-control" onkeyup="search(this.value)" type="text">

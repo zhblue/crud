@@ -9,8 +9,11 @@
 <div width=80%>
 <table class="table table-striped"  >
 <%
-	if (session.getAttribute("admin") == null
-			&& session.getAttribute("rroom") == null)
+	int user_id=(Integer)session.getAttribute("user_id");
+	if (!(
+			Auth.isAdmin(user_id)||
+			Auth.checkPrivilegeForRightOfTable(user_id, "", "report")
+		))
 		return;
 
 	String sql = (String) session.getAttribute("sql");

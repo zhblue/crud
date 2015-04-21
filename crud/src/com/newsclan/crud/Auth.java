@@ -5,7 +5,7 @@ public class Auth {
 		if( user_id == 1) return true;
 		return checkPrivilegeForRightOfTable(user_id,"","admin");
 	}
-	private static boolean checkPrivilegeForRightOfTable(int user_id, String tbname,
+	public static boolean checkPrivilegeForRightOfTable(int user_id, String tbname,
 			String right) {
 		String sql="select `right` from privilege where `user_id`=? and `right`=?";
 		String ret=DAO.queryString(sql, String.valueOf(user_id),String.format("[%s]%s", tbname,right));
