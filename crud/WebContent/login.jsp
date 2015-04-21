@@ -7,7 +7,7 @@
 	passwd = request.getParameter("passwd");
 	String rand = request.getParameter("rand");
 	if (rand != null && rand.equals(session.getAttribute("rand"))){
- 
+		session.setAttribute("rand",null);
 		if (Tools.login(username, passwd)) {
 			sql = "SELECT  * from user where name=? ";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
@@ -53,8 +53,8 @@
 			</tr>
 			<tr>
 
-				<td><img src="rand.jsp"></td>
-				<td><input name="rand" size="15" type=text> <input
+				<td><img src="rand.jsp" onclick="this.src='rand.jsp?'+Math.random();"></td>
+				<td><input name="rand" size="15" type=text > <input
 					type="submit" value="进入" name="B1"></td>
 			</tr>
 
