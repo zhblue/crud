@@ -35,6 +35,10 @@ public class DAO {
 					d = "0";
 				}
 			}
+			
+			if ("password".equals(field.name)) {
+				d = Tools.getHash(d, Tools.getRandomSalt());
+			}
 			data.add(d);
 			sql.append("`");
 			sql.append(field.name);
@@ -71,7 +75,9 @@ public class DAO {
 			String d = values.get(field.name);
 			if ("password".equals(field.name)&&"".equals(d)) 
 				continue;
+			sql.append("`");
 			sql.append(field.name);
+			sql.append("`");
 			sql.append("=?,");
 
 			
@@ -138,8 +144,8 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("字段");
-		title.add("值");
+		title.add("瀛楁");
+		title.add("鍊�");
 
 		ret.add(title);
 
@@ -165,8 +171,8 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("����");
-		title.add("ֵ");
+		title.add("字段名");
+		title.add("值");
 
 		ret.add(title);
 
@@ -241,7 +247,7 @@ public class DAO {
 		List ret = getTables();
 		for (Iterator tbit = ret.iterator(); tbit.hasNext();) {
 			String tbname = (String) tbit.next();
-			if (!Auth.canReadTable(user_id, tbname)) {
+			if (!(Auth.canReadTable(user_id, tbname)||Auth.canInsertTable(user_id, tbname))) {
 				tbit.remove();
 			}
 		}
