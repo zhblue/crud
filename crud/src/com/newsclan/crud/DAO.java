@@ -124,7 +124,7 @@ public class DAO {
 
 	public static List<List> getForm(int user_id, String tbname, boolean edit,
 			List<String>... values) {
-		if (Auth.canReadTable(user_id, tbname)) {
+		if (Auth.canReadTable(user_id, tbname)||Auth.canInsertTable(user_id, tbname)) {
 			return getForm(tbname, edit, values);
 		} else {
 			return null;
@@ -307,7 +307,7 @@ public class DAO {
 				return getList(tbname,keyword, pageNum, pageSize);
 			}
 		} else
-			return null;
+			return new Vector();
 	}
 
 	private static List<List> getList(String tbname, int pageNum, int pageSize) {
