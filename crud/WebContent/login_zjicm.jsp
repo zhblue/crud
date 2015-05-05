@@ -8,7 +8,7 @@
 	String rand = request.getParameter("rand");
 	if (rand != null && rand.equals(session.getAttribute("rand"))){
 		session.setAttribute("rand",null);
-		if (Tools.login(username, passwd)) {
+		if (ZJICM_portal.login(username, passwd)) {
 			sql = "SELECT  * from user where name=? ";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
@@ -17,8 +17,13 @@
 				session.setAttribute("user_id", rs.getInt("id"));
 				session.setAttribute("user_name", username);
 			}
+			int user_id = Integer.parseInt(username);
+			
+			session.setAttribute("user_id", user_id);
+			session.setAttribute("user_name", username);
+			
 			sql = "SELECT  `right` from privilege where user_id=?";
-			int user_id = rs.getInt("id");
+			
 			DB.close(rs);
 			DB.close(pstmt);
 
