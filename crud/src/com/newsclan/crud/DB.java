@@ -109,6 +109,7 @@ public class DB {
 }
 class Keeper extends TimerTask{
 
+	public static boolean stop;
 	private Queue<Connection> pool;
 	private Timer timer=new Timer();
 
@@ -140,6 +141,11 @@ class Keeper extends TimerTask{
 		}
 		if(Config.debug)
 			Tools.debug(checked+" Connection checked OK!\n" );
+		if(stop){
+			this.cancel();
+			timer.cancel();
+			timer.purge();
+		}
 	}
 
 	public static void dropConnection(Connection conn) {
