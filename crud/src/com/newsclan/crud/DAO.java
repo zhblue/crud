@@ -138,8 +138,8 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("瀛楁");
-		title.add("鍊�");
+		title.add("字段名");
+		title.add("值");
 
 		ret.add(title);
 
