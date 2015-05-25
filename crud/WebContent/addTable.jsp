@@ -8,6 +8,7 @@
 </head>
 <body>
 	<%
+	if(Auth.isAdmin((Integer)session.getAttribute("user_id"))){
 		request.setCharacterEncoding("UTF-8");
 		String tb_name = request.getParameter("tb_name");
 		String tb_title = request.getParameter("tb_title");
@@ -15,6 +16,7 @@
 		String[] fd_types = request.getParameterValues("fd_type");
 		String[] fd_titles = request.getParameterValues("fd_title");
 		Tools.addTable(tb_name,tb_title, fd_names, fd_types, fd_titles);
+	}
 	%> 
 </body>
 </html>
