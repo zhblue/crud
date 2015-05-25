@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8" import="java.sql.*,java.util.*,com.newsclan.crud.*"%>
 <%
+	request.setCharacterEncoding("UTF-8");
 	String username, passwd, sql;
 	Connection conn=DB.getConnection();
 	username = request.getParameter("username");
