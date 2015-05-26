@@ -40,7 +40,7 @@
 	} else {
 		System.out.println(1);
 		%>
-		<form method="post" action="login_zjicm.jsp">
+		<form method="post" action="login.jsp">
 		<table align=center>
 
 			<tr>
