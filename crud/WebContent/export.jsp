@@ -1,9 +1,11 @@
 <%@ page language="java" contentType="application/csv; charset=GBK"
 	pageEncoding="GBK"%><%@ page import="com.newsclan.crud.*,java.sql.*"%><%
-	if (session.getAttribute("admin") == null
-			&& session.getAttribute("report") == null)
+	int user_id=(Integer)session.getAttribute("user_id");
+	if (!(
+			Auth.isAdmin(user_id)||
+			Auth.checkPrivilegeForRightOfTable(user_id, "", "report")
+		))
 		return;
-
 	String sql = (String) session.getAttribute("sql");
 
 	response.setContentType("binary/octet-stream");

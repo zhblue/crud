@@ -39,7 +39,7 @@
 		}
       %>
       <%
-      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "[]report")||Auth.isAdmin(user_id)){
+      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "report")||Auth.isAdmin(user_id)){
       %>
       	 <a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
       <%} %>
@@ -49,8 +49,8 @@
         </div>
       </form>
        <%
-     if (session.getAttribute("admin") != null
-			||session.getAttribute("[]addTable") != null){
+     if (Auth.isAdmin(user_id)
+			||Auth.checkPrivilegeForRightOfTable(user_id, "", "addTable")){
 		%>
      	<a class="btn navbar-brand" href="#" onclick='addTable();'><span class='glyphicon glyphicon-plus'></span></a> 
      <%
