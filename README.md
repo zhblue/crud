@@ -21,7 +21,7 @@ datadic表用于翻译英文表名列名到中文,建表语句在db.sql。
 
 数据库配置文件在WEB-INF/db.prop
 
-[image](https://github.com/zhblue/crud/blob/master/crud/crud.png)
+![image](https://github.com/zhblue/crud/blob/master/crud/crud.png)
 
 正常连接数据库后，新建符合上述要求的数据表，刷新页面会自动出现新的菜单，点击可以展开数据进行增删改。
 
