@@ -12,7 +12,7 @@
 	
  function viewroom(roomid){
  	window.clearInterval(inter);
-		$("#main").load("view.jsp",{"tb":"room","id":roomid},reformatform);
+		$("#main").load("view.jsp",{"tb":"room","id":roomid},reformatview);
  }
 	function dbid(evt){
 		var data=$(evt.target).parent().parent().attr("id");
@@ -20,7 +20,7 @@
 	}
 	function view(rowid){
 		var tbname=$("#tbname").val();
-		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatform);
+		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatview);
 		
 		//window.open("view.jsp?tb="+tbname+"&id="+rowid);
 	}
@@ -58,6 +58,8 @@
 	function loadSelect(input){
 		var input_name=input.attr("name");
 		var default_value=input.val();
+		if(input[0].nodeName=="SPAN")  //view use span for tag, text() for value
+			 	default_value=input.text();
 		var tbname=input_name.substring(0,input_name.length-3);
 		var td=input.parent();
 		td.load("select.jsp?tbname="+tbname+"&value="+default_value);
@@ -71,9 +73,15 @@
 		if(tableName!='config')
 				$("textarea").ckeditor();
 	}
+	function reformatview(){
+		$("span[name$=_id]").each(function(){
+			loadSelect($(this));
+		});
+	}
+	
 	function loadReport(){
 		window.clearInterval(inter);
-		$("#main").load("report_select.jsp?"+Math.random());
+		$("#main").load("jsp/report_select.jsp?"+Math.random());
 	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
@@ -102,7 +110,7 @@
 	}
 	function showReport(frm){
 		var data=$(frm).serialize();
-		$("#main").load("report_select.jsp?"+Math.random(),data);
+		$("#main").load("jsp/report_select.jsp?"+Math.random(),data);
 		return false;
 	}
 	function submitAdd(tbname){
@@ -142,7 +150,6 @@
 		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
 	var stid=null;
-	var inter=null;
 	var tableName="room";
 	var searchKeyword="";
 	var thepage=0;
