@@ -138,7 +138,7 @@ public class DAO {
 			List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
-		title.add("字段名");
+		title.add("字段");
 		title.add("值");
 
 		ret.add(title);
@@ -151,7 +151,7 @@ public class DAO {
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
-				row.add(String.valueOf(values[0].get(i++)));
+				row.add("<span name='"+field.name+"'>"+String.valueOf(values[0].get(i++))+"</span>");
 			} else {
 				row.add("");
 			}
@@ -614,7 +614,6 @@ public class DAO {
 			DB.close(rs);
 			DB.close(stmt);
 		}
-
 		return ret;
 	}
 }
