@@ -89,10 +89,9 @@ CREATE TABLE `privilege` (
 
 /*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
 INSERT INTO `privilege` (`id`,`user_id`,`right`) VALUES 
- (8,1,'[privilege]read'),
+ (8,1,'[]admin'),
  (9,1,'[user]read'),
- (10,1,'[datadic]read'),
- (11,1,'[news]read');
+ (10,1,'[datadic]read');
 /*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
 
 
