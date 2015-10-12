@@ -149,6 +149,7 @@
 		searchKeyword=keyword;
 		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
+	var inter=null;
 	var stid=null;
 	var tableName="room";
 	var searchKeyword="";
