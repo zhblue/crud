@@ -233,9 +233,12 @@ public class DAO {
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
-		if (f.type == Types.DATE || f.type == Types.TIMESTAMP
-				|| f.name.endsWith("_date"))
+		if (f.type == Types.DATE || f.name.endsWith("_date"))
 			return "input_date";
+		else if(f.type==Types.TIMESTAMP||f.type==Types.TIMESTAMP_WITH_TIMEZONE||
+				f.name.endsWith("_time"))
+			return "input_datetime";
+		else
 		return "input_text";
 	}
 

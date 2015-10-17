@@ -70,6 +70,13 @@
 			loadSelect($(this));
 		});
 		$(".input_date").datepicker();
+		$(".input_datetime").datetimepicker(
+				{   showSecond: false,
+		            timeFormat: 'hh:mm:ss',
+		            stepHour: 1,
+		            stepMinute: 1,
+		            stepSecond: 1
+		        });
 		if(tableName!='config')
 				$("textarea").ckeditor();
 	}

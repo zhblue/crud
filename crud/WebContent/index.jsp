@@ -11,9 +11,13 @@
 <script src="bs/js/bootstrap.js"></script>
 <link rel="stylesheet" type="text/css" href="jq/css/jquery-ui.min.css" />
 <link rel="stylesheet" type="text/css" href="jq/css/jquery.wysiwyg.css" />
-
+<link type="text/css" href="jq/css/jquery-ui-timepicker-addon.css" rel="stylesheet" />
+     
 <script type="text/javascript" src="jq/jquery-ui.min.js"></script>
 <script type="text/javascript" src="jq/jquery-ui-datepicker.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-timepicker-zh-CN.js"></script>
+
 
 <script src="ckeditor/ckeditor.js"></script>
 <script src="ckeditor/adapters/jquery.js"></script>
