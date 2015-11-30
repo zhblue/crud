@@ -64,7 +64,7 @@
 					value.remove(0);
 				}
 				
-		%><input type=hidden name="<%=DAO.getPrimaryKeyFieldName(tbname) %>" value="<%=id%>">
+		%><input type=hidden name="id" value="<%=id%>">
 		<%=Tools.toTable(DAO.getForm(user_id,tbname, false,value),
 						"table table-striped table-hover")%>
 		<%

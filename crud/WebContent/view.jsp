@@ -8,17 +8,16 @@
 </head>
 <body>
 	<%
-		request.setCharacterEncoding("UTF8");
+		request.setCharacterEncoding("UTF-8");
 		String tbname = request.getParameter("tbname");
 		String sid = request.getParameter("id");
-		Integer user_id=(Integer)session.getAttribute("user_id");
-		if(user_id==null) user_id=0;
+		int user_id=Tools.getUserId(session);
 		int id = -1;
 		if (sid != null) {
 			try {
 				id = Integer.parseInt(sid);
 			} catch (Exception e) {
-				e.printStackTrace();
+			//	e.printStackTrace();
 			}
 		}
 	
@@ -37,7 +36,7 @@
 						"table table-striped table-hover")%>
 		<% 
 			} else {
-				List<List> values=DAO.queryList("select * from `"+tbname+"` where id=?", false, String.valueOf(id));
+				List<List> values=DAO.queryList("select * from `"+tbname+"` where "+DAO.getPrimaryKeyFieldName(tbname)+"=?", false, String.valueOf(id));
 				List<String> value=null;
 				if(values.size()>0){
 					value=values.get(0);

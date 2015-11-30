@@ -60,9 +60,12 @@ public class DAO {
 		StringBuffer sql = new StringBuffer("update  `" + tbname + "` set ");
 
 		List<String> data = new LinkedList();
+		boolean first=true;
 		for (Field field : fds) {
-			if ("id".equals(field.name))
+			if ("id".equals(field.name)||first){
+				first=false;
 				continue;
+			}
 			String d = values.get(field.name);
 			if ("password".equals(field.name) && "".equals(d))
 				continue;
@@ -86,13 +89,14 @@ public class DAO {
 
 		}
 		sql.deleteCharAt(sql.length() - 1);
-		sql.append(" where id=?");
+		sql.append(" where "+DAO.getPrimaryKeyFieldName(tbname)+"=?");
 		data.add(String.valueOf(id));
 		return update(sql.toString(), data.toArray());
 
 	}
 	public static String getPrimaryKeyFieldName(String tbname) {
-		return getFieldsOfTable(tbname)[0].name;
+		String ret=getFieldsOfTable(tbname)[0].name;
+		return ret;
 	}
 	public static Field[] getFieldsOfTable(String tbname) {
 		List<Field> ret = new LinkedList<Field>();
@@ -148,7 +152,7 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
 		for (Field field : fds) {
-			if (!edit && "id".equals(field.name))
+			if (!edit && ("id".equals(field.name)||field.name.equals(DAO.getPrimaryKeyFieldName(tbname))))
 				continue;
 			List row = new LinkedList();
 			row.add(field.label);
@@ -528,7 +532,7 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
-			if (field.name.endsWith("_id")) {
+			if (field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
 				String subtable = field.name.substring(0,
 						field.name.length() - 3);
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
@@ -550,27 +554,27 @@ public class DAO {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
 		String ret = "select ";
-		String fields = tbname + "."+fds[0].name+" as id";
+		String fields ="";
 		
 		String tables = String.format("`%s` `%s`", tbname, tbname);
-		for (int i = 1; i < fds.length; i++) {
-			if (fds[i].name.endsWith("_id")&&!fds[i].name.equals(fds[i].table+"_id")) {
-				String join = fds[i].name
-						.substring(0, fds[i].name.length() - 3);
+		for (Field field:fds) {
+			if (field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
+				String join = field.name
+						.substring(0, field.name.length() - 3);
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
-					fields += "," + join + ".id as `" + fds[i].name + "_value`";
+					fields += "," + join + "."+getPrimaryKeyFieldName(join)+" as `" + field.name + "_value`";
 				}
 				tables += " left join `" + join + "` `" + join + "` on "
-						+ tbname + "." + fds[i].name + "=" + join + ".id";
+						+ tbname + "." + field.name + "=" + join + "."+getPrimaryKeyFieldName(join)+"";
 				;
 			} else {
-				fields += "," + tbname + "." + fds[i].name + " as `"
-						+ fds[i].name + "`";
+				fields += "," + tbname + "." + field.name + " as `"
+						+ field.name + "`";
 			}
 		}
-		ret += fields + " from " + tables + " ";
+		ret += fields.substring(1) + " from " + tables + " ";
 		return ret;
 	}
 
