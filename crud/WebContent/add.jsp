@@ -11,7 +11,7 @@
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
 		String sid = request.getParameter("id");
-		int user_id=(Integer)session.getAttribute("user_id");
+		int user_id=Tools.getUserId(session);
 		int id = -1;
 		if (sid != null) {
 			try {
@@ -57,14 +57,14 @@
 						"table table-striped table-hover")%>
 		<% 
 			} else {
-				List<List> values=DAO.queryList("select * from `"+tbname+"` where id=?", false, String.valueOf(id));
+				List<List> values=DAO.queryList("select * from `"+tbname+"` where "+DAO.getPrimaryKeyFieldName(tbname)+"=?", false, String.valueOf(id));
 				List<String> value=null;
 				if(values.size()>0){
 					value=values.get(0);
 					value.remove(0);
 				}
 				
-		%><input type=hidden name=id value="<%=id%>">
+		%><input type=hidden name="<%=DAO.getPrimaryKeyFieldName(tbname) %>" value="<%=id%>">
 		<%=Tools.toTable(DAO.getForm(user_id,tbname, false,value),
 						"table table-striped table-hover")%>
 		<%

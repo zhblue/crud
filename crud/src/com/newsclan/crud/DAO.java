@@ -91,7 +91,9 @@ public class DAO {
 		return update(sql.toString(), data.toArray());
 
 	}
-
+	public static String getPrimaryKeyFieldName(String tbname) {
+		return getFieldsOfTable(tbname)[0].name;
+	}
 	public static Field[] getFieldsOfTable(String tbname) {
 		List<Field> ret = new LinkedList<Field>();
 		Connection conn = DB.getConnection();
@@ -173,7 +175,7 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
 		for (Field field : fds) {
-			if (!edit && "id".equals(field.name))
+			if (!edit && ("id".equals(field.name)||field.name.equals(DAO.getPrimaryKeyFieldName(tbname))))
 				continue;
 			if (!edit && "input_user".equals(field.name))
 				continue;
@@ -548,10 +550,11 @@ public class DAO {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
 		String ret = "select ";
-		String fields = tbname + ".id as id";
+		String fields = tbname + "."+fds[0].name+" as id";
+		
 		String tables = String.format("`%s` `%s`", tbname, tbname);
 		for (int i = 1; i < fds.length; i++) {
-			if (fds[i].name.endsWith("_id")) {
+			if (fds[i].name.endsWith("_id")&&!fds[i].name.equals(fds[i].table+"_id")) {
 				String join = fds[i].name
 						.substring(0, fds[i].name.length() - 3);
 				fields += "," + join + "." + getFirstCharFieldName(join)

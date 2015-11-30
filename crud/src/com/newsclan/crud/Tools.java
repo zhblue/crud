@@ -13,6 +13,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.lang3.StringEscapeUtils;
 
@@ -46,6 +47,11 @@ public class Tools {
 		DB.close(pstmt);
 		DB.close(conn);
 		return ret;
+	}
+	public static int getUserId(HttpSession session){
+		Integer user_id = (Integer) session.getAttribute("user_id");
+		if(user_id==null) user_id=0;
+		return user_id;
 	}
 	public static String getHash(String origin,String salt){
 		return Md5(origin+salt)+salt;

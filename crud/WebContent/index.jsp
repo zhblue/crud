@@ -33,7 +33,7 @@
   <div class="navbar bs-navbar" >
     <a class="navbar-brand" href="https://github.com/zhblue/crud" target='_blank'><%=Config.get("system.name") %></a>
       <%
-      int user_id=(Integer)session.getAttribute("user_id");
+      int user_id=Tools.getUserId(session);
       	List<String> tables=com.newsclan.crud.DAO.getTables(user_id);
 		Iterator<String> it=tables.iterator(); 
 		while(it.hasNext()){ 

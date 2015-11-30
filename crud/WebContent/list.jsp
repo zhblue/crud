@@ -18,7 +18,7 @@ String keyword=request.getParameter("keyword");
 <a href="javascript:pageDown('<%=tbname %>',<%=pageNum %>);" >下一页</a> 
 <%
  List data=null;
- int user_id=(Integer)session.getAttribute("user_id");
+ int user_id=Tools.getUserId(session);
  if(keyword!=null&&!keyword.equals("")){
 	 System.out.format("keyword=%s\n",keyword);
 	data=DAO.getList(user_id, tbname,keyword,pageNum,Config.pageSize);
