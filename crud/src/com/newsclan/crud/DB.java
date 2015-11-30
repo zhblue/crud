@@ -29,8 +29,13 @@ public class DB {
 		Connection conn=null;
 		try {
 			if(pool&&!queue.isEmpty()){
-				return queue.poll();
-			}else{
+				conn= queue.poll();
+			}
+			if(!testOK(conn)){
+				if(pool&&conn!=null){
+					queue.remove(conn);
+					Keeper.dropConnection(conn);
+				}
 				Class.forName(driver).newInstance();
 				conn = DriverManager.getConnection(connectString, dbusername,
 						dbpassword);
