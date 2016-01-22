@@ -117,7 +117,7 @@
 	}
 	function showReport(frm){
 		var data=$(frm).serialize();
-		$("#main").load("jsp/report_select.jsp?"+Math.random(),data);
+		$("#main").load("report_select.jsp?"+Math.random(),data);
 		return false;
 	}
 	function submitAdd(tbname){
