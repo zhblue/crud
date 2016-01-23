@@ -58,11 +58,13 @@ if(id==null){
 }else{
 	int iid=Integer.parseInt(id);
 	String sql=DAO.queryString("select value from config where id="+iid);
+	String name=DAO.queryString("select name from config where id="+iid);
 	String start=request.getParameter("start");
 	String end=request.getParameter("end");
 	sql=sql.replace("START_DATE",start);
 	sql=sql.replace("END_DATE",end);
 	session.setAttribute("sql",sql);
+	session.setAttribute("report_name", name+"_"+start+"-"+end);
 	response.sendRedirect("report.jsp?"+Math.random());
 }
 %>

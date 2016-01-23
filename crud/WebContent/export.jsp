@@ -7,10 +7,10 @@
 		))
 		return;
 	String sql = (String) session.getAttribute("sql");
-
+    String name=(String) session.getAttribute("report_name");
 	response.setContentType("binary/octet-stream");
 	response.setHeader("Content-Disposition", "attachment; filename="
-			+ new String("导出数据.csv".getBytes("gb2312"), "iso8859-1"));
+			+ new String((name+".csv").getBytes("gb2312"), "iso8859-1"));
 
 	Field[] fds = DAO.getFields(sql);
 	Connection conn = DB.getConnection();
