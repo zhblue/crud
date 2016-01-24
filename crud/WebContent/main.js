@@ -88,7 +88,7 @@
 	
 	function loadReport(){
 		window.clearInterval(inter);
-		$("#main").load("report_select.jsp?"+Math.random());
+		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
 	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 

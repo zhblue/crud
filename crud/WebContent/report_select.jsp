@@ -7,9 +7,7 @@
 <title>Select Report</title>
 </head>
 <link type="text/css" rel="stylesheet" href="../date/styles/main.css" />
-<script src="../date/scripts/jquery.js"></script>
-<script src="../date/scripts/eye-base.js"></script>
-<script src="../date/scripts/eye-all.js"></script>
+
  
 <body background="bg2.jpg" > 
 <%
@@ -49,8 +47,8 @@ if(id==null){
 	<select type=text name=id >
 	<%=selection%> 
 	</select>
-	<input onClick="eye.datePicker.show(this);" name=start value="<%=Tools.lastMonthFirstDay()%>">
-	<input onClick="eye.datePicker.show(this);" name=end value="<%=Tools.lastMonthLastDay()%>">
+	<input class="input_date" name=start value="<%=Tools.lastMonthFirstDay()%>">
+	<input class="input_date" name=end value="<%=Tools.lastMonthLastDay()%>">
 	<input type=submit>
 	</form>
 	</p>
