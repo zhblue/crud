@@ -47,8 +47,8 @@ if(id==null){
 	<select type=text name=id >
 	<%=selection%> 
 	</select>
-	<input class="input_date" name=start value="<%=Tools.lastMonthFirstDay()%>">
-	<input class="input_date" name=end value="<%=Tools.lastMonthLastDay()%>">
+	<input class="input_date" name=start value="<%=Tools.today()%>">
+	<input class="input_date" name=end value="<%=Tools.tomorrow()%>">
 	<input type=submit>
 	</form>
 	</p>
