@@ -532,7 +532,7 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
-			if (field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
+			if (false&&field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
 				String subtable = field.name.substring(0,
 						field.name.length() - 3);
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
