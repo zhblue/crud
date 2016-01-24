@@ -213,6 +213,14 @@ public class Tools {
 		}
 		return s;
 	}
+	public static String tomorrow() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.DATE, +1);
+		//cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+	}
+	
 	public static String lastMonthFirstDay() {
 
 		Calendar cal = Calendar.getInstance();
@@ -229,13 +237,7 @@ public class Tools {
 		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
 				.getTime());
 	}
-	public static String tomorrow() {
-		Calendar cal = Calendar.getInstance();
-		cal.add(cal.DATE, +1);
-		//cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
-		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
-				.getTime());
-	}
+	
 	public static String today() {
 		Calendar cal = Calendar.getInstance();
 		//cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
