@@ -229,6 +229,19 @@ public class Tools {
 		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
 				.getTime());
 	}
+	public static String tomorrow() {
+		Calendar cal = Calendar.getInstance();
+		cal.add(cal.DATE, +1);
+		//cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+	}
+	public static String today() {
+		Calendar cal = Calendar.getInstance();
+		//cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
+				.getTime());
+	}
 	public static void debug(String msg) {
 		// TODO Auto-generated method stub
 		if (Config.debug)
