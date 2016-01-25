@@ -413,7 +413,7 @@ public class DAO {
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			//e.printStackTrace();
 		} finally {
 			DB.close(rs);
 			DB.close(pstmt);
@@ -532,9 +532,11 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
-			if (field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
-				String subtable = field.name.substring(0,
-						field.name.length() - 3);
+			String subtable =field.name.endsWith("_id")? field.name.substring(0,
+					field.name.length() - 3):"";
+			if(hasTable("t_"+subtable)){subtable="t_"+subtable;}
+			if (field.name.endsWith("_id")&&hasTable(subtable)&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
+				
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
 						getFirstCharFieldName(subtable)));
 
@@ -558,9 +560,15 @@ public class DAO {
 		
 		String tables = String.format("`%s` `%s`", tbname, tbname);
 		for (Field field:fds) {
-			if (field.name.endsWith("_id")&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
-				String join = field.name
-						.substring(0, field.name.length() - 3);
+			String join =field.name.endsWith("_id")? field.name
+					.substring(0, field.name.length() - 3):"";
+			if(hasTable("t_"+join)){
+				join="t_"+join;
+			}
+			if (field.name.endsWith("_id")&&hasTable(join) &&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
+				
+			
+				
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
@@ -575,8 +583,16 @@ public class DAO {
 			}
 		}
 		ret += fields.substring(1) + " from " + tables + " ";
+		if(Config.debug) System.out.println(ret);
 		return ret;
 	}
+
+	private static boolean hasTable(String join) {
+		// TODO Auto-generated method stub
+		String yes=DAO.queryString("select 'yes' from `"+join+"` limit 1",new String[]{});
+		return "yes".equals(yes);
+	}
+
 
 	public static boolean isFieldNumber(Field f) {
 		switch (f.type) {
