@@ -12,6 +12,8 @@ import java.util.*;
 
 public class DAO {
 	
+	private static String table_prefix=Config.get("db.table.prefix");
+
 	public static int insert(int user_id,String tbname, Map<String, String> values) {
 		if(!Auth.canInsertTable(user_id, tbname)) return -1;
 		Field[] fds = getFieldsOfTable(tbname);
@@ -534,7 +536,7 @@ public class DAO {
 				continue;
 			String subtable =field.name.endsWith("_id")? field.name.substring(0,
 					field.name.length() - 3):"";
-			if(hasTable("t_"+subtable)){subtable="t_"+subtable;}
+			if(hasTable(table_prefix+subtable)){subtable=table_prefix+subtable;}
 			if (field.name.endsWith("_id")&&hasTable(subtable)&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
 				
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
@@ -562,8 +564,8 @@ public class DAO {
 		for (Field field:fds) {
 			String join =field.name.endsWith("_id")? field.name
 					.substring(0, field.name.length() - 3):"";
-			if(hasTable("t_"+join)){
-				join="t_"+join;
+			if(hasTable(table_prefix+join)){
+				join=table_prefix+join;
 			}
 			if (field.name.endsWith("_id")&&hasTable(join) &&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
 				
