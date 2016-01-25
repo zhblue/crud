@@ -362,7 +362,7 @@ public class DAO {
 			sql+=" input_user="+user_id;
 		}
 		
-		if (tbname.endsWith("log"))
+	//	if (tbname.endsWith("log"))
 			sql += " order by id desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
@@ -567,10 +567,11 @@ public class DAO {
 			if(hasTable(table_prefix+join)){
 				join=table_prefix+join;
 			}
-			if (field.name.endsWith("_id")&&hasTable(join) &&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
-				
+			if (field.name.endsWith("_id")
+					&&!join.equals(tbname)
+					&&hasTable(join) 
+					&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
 			
-				
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
@@ -580,6 +581,7 @@ public class DAO {
 						+ tbname + "." + field.name + "=" + join + "."+getPrimaryKeyFieldName(join)+"";
 				;
 			} else {
+				
 				fields += "," + tbname + "." + field.name + " as `"
 						+ field.name + "`";
 			}
