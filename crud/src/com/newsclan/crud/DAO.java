@@ -11,11 +11,13 @@ import java.sql.Types;
 import java.util.*;
 
 public class DAO {
-	
-	private static String table_prefix=Config.get("db.table.prefix");
 
-	public static int insert(int user_id,String tbname, Map<String, String> values) {
-		if(!Auth.canInsertTable(user_id, tbname)) return -1;
+	private static String table_prefix = Config.get("db.table.prefix");
+
+	public static int insert(int user_id, String tbname,
+			Map<String, String> values) {
+		if (!Auth.canInsertTable(user_id, tbname))
+			return -1;
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("insert into `" + tbname + "`(");
 		StringBuffer value = new StringBuffer(" values(");
@@ -25,7 +27,7 @@ public class DAO {
 			if ("id".equals(field.name))
 				continue;
 			String d = values.get(field.name);
-			
+
 			if (DAO.isFieldNumber(field)) {
 				if ("".equals(d)) {
 					d = "0";
@@ -36,7 +38,7 @@ public class DAO {
 				d = Tools.getHash(d, Tools.getRandomSalt());
 			}
 			if ("input_user".equals(field.name)) {
-				d=String.valueOf(user_id);
+				d = String.valueOf(user_id);
 			}
 			data.add(d);
 			sql.append("`");
@@ -44,8 +46,7 @@ public class DAO {
 			sql.append("`,");
 			value.append("?,");
 		}
-		
-		
+
 		sql.deleteCharAt(sql.length() - 1);
 		value.deleteCharAt(value.length() - 1);
 		sql.append(") ");
@@ -55,17 +56,18 @@ public class DAO {
 
 	}
 
-	
-	public  static int update(int user_id,String tbname, int id, Map<String, String> values) {
-		if (!Auth.canUpdateTable(user_id, tbname)) return -1;
+	public static int update(int user_id, String tbname, int id,
+			Map<String, String> values) {
+		if (!Auth.canUpdateTable(user_id, tbname))
+			return -1;
 		Field[] fds = getFieldsOfTable(tbname);
 		StringBuffer sql = new StringBuffer("update  `" + tbname + "` set ");
 
 		List<String> data = new LinkedList();
-		boolean first=true;
+		boolean first = true;
 		for (Field field : fds) {
-			if ("id".equals(field.name)||first){
-				first=false;
+			if ("id".equals(field.name) || first) {
+				first = false;
 				continue;
 			}
 			String d = values.get(field.name);
@@ -85,21 +87,23 @@ public class DAO {
 				d = Tools.getHash(d, Tools.getRandomSalt());
 			}
 			if ("input_user".equals(field.name)) {
-				d=String.valueOf(user_id);
+				d = String.valueOf(user_id);
 			}
 			data.add(d);
 
 		}
 		sql.deleteCharAt(sql.length() - 1);
-		sql.append(" where "+DAO.getPrimaryKeyFieldName(tbname)+"=?");
+		sql.append(" where " + DAO.getPrimaryKeyFieldName(tbname) + "=?");
 		data.add(String.valueOf(id));
 		return update(sql.toString(), data.toArray());
 
 	}
+
 	public static String getPrimaryKeyFieldName(String tbname) {
-		String ret=getFieldsOfTable(tbname)[0].name;
+		String ret = getFieldsOfTable(tbname)[0].name;
 		return ret;
 	}
+
 	public static Field[] getFieldsOfTable(String tbname) {
 		List<Field> ret = new LinkedList<Field>();
 		Connection conn = DB.getConnection();
@@ -154,12 +158,15 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
 		for (Field field : fds) {
-			if (!edit && ("id".equals(field.name)||field.name.equals(DAO.getPrimaryKeyFieldName(tbname))))
+			if (!edit
+					&& ("id".equals(field.name) || field.name.equals(DAO
+							.getPrimaryKeyFieldName(tbname))))
 				continue;
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
-				row.add("<span name='"+field.name+"'>"+String.valueOf(values[0].get(i++))+"</span>");
+				row.add("<span name='" + field.name + "'>"
+						+ String.valueOf(values[0].get(i++)) + "</span>");
 			} else {
 				row.add("");
 			}
@@ -181,11 +188,13 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
 		for (Field field : fds) {
-			if (!edit && ("id".equals(field.name)||field.name.equals(DAO.getPrimaryKeyFieldName(tbname))))
+			if (!edit
+					&& ("id".equals(field.name) || field.name.equals(DAO
+							.getPrimaryKeyFieldName(tbname))))
 				continue;
 			if (!edit && "input_user".equals(field.name))
 				continue;
-			
+
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
@@ -243,11 +252,10 @@ public class DAO {
 		// TODO Auto-generated method stub
 		if (f.type == Types.DATE || f.name.endsWith("_date"))
 			return "input_date";
-		else if(f.type==Types.TIMESTAMP||
-				f.name.endsWith("_time"))
+		else if (f.type == Types.TIMESTAMP || f.name.endsWith("_time"))
 			return "input_datetime";
 		else
-		return "input_text";
+			return "input_text";
 	}
 
 	public static List<String> getTables(int user_id) {
@@ -310,13 +318,13 @@ public class DAO {
 	public static List<List> getList(int user_id, String tbname,
 			String keyword, int pageNum, int pageSize) {
 		if (Auth.canReadTable(user_id, tbname)) {
-			
-				return getList(tbname, keyword, pageNum, pageSize);
-			
+
+			return getList(tbname, keyword, pageNum, pageSize);
+
 		} else if (Auth.canInsertTable(user_id, tbname)) {
-			
-				return getList(tbname, keyword, pageNum, pageSize,user_id);
-			
+
+			return getList(tbname, keyword, pageNum, pageSize, user_id);
+
 		} else {
 			return new Vector();
 		}
@@ -326,13 +334,14 @@ public class DAO {
 		// TODO Auto-generated method stub
 		return getList(tbname, "", pageNum, pageSize);
 	}
+
 	private static List<List> getList(String tbname, String keyword,
 			int pageNum, int pageSize) {
-		return  getList( tbname,  keyword,
-				 pageNum,  pageSize, 1);
+		return getList(tbname, keyword, pageNum, pageSize, 1);
 	}
+
 	private static List<List> getList(String tbname, String keyword,
-			int pageNum, int pageSize,int user_id) {
+			int pageNum, int pageSize, int user_id) {
 
 		tbname = tbname.replace("`", "");
 		String sql = "select * from `" + tbname + "`";
@@ -340,9 +349,9 @@ public class DAO {
 		String[] values = {};
 		String where = DAO.getKeywordLike(tbname);
 		if (!"".equals(keyword)) {
-			
-			sql += " where (" + where+" ) ";
-			
+
+			sql += " where (" + where + " ) ";
+
 			int k = where.split("\\?").length - 1;
 			Vector v = new Vector();
 			for (int i = 0; i < k; i++) {
@@ -350,20 +359,19 @@ public class DAO {
 			}
 			values = (String[]) v.toArray(values);
 		}
-		if((!Auth.canReadTable(user_id, tbname))
-				&&Auth.canInsertTable(user_id, tbname)
-				&&DAO.hasInputer(tbname)
-				){
+		if ((!Auth.canReadTable(user_id, tbname))
+				&& Auth.canInsertTable(user_id, tbname)
+				&& DAO.hasInputer(tbname)) {
 			if ("".equals(keyword)) {
-				sql+=" where ";
-			}else{
-				sql+=" and ";
+				sql += " where ";
+			} else {
+				sql += " and ";
 			}
-			sql+=" input_user="+user_id;
+			sql += " input_user=" + user_id;
 		}
-		
-	//	if (tbname.endsWith("log"))
-			sql += " order by id desc";
+
+		// if (tbname.endsWith("log"))
+		sql += " order by id desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
 		return queryList(sql, true, values);
@@ -372,9 +380,9 @@ public class DAO {
 
 	private static boolean hasInputer(String tbname) {
 		// TODO Auto-generated method stub
-		Field[] fds = getFields("select * from "+tbname);
+		Field[] fds = getFields("select * from " + tbname);
 		for (Field field : fds) {
-			if(field.name.equals("input_user")){
+			if (field.name.equals("input_user")) {
 				return true;
 			}
 		}
@@ -409,13 +417,18 @@ public class DAO {
 			while (rs.next()) {
 				row = new LinkedList();
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					row.add(rs.getObject(i));
+					Object v = rs.getObject(i);
+					if (v == null) {
+						row.add("");
+					} else {
+						row.add(v);
+					}
 				}
 				ret.add(row);
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
-			//e.printStackTrace();
+			// e.printStackTrace();
 		} finally {
 			DB.close(rs);
 			DB.close(pstmt);
@@ -534,11 +547,14 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
-			String subtable =field.name.endsWith("_id")? field.name.substring(0,
-					field.name.length() - 3):"";
-			if(hasTable(table_prefix+subtable)){subtable=table_prefix+subtable;}
-			if (field.name.endsWith("_id")&&hasTable(subtable)&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
-				
+			String subtable = field.name.endsWith("_id") ? field.name
+					.substring(0, field.name.length() - 3) : "";
+			if (hasTable(table_prefix + subtable)) {
+				subtable = table_prefix + subtable;
+			}
+			if (field.name.endsWith("_id") && hasTable(subtable)
+					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
+
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
 						getFirstCharFieldName(subtable)));
 
@@ -558,45 +574,47 @@ public class DAO {
 		// TODO Auto-generated method stub
 		Field[] fds = getFields("select * from " + tbname);
 		String ret = "select ";
-		String fields ="";
-		
+		String fields = "";
+
 		String tables = String.format("`%s` `%s`", tbname, tbname);
-		for (Field field:fds) {
-			String join =field.name.endsWith("_id")? field.name
-					.substring(0, field.name.length() - 3):"";
-			if(hasTable(table_prefix+join)){
-				join=table_prefix+join;
+		for (Field field : fds) {
+			String join = field.name.endsWith("_id") ? field.name.substring(0,
+					field.name.length() - 3) : "";
+			if (hasTable(table_prefix + join)) {
+				join = table_prefix + join;
 			}
-			if (field.name.endsWith("_id")
-					&&!join.equals(tbname)
-					&&hasTable(join) 
-					&&!field.name.equals(getPrimaryKeyFieldName(tbname))) {
-			
+			if (field.name.endsWith("_id") && !join.equals(tbname)
+					&& hasTable(join)
+					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
+
 				fields += "," + join + "." + getFirstCharFieldName(join)
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
-					fields += "," + join + "."+getPrimaryKeyFieldName(join)+" as `" + field.name + "_value`";
+					fields += "," + join + "." + getPrimaryKeyFieldName(join)
+							+ " as `" + field.name + "_value`";
 				}
 				tables += " left join `" + join + "` `" + join + "` on "
-						+ tbname + "." + field.name + "=" + join + "."+getPrimaryKeyFieldName(join)+"";
+						+ tbname + "." + field.name + "=" + join + "."
+						+ getPrimaryKeyFieldName(join) + "";
 				;
 			} else {
-				
+
 				fields += "," + tbname + "." + field.name + " as `"
 						+ field.name + "`";
 			}
 		}
 		ret += fields.substring(1) + " from " + tables + " ";
-		if(Config.debug) System.out.println(ret);
+		if (Config.debug)
+			System.out.println(ret);
 		return ret;
 	}
 
 	private static boolean hasTable(String join) {
 		// TODO Auto-generated method stub
-		String yes=DAO.queryString("select 'yes' from `"+join+"` limit 1",new String[]{});
+		String yes = DAO.queryString(
+				"select 'yes' from `" + join + "` limit 1", new String[] {});
 		return "yes".equals(yes);
 	}
-
 
 	public static boolean isFieldNumber(Field f) {
 		switch (f.type) {
