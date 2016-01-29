@@ -59,7 +59,9 @@
      	<a class="btn navbar-brand" href="#" onclick='addTable();'><span class='glyphicon glyphicon-plus'></span></a> 
      <%
      }
-     %> <a class="btn navbar-brand" href="logout.jsp" ><span class='glyphicon glyphicon-log-out'></span></a>
+     %>
+     <a class="btn navbar-brand" href="#passChange"  onclick='passChange();'><span class='glyphicon glyphicon-user'></span></a>
+     <a class="btn navbar-brand" href="logout.jsp" ><span class='glyphicon glyphicon-log-out'></span></a>
    
   </div><!-- /.navbar-collapse -->
 </div>

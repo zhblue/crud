@@ -90,6 +90,10 @@
 		window.clearInterval(inter);
 		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
 	}
+	function passChange(){ 
+		window.clearInterval(inter);
+		$("#main").load("passChange.jsp?"+Math.random());
+	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
 		if (typeof(pageNum)=='undefined') pageNum=thepage;
