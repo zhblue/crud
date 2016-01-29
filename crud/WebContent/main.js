@@ -94,6 +94,13 @@
 		window.clearInterval(inter);
 		$("#main").load("passChange.jsp?"+Math.random());
 	}
+	function checkIfPasswordIsSame(frm){
+		if($("#password").val()!=$("#password2").val()){
+			alert("两次密码不一致");
+			return false;
+		}
+		return true;
+	}
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
 		if (typeof(pageNum)=='undefined') pageNum=thepage;

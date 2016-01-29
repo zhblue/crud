@@ -38,7 +38,7 @@ if(rs.next()){
 	name=rs.getString("name");
 	password=rs.getString("password");
 }%>
-<form method=post action="passChange.jsp">
+<form method=post action="passChange.jsp" onsubmit="return checkIfPasswordIsSame(this);">
 <table class='table-striped table-condensed'>
 <thead>
 <tr><th class=toprow colspan=3>用户</th></tr></thead>
@@ -47,7 +47,11 @@ if(rs.next()){
 	</td>
 </tr>
 <tr><td>密码</td>
-	<td><input style='height:32px' type=text name="password"  value="">
+	<td><input style='height:32px' id="password" type="password" name="password"  value="">
+	</td>
+</tr>
+<tr><td>重复密码</td>
+	<td><input style='height:32px' id="password2" type="password" name="password2"  value="">
 	</td>
 </tr>
 <tr><td><input  class='btn' type=submit value='确定'></td>	<td><input class='btn' type=reset></td></tr>
