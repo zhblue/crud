@@ -30,6 +30,7 @@ CREATE TABLE `datadic` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `field` varchar(45) collate utf8_bin default NULL,
   `name` varchar(45) collate utf8_bin default NULL,
+  `transview` varchar(45) collate utf8_bin default NULL,
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
