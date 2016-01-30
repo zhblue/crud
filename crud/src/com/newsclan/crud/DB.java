@@ -58,8 +58,8 @@ public class DB {
 				try {
 					if(pool&&toClose instanceof Connection){
 						 queue.add((Connection)toClose);
-						 if(Config.debug)
-							 	System.err.format("DB pool size:%d\n",queue.size());
+						// if(Config.debug)
+						//	 	System.err.format("DB pool size:%d\n",queue.size());
 					}else{
 						close.invoke(toClose);
 					}

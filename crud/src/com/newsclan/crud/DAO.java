@@ -304,6 +304,17 @@ public class DAO {
 			return ret;
 		}
 	}
+	public static String transview(String value) {
+		value = value.replace("'", "\\'");
+		String ret = value;
+		
+		ret = queryString("select transview from datadic where field=?", value);
+		if (ret == null||"".equals(ret.trim())) {
+			return value;
+		} else {
+			return ret;
+		}
+	}
 
 	public static List<List> getList(String tbname) {
 
@@ -340,11 +351,27 @@ public class DAO {
 		return getList(tbname, keyword, pageNum, pageSize, 1);
 	}
 
+	public static String getSelectOfTable(String tbname){
+		StringBuilder sb=new StringBuilder();
+		Field[] fds = DAO.getFieldsOfTable(tbname);
+		for(Field fd:fds){
+			String transview=transview(fd.name);
+			if(transview!=null)
+			sb.append(transview);
+			sb.append(" ");
+			sb.append(fd.name);
+			sb.append(",");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		return sb.toString();
+	}
 	private static List<List> getList(String tbname, String keyword,
 			int pageNum, int pageSize, int user_id) {
 
 		tbname = tbname.replace("`", "");
+		//String select=getSelectOfTable(tbname);
 		String sql = "select * from `" + tbname + "`";
+		Tools.debug(sql);
 		sql = DAO.getJoinTableSQL(tbname, true);
 		String[] values = {};
 		String where = DAO.getKeywordLike(tbname);
@@ -598,9 +625,15 @@ public class DAO {
 						+ getPrimaryKeyFieldName(join) + "";
 				;
 			} else {
-
-				fields += "," + tbname + "." + field.name + " as `"
+				String transview=transview(field.name);
+				if(transview.equals(field.name)){
+					fields += "," + tbname + "." + field.name + " as `"
 						+ field.name + "`";
+				}else{
+					transview=transview.replace("#",  tbname + "." + field.name);
+					fields += "," + transview+ " as `"
+							+ field.name + "`";
+				}
 			}
 		}
 		ret += fields.substring(1) + " from " + tables + " ";
