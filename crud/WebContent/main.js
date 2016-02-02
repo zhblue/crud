@@ -55,14 +55,25 @@
 		
 		
 	}
-	function loadSelect(input){
+	function filteNext(preSelect){
+		console.log("pre:",preSelect.name,preSelect.value);
+		var tr=$(preSelect).parent().parent();
+		var nextSelect=tr.next().children().last().children().last();
+		if(nextSelect!=null&&nextSelect[0].tagName=="SELECT"){
+			var keyword=preSelect.name;
+			var keyvalue=preSelect.value;
+			console.log("reload:",keyword,keyvalue);
+		    loadSelect(nextSelect,"keyword="+keyword+"&keyvalue="+keyvalue);
+		}
+	}
+	function loadSelect(input,append){
 		var input_name=input.attr("name");
 		var default_value=input.val();
 		if(input[0].nodeName=="SPAN")  //view use span for tag, text() for value
 			 	default_value=input.text();
 		var tbname=input_name.substring(0,input_name.length-3);
 		var td=input.parent();
-		td.load("select.jsp?tbname="+tbname+"&value="+default_value);
+		td.load("select.jsp?tbname="+tbname+"&value="+default_value+"&"+append);
 		
 	}
 	function reformatform(){

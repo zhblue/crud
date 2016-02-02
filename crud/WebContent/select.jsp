@@ -11,9 +11,11 @@
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
 		String value=request.getParameter("value");
+		String keyword=request.getParameter("keyword");
+		String keyvalue=request.getParameter("keyvalue");
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
-			out.println(Tools.toSelect(tbname,value)); 
+			out.println(Tools.toSelect(tbname,value,keyword,keyvalue)); 
 		} 
 		
 	%>

@@ -123,15 +123,26 @@ public class Tools {
 		return sql.replace("'", "\\'");
 	}
 
-	public static String toSelect(String tbname, String value) {
+	public static String toSelect(String tbname, String value,String ... keys) {
 		StringBuffer ret = new StringBuffer();
 		String nameFD = DAO.getFirstCharFieldName(tbname);
 		String sql = "select id," + nameFD + " from `" + tbname + "`";
+		if(keys.length==2){
+			System.out.println(keys[0]);
+			Field[] fds = DAO.getFieldsOfTable(tbname);
+			for(Field fd:fds){
+				if(fd.name.equals(keys[0])){
+					sql+=" where "+keys[0]+"="+keys[1];
+					break;
+				}
+				System.out.println(fd.name);
+			}
+		}
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
 		ret.append(tbname);
-		ret.append("_id'>");
+		ret.append("_id' onChange='filteNext(this);'>");
 
 		for (List row : data) {
 			ret.append("<option value='");
