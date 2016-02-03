@@ -124,9 +124,11 @@ public class Tools {
 	}
 
 	public static String toSelect(String tbname, String value,String ... keys) {
-		StringBuffer ret = new StringBuffer();
+		StringBuilder ret = new StringBuilder();
+		StringBuilder options = new StringBuilder();
 		String nameFD = DAO.getFirstCharFieldName(tbname);
 		String sql = "select id," + nameFD + " from `" + tbname + "`";
+		boolean noDefault=true;
 		if(keys.length==2){
 			System.out.println(keys[0]);
 			Field[] fds = DAO.getFieldsOfTable(tbname);
@@ -142,18 +144,24 @@ public class Tools {
 		ret.append("<select");
 		ret.append(" name='");
 		ret.append(tbname);
-		ret.append("_id' onChange='filteNext(this);'>");
+		ret.append("_id' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");
 
 		for (List row : data) {
-			ret.append("<option value='");
-			ret.append(row.get(0));
-			ret.append("'");
-			if (String.valueOf(row.get(0)).equals(value))
-				ret.append(" selected");
-			ret.append(">");
-			ret.append(row.get(1));
-			ret.append("</option>");
+			options.append("<option value='");
+			options.append(row.get(0));
+			options.append("'");
+			if (String.valueOf(row.get(0)).equals(value)){
+				options.append(" selected");
+				noDefault=false;
+			}
+			options.append(">");
+			options.append(row.get(1));
+			options.append("</option>\n");
 		}
+		if(noDefault){
+			ret.append("<option value='-1'>请选择</option>\n");
+		}
+		ret.append(options.toString());
 		ret.append("</select>");
 		return ret.toString();
 
