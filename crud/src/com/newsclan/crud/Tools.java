@@ -108,8 +108,9 @@ public class Tools {
 			fd_names[i] = filteSQL(fd_names[i]);
 			fd_titles[i] = filteSQL(fd_titles[i]);
 			String[] values = { fd_names[i], fd_titles[i] };
-			DAO.executeUpdate(dict, values);
-
+			if(!"".equals(fd_titles[i])){
+				DAO.executeUpdate(dict, values);
+			}
 			sql.append(",`" + fd_names[i] + "` " + fd_types[i] + "");
 
 		}
@@ -127,14 +128,14 @@ public class Tools {
 		StringBuilder ret = new StringBuilder();
 		StringBuilder options = new StringBuilder();
 		String nameFD = DAO.getFirstCharFieldName(tbname);
-		String sql = "select id," + nameFD + " from `" + tbname + "`";
+		String sql = "select id," + (nameFD) + " from `" + filteSQL(tbname) + "`";
 		boolean noDefault=true;
 		if(keys.length==2){
 			System.out.println(keys[0]);
 			Field[] fds = DAO.getFieldsOfTable(tbname);
 			for(Field fd:fds){
 				if(fd.name.equals(keys[0])){
-					sql+=" where "+keys[0]+"="+keys[1];
+					sql+=" where "+filteSQL(keys[0])+"="+filteSQL(keys[1]);
 					break;
 				}
 				System.out.println(fd.name);
