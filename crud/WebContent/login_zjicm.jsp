@@ -10,7 +10,7 @@
 	if (rand != null && rand.equals(session.getAttribute("rand"))){
 		session.setAttribute("rand",null);
 		if (ZJICM_portal.login(username, passwd)) {
-			sql = "SELECT  * from user where name=? ";
+			sql = "SELECT  * from "+Config.sysPrefix+"user where name=? ";
 			PreparedStatement pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, username);
 			ResultSet rs = pstmt.executeQuery();
@@ -23,7 +23,7 @@
 			session.setAttribute("user_id", user_id);
 			session.setAttribute("user_name", username);
 			
-			sql = "SELECT  `right` from privilege where user_id=?";
+			sql = "SELECT  `right` from "+Config.sysPrefix+"privilege where user_id=?";
 			
 			DB.close(rs);
 			DB.close(pstmt);

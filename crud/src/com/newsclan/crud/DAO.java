@@ -297,7 +297,7 @@ public class DAO {
 		if (value.endsWith("_id")) {
 			value = value.substring(0, value.length() - 3);
 		}
-		ret = queryString("select name from datadic where field=?", value);
+		ret = queryString("select name from "+Config.sysPrefix+"datadic where field=?", value);
 		if (ret == null) {
 			return value;
 		} else {
@@ -308,7 +308,7 @@ public class DAO {
 		value = value.replace("'", "\\'");
 		String ret = value;
 		
-		ret = queryString("select transview from datadic where field=?", value);
+		ret = queryString("select transview from "+Config.sysPrefix+"datadic where field=?", value);
 		if (ret == null||"".equals(ret.trim())) {
 			return value;
 		} else {

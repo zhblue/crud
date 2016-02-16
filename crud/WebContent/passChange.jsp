@@ -28,7 +28,7 @@ response.sendRedirect( "index.jsp");
 
 }else{%>
 <%
-String sql="select * from `user` where user.id="+session.getAttribute("user_id");
+String sql="select * from `"+Config.sysPrefix+"user` where user.id="+session.getAttribute("user_id");
 
 Statement stmt=conn.createStatement();
 

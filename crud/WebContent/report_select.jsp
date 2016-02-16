@@ -28,7 +28,7 @@ if(id==null){
 	PreparedStatement pstmt;
 	String selection="";
 	try {
-		pstmt = conn.prepareStatement("select * from config where name like '%报表'");
+		pstmt = conn.prepareStatement("select * from "+Config.sysPrefix+"config where name like '%报表'");
 		// pstmt.setInt(1, id);
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
@@ -56,8 +56,8 @@ if(id==null){
 	<%	
 }else{
 	int iid=Integer.parseInt(id);
-	String sql=DAO.queryString("select value from config where id="+iid);
-	String name=DAO.queryString("select name from config where id="+iid);
+	String sql=DAO.queryString("select value from "+Config.sysPrefix+"config where id="+iid);
+	String name=DAO.queryString("select name from "+Config.sysPrefix+"config where id="+iid);
 	String start=request.getParameter("start");
 	String end=request.getParameter("end");
 	sql=sql.replace("START_DATE",start);

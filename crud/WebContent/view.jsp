@@ -37,7 +37,7 @@
 						"table table-striped table-hover")%>
 		<% 
 			} else {
-				List<List> values=DAO.queryList("select * from `"+tbname+"` where "+DAO.getPrimaryKeyFieldName(tbname)+"=?", false, String.valueOf(id));
+				List<List> values=DAO.queryList("select * from `"+Config.sysPrefix+tbname+"` where "+DAO.getPrimaryKeyFieldName(tbname)+"=?", false, String.valueOf(id));
 				List<String> value=null;
 				if(values.size()>0){
 					value=values.get(0);

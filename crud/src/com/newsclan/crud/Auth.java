@@ -10,7 +10,7 @@ public class Auth {
 			String right) {
 		if(Config.get("login.check").equalsIgnoreCase("false")) return true;
 		if(user_id>1000&&"student,news".contains(tbname)&&"insert,update".contains(right)) return true;
-		String sql="select `right` from privilege where `user_id`=? and `right`=?";
+		String sql="select `right` from "+Config.sysPrefix+"privilege where `user_id`=? and `right`=?";
 		String ret=DAO.queryString(sql, String.valueOf(user_id),String.format("[%s]%s", tbname,right));
 		return ret!=null;
 	}

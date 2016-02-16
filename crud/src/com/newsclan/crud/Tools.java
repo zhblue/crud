@@ -25,7 +25,7 @@ public class Tools {
 	public static boolean login(String username,String password){
 		boolean ret=false;
 		Connection conn=DB.getConnection();
-		String sql="select password from user where name=? ";
+		String sql="select password from "+Config.sysPrefix+"user where name=? ";
 		PreparedStatement pstmt=null;
 		ResultSet rs=null;
 		try {
