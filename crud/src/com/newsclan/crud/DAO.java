@@ -116,6 +116,10 @@ public class DAO {
 				fd.type = rs.getInt("DATA_TYPE");
 				fd.label = translate(fd.name);
 				fd.table = rs.getString("TABLE_NAME");
+				fd.transview = transview(fd.name);
+				if(fd.transview!=null){
+					fd.transview=fd.transview.replace("#",  tbname + "." + fd.name);
+				}
 				fd.ftable=transname(fd.name);
 				ret.add(fd);
 			}
@@ -310,9 +314,7 @@ public class DAO {
 	public static String transname(String value) {
 		value = value.replace("'", "\\'");
 		String ret = value;
-		if (value.endsWith("_id")) {
-			value = value.substring(0, value.length() - 3);
-		}
+	
 		ret = queryString("select ftable from "+Config.sysPrefix+"datadic where field=?", value);
 		if (ret == null) {
 			return null;
@@ -326,7 +328,7 @@ public class DAO {
 		
 		ret = queryString("select transview from "+Config.sysPrefix+"datadic where field=?", value);
 		if (ret == null||"".equals(ret.trim())) {
-			return value;
+			return null;
 		} else {
 			return ret;
 		}
@@ -596,7 +598,11 @@ public class DAO {
 			if (hasTable(table_prefix + subtable)) {
 				subtable = table_prefix + subtable;
 			}
-			if (field.name.endsWith("_id") && hasTable(subtable)
+			if(field.ftable!=null&&field.transview!=null&&!"".equals(field.transview.trim())){
+
+				sb.append(String.format(" %s like ? or",field.transview));
+				
+			}else	if (field.name.endsWith("_id") && hasTable(subtable)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
 
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
@@ -624,17 +630,24 @@ public class DAO {
 		for (Field field : fds) {
 			String join = field.name.endsWith("_id") ? field.name.substring(0,
 					field.name.length() - 3) : "";
-			if (hasTable(table_prefix + join)) {
-				join = table_prefix + join;
-			}
+			
 			if(field.ftable!=null&&hasTable(field.ftable)){
 				join = field.ftable;
+			}else{
+				if (hasTable(table_prefix + join)) {
+					join = table_prefix + join;
+				}
 			}
 			if ((field.name.endsWith("_id")||field.ftable!=null) && !join.equals(tbname)
 					&& hasTable(join)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
+				String dataFieldName=getFirstCharFieldName(join);
+				
+				if(field.transview!=null){
+					dataFieldName=field.transview;
+				}
 
-				fields += "," + join + "." + getFirstCharFieldName(join)
+				fields += "," + join + "." + dataFieldName
 						+ " as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
 					fields += "," + join + "." + getPrimaryKeyFieldName(join)
@@ -645,8 +658,8 @@ public class DAO {
 						+ getPrimaryKeyFieldName(join) + "";
 				;
 			} else {
-				String transview=transview(field.name);
-				if(transview.equals(field.name)){
+				String transview=field.transview;
+				if(transview==null){
 					fields += "," + tbname + "." + field.name + " as `"
 						+ field.name + "`";
 				}else{

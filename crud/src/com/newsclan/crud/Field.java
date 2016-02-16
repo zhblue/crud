@@ -6,6 +6,7 @@ public class Field {
 	public int type;
 	public String name;
 	public String table;
+	public String transview;
 	public String ftable;
 	
 }
