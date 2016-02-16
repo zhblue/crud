@@ -13,9 +13,11 @@
 		String value=request.getParameter("value");
 		String keyword=request.getParameter("keyword");
 		String keyvalue=request.getParameter("keyvalue");
+		String input_name=request.getParameter("input_name");
+		
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
-			out.println(Tools.toSelect(tbname,value,keyword,keyvalue)); 
+			out.println(Tools.toSelect(tbname,value,keyword,keyvalue,input_name)); 
 		} 
 		
 	%>

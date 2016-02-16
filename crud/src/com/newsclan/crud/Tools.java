@@ -121,6 +121,7 @@ public class Tools {
 
 	private static String filteSQL(String sql) {
 		// TODO Auto-generated method stub
+		if(sql==null) return null;
 		return sql.replace("'", "\\'");
 	}
 
@@ -144,8 +145,10 @@ public class Tools {
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
-		ret.append(tbname);
-		ret.append("_id' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");
+		String input_name=filteSQL(keys[2]);
+		if(null==input_name) input_name=tbname+"_id";
+		ret.append(input_name);
+		ret.append("' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");
 
 		for (List row : data) {
 			options.append("<option value='");

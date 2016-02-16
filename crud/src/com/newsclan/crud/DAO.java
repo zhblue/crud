@@ -116,6 +116,7 @@ public class DAO {
 				fd.type = rs.getInt("DATA_TYPE");
 				fd.label = translate(fd.name);
 				fd.table = rs.getString("TABLE_NAME");
+				fd.ftable=transname(fd.name);
 				ret.add(fd);
 			}
 		} catch (SQLException e) {
@@ -245,8 +246,10 @@ public class DAO {
 			ret.append(Tools.toHTML(value[0]));
 		ret.append("' type='text' class='");
 		ret.append(getFormType(field));
+		if(field.ftable!=null&&!field.ftable.equals(""))
+			ret.append("' postLoad='1' fr='"+field.ftable);
 		ret.append("'>");
-	}
+	} 
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
@@ -300,6 +303,19 @@ public class DAO {
 		ret = queryString("select name from "+Config.sysPrefix+"datadic where field=?", value);
 		if (ret == null) {
 			return value;
+		} else {
+			return ret;
+		}
+	}
+	public static String transname(String value) {
+		value = value.replace("'", "\\'");
+		String ret = value;
+		if (value.endsWith("_id")) {
+			value = value.substring(0, value.length() - 3);
+		}
+		ret = queryString("select ftable from "+Config.sysPrefix+"datadic where field=?", value);
+		if (ret == null) {
+			return null;
 		} else {
 			return ret;
 		}
