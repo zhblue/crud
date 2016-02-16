@@ -423,7 +423,7 @@ public class DAO {
 
 	private static boolean hasInputer(String tbname) {
 		// TODO Auto-generated method stub
-		Field[] fds = getFields("select * from " + tbname);
+		Field[] fds = getFieldsOfTable(tbname);
 		for (Field field : fds) {
 			if (field.name.equals("input_user")) {
 				return true;
@@ -549,6 +549,7 @@ public class DAO {
 				f[i].type = rsmd.getColumnType(i + 1);
 				f[i].label = translate(rsmd.getColumnLabel(i + 1));
 				f[i].table = rsmd.getTableName(i + 1);
+				f[i].ftable = transname(f[i].name);
 				// System.out.println(f[i].type);
 			}
 		} catch (SQLException e) {
@@ -586,7 +587,7 @@ public class DAO {
 	private static String getKeywordLike(String tbname) {
 		// TODO Auto-generated method stub
 		StringBuilder sb = new StringBuilder();
-		Field[] fds = getFields("select * from " + tbname);
+		Field[] fds = getFieldsOfTable(tbname);
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
@@ -615,7 +616,7 @@ public class DAO {
 
 	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
 		// TODO Auto-generated method stub
-		Field[] fds = getFields("select * from " + tbname);
+		Field[] fds = getFieldsOfTable(tbname);
 		String ret = "select ";
 		String fields = "";
 
@@ -626,7 +627,10 @@ public class DAO {
 			if (hasTable(table_prefix + join)) {
 				join = table_prefix + join;
 			}
-			if (field.name.endsWith("_id") && !join.equals(tbname)
+			if(field.ftable!=null&&hasTable(field.ftable)){
+				join = field.ftable;
+			}
+			if ((field.name.endsWith("_id")||field.ftable!=null) && !join.equals(tbname)
 					&& hasTable(join)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
 
