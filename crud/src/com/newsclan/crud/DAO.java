@@ -12,7 +12,7 @@ import java.util.*;
 
 public class DAO {
 
-	private static String table_prefix = Config.get("db.table.prefix");
+	public static String table_prefix = Config.get("db.table.prefix");
 
 	public static int insert(int user_id, String tbname,
 			Map<String, String> values) {
@@ -675,7 +675,7 @@ public class DAO {
 		return ret;
 	}
 
-	private static boolean hasTable(String join) {
+	public static boolean hasTable(String join) {
 		// TODO Auto-generated method stub
 		String yes = DAO.queryString(
 				"select 'yes' from `" + join + "` limit 1", new String[] {});

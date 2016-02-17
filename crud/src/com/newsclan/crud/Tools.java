@@ -129,6 +129,9 @@ public class Tools {
 		StringBuilder ret = new StringBuilder();
 		StringBuilder options = new StringBuilder();
 		String nameFD = DAO.getFirstCharFieldName(tbname);
+		String input_name=filteSQL(keys[2]);
+		String transview=DAO.transview(input_name);
+		if(transview!=null) nameFD=transview;
 		String sql = "select id," + (nameFD) + " from `" + filteSQL(tbname) + "`";
 		boolean noDefault=true;
 		if(keys.length==2){
@@ -145,7 +148,6 @@ public class Tools {
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
-		String input_name=filteSQL(keys[2]);
 		if(null==input_name) input_name=tbname+"_id";
 		ret.append(input_name);
 		ret.append("' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");

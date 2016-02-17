@@ -17,6 +17,8 @@
 		
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
+			if(DAO.hasTable(DAO.table_prefix+tbname))
+				tbname=DAO.table_prefix+tbname;
 			out.println(Tools.toSelect(tbname,value,keyword,keyvalue,input_name)); 
 		} 
 		
