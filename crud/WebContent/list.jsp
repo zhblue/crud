@@ -9,6 +9,7 @@
 </head> 
 <body>
 <%
+request.setCharacterEncoding("UTF-8");
 int pageNum=Tools.getRequestInt(request,"pageNum");
 String tbname=request.getParameter("tb").replace("`", "");
 String keyword=request.getParameter("keyword");
