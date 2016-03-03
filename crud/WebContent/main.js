@@ -119,7 +119,7 @@
 	function mainLoad(tbname,pageNum,keyword){
 		tableName=tbname; 
 		if (typeof(pageNum)=='undefined') pageNum=thepage;
-		if (typeof(keyword)=='undefined') keyword=searchKeyword;
+		if (typeof(keyword)=='undefined'||keyword=="") keyword=searchKeyword;
 		thepage=pageNum;
 		searchKeyword=keyword;
 		window.clearInterval(inter);
