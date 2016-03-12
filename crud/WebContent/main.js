@@ -37,6 +37,15 @@
 			});
 		}
 	}
+	function handsend(orderNum){
+		var ans=confirm('确定手工发货？请在跨境通客户端中确认通关信息后再做此操作。订单号'+orderNum);
+		var tbname=$("#tbname").val();
+		if(ans){
+			$.post("handsend.jsp",{"orderNum":orderNum},new function(){
+				 alert("已经手工推至发货队列,订单号:"+orderNum);
+			});
+		}
+	}
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
 		$("#main tr").append("<td>"+

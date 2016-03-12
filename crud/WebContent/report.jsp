@@ -19,8 +19,11 @@
 	String spage=request.getParameter("page");
 	if (spage==null) spage="0";
 	int ipage=Integer.parseInt(spage);
-	sql +=" order by id desc limit "+(ipage*16)+",16";
-	
+	if(sql.contains("order by")){
+		sql +=" limit "+(ipage*16)+",16";
+	}else{
+		sql +=" order by id desc limit "+(ipage*16)+",16";
+	}
 	Field[] fds = DAO.getFields(sql);
 	Connection conn = DB.getConnection();
 	Statement stmt = conn.createStatement();
