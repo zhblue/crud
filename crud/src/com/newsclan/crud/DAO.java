@@ -634,7 +634,7 @@ public class DAO {
 			if(field.ftable!=null&&hasTable(field.ftable)){
 				join = field.ftable;
 			}else{
-				if (hasTable(table_prefix + join)) {
+				if (!DAO.hasTable(tbname)&&hasTable(table_prefix + join)) {
 					join = table_prefix + join;
 				}
 			}
@@ -656,7 +656,7 @@ public class DAO {
 				tables += " left join `" + join + "` `" + join + "` on "
 						+ tbname + "." + field.name + "=" + join + "."
 						+ getPrimaryKeyFieldName(join) + "";
-				;
+				
 			} else {
 				String transview=field.transview;
 				if(transview==null){

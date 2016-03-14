@@ -193,6 +193,6 @@
 	}
 	var inter=null;
 	var stid=null;
-	var tableName="room";
+	var tableName="t_order";
 	var searchKeyword="";
 	var thepage=0;
