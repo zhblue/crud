@@ -595,7 +595,7 @@ public class DAO {
 				continue;
 			String subtable = field.name.endsWith("_id") ? field.name
 					.substring(0, field.name.length() - 3) : "";
-			if (hasTable(table_prefix + subtable)) {
+			if (!DAO.hasTable(subtable)&&hasTable(table_prefix + subtable)) {
 				subtable = table_prefix + subtable;
 			}
 			if(field.ftable!=null&&field.transview!=null&&!"".equals(field.transview.trim())){
@@ -634,7 +634,7 @@ public class DAO {
 			if(field.ftable!=null&&hasTable(field.ftable)){
 				join = field.ftable;
 			}else{
-				if (!DAO.hasTable(tbname)&&hasTable(table_prefix + join)) {
+				if (!DAO.hasTable(join)&&hasTable(table_prefix + join)) {
 					join = table_prefix + join;
 				}
 			}
