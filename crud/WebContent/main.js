@@ -187,12 +187,12 @@
 		$("#tb_adding").append(row);
 	}
 	function search(keyword){
-		window.clearTimeout(stid);
+		window.clearTimeout(inter);
 		searchKeyword=keyword;
-		stid=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
+		inter=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
 	var inter=null;
-	var stid=null;
+	//var stid=null;
 	var tableName="t_order";
 	var searchKeyword="";
 	var thepage=0;
