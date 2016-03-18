@@ -60,4 +60,6 @@
 <a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>');">上一页</a>
 <%} %>
 <a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage+1)%>');">下一页</a>
+<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage)%>');">刷新</a>
+
 </body></html>
