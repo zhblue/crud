@@ -6,7 +6,7 @@
 
 <body background="bg2.jpg" >
 <div width=80%>
-<table class="table table-striped"  >
+
 <%
 	int user_id=(Integer)session.getAttribute("user_id");
 	if (!(
@@ -19,6 +19,17 @@
 	String spage=request.getParameter("page");
 	if (spage==null) spage="0";
 	int ipage=Integer.parseInt(spage);
+	%>
+	<a class='btn btn-success' target=_blank href="export.jsp">导出</a> 
+	<%if(ipage>0){ %>
+		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>');">上一页</a>
+	<%} %>
+	<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage+1)%>');">下一页</a>
+	<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage)%>');">刷新</a>
+	
+	<table class="table table-striped"  >
+	
+	<% 
 	if(sql.contains("order by")){
 		sql +=" limit "+(ipage*16)+",16";
 	}else{
@@ -55,11 +66,5 @@
 %>
 </table>
 </div>
-<a class='btn btn-success' target=_blank href="export.jsp">导出</a> 
-<%if(ipage>0){ %>
-<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>');">上一页</a>
-<%} %>
-<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage+1)%>');">下一页</a>
-<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage)%>');">刷新</a>
 
 </body></html>
