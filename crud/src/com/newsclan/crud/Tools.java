@@ -134,7 +134,7 @@ public class Tools {
 		if(transview!=null) nameFD=transview;
 		String sql = "select id," + (nameFD) + " from `" + filteSQL(tbname) + "`";
 		boolean noDefault=true;
-		if(keys.length==2){
+		if(keys.length>=2){
 			System.out.println(keys[0]);
 			Field[] fds = DAO.getFieldsOfTable(tbname);
 			for(Field fd:fds){
