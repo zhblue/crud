@@ -81,7 +81,7 @@
 		if(input[0].nodeName=="SPAN")  //view use span for tag, text() for value
 			 	default_value=input.text();
 		var tbname=input_name.substring(0,input_name.length-3);
-		if(input.attr("fr")!="") tbname=input.attr("fr");;
+	//	if(input.attr("fr")!=undefined) tbname=input.attr("fr");;
 		var td=input.parent();
 		td.load("select.jsp?tbname="+tbname+"&input_name="+input_name+"&value="+default_value+"&"+append);
 		
