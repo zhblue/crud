@@ -13,6 +13,8 @@ CRUD is Really Urgly coDed -- 课设毕设快速原型
 
 datadic表用于翻译英文表名列名到中文,建表语句在db.sql。
 
+默认账号admin 密码admin， 除config/datadic/privilege/user四张系统表以外，样例表可以删除。
+
 符合上述原则设计表，自动实现菜单、各表增删改，用于快速建立小型系统原型。
 
 支持超文本编辑、文件上传。
