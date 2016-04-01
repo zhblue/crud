@@ -631,7 +631,7 @@ public class DAO {
 			String join = field.name.endsWith("_id") ? field.name.substring(0,
 					field.name.length() - 3) : "";
 			
-			if(field.ftable!=null&&hasTable(field.ftable)){
+			if(field.ftable!=null&&hasTable(field.ftable)){//有指定的外键表时，优先使用
 				join = field.ftable;
 			}else{
 				if (!DAO.hasTable(join)&&hasTable(table_prefix + join)) {
