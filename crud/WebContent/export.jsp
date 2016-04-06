@@ -26,7 +26,9 @@
 		for (int i = 0; i < fds.length; i++) {
 			if (i > 0)
 				out.print(",");
-			out.print(rs.getString(i + 1));
+			if(rs.getString(i + 1).length()>8)
+				out.print("'");
+			out.print("\""+rs.getString(i + 1)+"\"");
 
 		}
 		out.println();
