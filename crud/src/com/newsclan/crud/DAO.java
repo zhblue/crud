@@ -608,7 +608,12 @@ public class DAO {
 				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
 						getFirstCharFieldName(subtable)));
 
-			} else {
+			} else if(field.type==Types.TIMESTAMP||field.type==Types.DATE){
+				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%Y-%m-%d %H:%i:%s') like ? or", field.table,
+						field.name));
+
+				
+			}else {
 				sb.append(String.format(" `%s`.`%s` like ? or", field.table,
 						field.name));
 
