@@ -51,6 +51,7 @@
         <div class="form-group">
           <input placeholder="查找" class="nav-brand form-control" onkeyup="search(this.value)" type="text">
         </div>
+        <input id="auto" type="checkbox" onclick="autoRefresh()">自动刷新
       </form>
        <%
      if (Auth.isAdmin(user_id)

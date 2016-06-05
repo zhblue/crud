@@ -18,6 +18,8 @@ String keyword=request.getParameter("keyword");
 <%=Tools.toHTML(DAO.translate(tbname)) %>
 <a href="javascript:pageUp('<%=tbname %>',<%=pageNum %>);" >上一页</a> 
 <a href="javascript:pageDown('<%=tbname %>',<%=pageNum %>);" >下一页</a> 
+<script></script>
+
 <%
  List data=null;
  int user_id=Tools.getUserId(session);

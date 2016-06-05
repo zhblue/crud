@@ -140,15 +140,21 @@
 				$("#addrow").click(function(){
 					$("#main").load("add.jsp",{tb:tbname},reformatform);
 				});
+				if($("#auto")[0].checked){
+					window.clearTimeout(inter);
+					inter=window.setInterval('refresh()',1000);
+				}
 			}
 		});
 		
 	}
 	function pageUp(tbname,pageNum){
-		mainLoad(tbname,pageNum-1,searchKeyword);
+		thepage=pageNum-1;
+		mainLoad(tbname,thepage,searchKeyword);
 	}
 	function pageDown(tbname,pageNum){
-		mainLoad(tbname,pageNum+1,searchKeyword);
+		thepage=pageNum+1;
+		mainLoad(tbname,thepage,searchKeyword);
 	}
 	function showReport(frm){
 		var data=$(frm).serialize();
@@ -191,8 +197,15 @@
 		searchKeyword=keyword;
 		inter=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
+	function refresh(){
+		mainLoad(tableName,thepage,searchKeyword);
+	}
+	function autoRefresh(){
+		window.clearTimeout(inter);
+		inter=window.setInterval('refresh()',1000);
+	}
 	var inter=null;
 	//var stid=null;
-	var tableName="t_order";
+	var tableName="node";
 	var searchKeyword="";
 	var thepage=0;
