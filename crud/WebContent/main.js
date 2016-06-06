@@ -90,7 +90,7 @@
 		input[0].id=input_name;
 		input[0].type="hidden";
 
-		var html=$(td).html()+"<iframe width='50%' height='100%' src='upload.jsp?input_name="+input_name+"'></iframe>";
+		var html=$(td).html()+"<iframe width='50%' height='40px' scrolling='no' src='upload.jsp?input_name="+input_name+"'></iframe>";
 
 		$(td).html(html);
 		
