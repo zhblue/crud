@@ -21,6 +21,8 @@
 <body>   
 <%  
 int user_id=-1;
+int year=Calendar.getInstance().get(Calendar.YEAR);
+
 try{
 	user_id=Tools.getUserId(session);
 	if(!Auth.canUploadFile(user_id)) return;
@@ -38,8 +40,7 @@ if(ServletFileUpload.isMultipartContent(request)){
     List<FileItem> fileItemsList = servletFileUpload.parseRequest(request);  
     for (FileItem item : fileItemsList) {  
         if (!item.isFormField()) {  
-        	int year=Calendar.getInstance().get(Calendar.YEAR);
-            String fileName = item.getName(); 
+        	String fileName = item.getName(); 
             fileName=fileName.replace("..", ".");
             String ext=fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
             if(".jsp".equals(ext)) continue;

@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@page import="java.io.File"%>  
+<%@page import="com.newsclan.crud.*,java.util.*"%>  
    
     <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">  
     <html>  
@@ -21,11 +22,19 @@
     </head>  
     <body>  
     <%  
+    int user_id=-1;
+    int year=Calendar.getInstance().get(Calendar.YEAR);
+
+    try{
+    	user_id=Tools.getUserId(session);
+    	if(!Auth.canUploadFile(user_id)) return;
+    }catch(Exception e){return;}
+
         String path = request.getContextPath() + "/";  
         String type = "";  
         if(request.getParameter("type") != null)//获取文件分类  
             type = request.getParameter("type").toLowerCase() + "/";  
-        String clientPath = "ckeditor/uploader/upload/" + type;  
+        String clientPath = "/upload/"+year+"/"+user_id +"/"+ type;
         File root = new File(request.getSession().getServletContext().getRealPath(clientPath));  
         if(!root.exists()){  
             root.mkdirs();  
