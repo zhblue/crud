@@ -19,16 +19,19 @@
 		return parseInt(data);
 	}
 	function view(rowid){
+		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatview);
 		
 		//window.open("view.jsp?tb="+tbname+"&id="+rowid);
 	}
 	function edit(rowid){
+		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
 	function del(rowid){
+		window.clearTimeout(inter);
 		var ans=confirm('确定删除编号'+rowid);
 		var tbname=$("#tbname").val();
 		if(ans){
@@ -37,15 +40,7 @@
 			});
 		}
 	}
-	function handsend(orderNum){
-		var ans=confirm('确定手工发货？请在跨境通客户端中确认通关信息后再做此操作。订单号'+orderNum);
-		var tbname=$("#tbname").val();
-		if(ans){
-			$.post("handsend.jsp",{"orderNum":orderNum},new function(){
-				 alert("已经手工推至发货队列,订单号:"+orderNum);
-			});
-		}
-	}
+	
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
 		$("#main tr").append("<td>"+
@@ -131,7 +126,7 @@
 		if (typeof(keyword)=='undefined'||keyword=="") keyword=searchKeyword;
 		thepage=pageNum;
 		searchKeyword=keyword;
-		window.clearInterval(inter);
+		window.clearTimeout(inter);
 		$("#main").load("list.jsp",{"tb":tbname,"pageNum":pageNum,"keyword":keyword},function(text,status,http){
 			
 			if(status=="success"){
@@ -141,8 +136,7 @@
 					$("#main").load("add.jsp",{tb:tbname},reformatform);
 				});
 				if($("#auto")[0].checked){
-					window.clearTimeout(inter);
-					inter=window.setInterval('refresh()',1000);
+					autoRefresh();
 				}
 			}
 		});
@@ -202,7 +196,7 @@
 	}
 	function autoRefresh(){
 		window.clearTimeout(inter);
-		inter=window.setInterval('refresh()',1000);
+		inter=window.setTimeout('refresh()',1000);
 	}
 	var inter=null;
 	//var stid=null;
