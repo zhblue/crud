@@ -1,5 +1,7 @@
+<%@page import="java.util.Calendar"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@page import="com.newsclan.crud.*"%>  
 <%@page import="java.io.File"%>  
 <%@page import="java.util.UUID"%>  
 <%@page import="org.apache.commons.fileupload.FileItem"%>  
@@ -18,6 +20,12 @@
 </head>  
 <body>   
 <%  
+int user_id=-1;
+try{
+	user_id=Tools.getUserId(session);
+	if(!Auth.canUploadFile(user_id)) return;
+}catch(Exception e){return;}
+
 String path = request.getContextPath() + "/";  
 if(ServletFileUpload.isMultipartContent(request)){  
     String type = "";  
@@ -30,13 +38,14 @@ if(ServletFileUpload.isMultipartContent(request)){
     List<FileItem> fileItemsList = servletFileUpload.parseRequest(request);  
     for (FileItem item : fileItemsList) {  
         if (!item.isFormField()) {  
+        	int year=Calendar.getInstance().get(Calendar.YEAR);
             String fileName = item.getName(); 
             fileName=fileName.replace("..", ".");
             String ext=fileName.substring(fileName.lastIndexOf(".")).toLowerCase();
             if(".jsp".equals(ext)) continue;
             fileName = "file" + System.currentTimeMillis() + ext;  
             //定义文件路径，根据你的文件夹结构，可能需要做修改  
-            String clientPath = "ckeditor/uploader/upload/" + type + fileName;  
+            String clientPath = "/upload/"+year+"/"+user_id +"/"+ type + fileName;  
   
             //保存文件到服务器上  
             File file = new File(request.getSession().getServletContext().getRealPath(clientPath));  

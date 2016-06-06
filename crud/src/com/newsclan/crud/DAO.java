@@ -270,8 +270,11 @@ public class DAO {
 		List ret = getTables();
 		for (Iterator tbit = ret.iterator(); tbit.hasNext();) {
 			String tbname = (String) tbit.next();
-			if (!(Auth.canReadTable(user_id, tbname) || Auth.canInsertTable(
-					user_id, tbname))) {
+			if (!(Auth.canReadTable(user_id, tbname) 
+					|| Auth.canInsertTable(user_id, tbname)
+					|| Auth.canUpdateTable(user_id, tbname)
+					
+					)) {
 				tbit.remove();
 			}
 		}
@@ -609,7 +612,7 @@ public class DAO {
 						getFirstCharFieldName(subtable)));
 
 			} else if(field.type==Types.TIMESTAMP||field.type==Types.DATE){
-				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%Y-%m-%d %H:%i:%s') like ? or", field.table,
+				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%%Y-%%m-%%d %%H:%%i:%%s') like ? or", field.table,
 						field.name));
 
 				

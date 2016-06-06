@@ -34,6 +34,11 @@ public class Auth {
 			return true;
 		return checkPrivilegeForRightOfTable(user_id, tbname, "update");
 	}
+	public static boolean canUploadFile(int user_id) {
+		if (isAdmin(user_id))
+			return true;
+		return checkPrivilegeForRightOfTable(user_id, "", "upload");
+	}
 
 	public static boolean canDeleteTable(int user_id, String tbname) {
 		if (isAdmin(user_id))
