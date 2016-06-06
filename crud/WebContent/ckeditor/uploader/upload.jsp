@@ -46,7 +46,7 @@ if(ServletFileUpload.isMultipartContent(request)){
             if(".jsp".equals(ext)) continue;
             fileName = "file" + System.currentTimeMillis() + ext;  
             //定义文件路径，根据你的文件夹结构，可能需要做修改  
-            String clientPath = "/upload/"+year+"/"+user_id +"/"+ type + fileName;  
+            String clientPath = Config.get("upload.path")+"/"+year+"/"+user_id +"/"+ type + fileName;  
   
             //保存文件到服务器上  
             File file = new File(request.getSession().getServletContext().getRealPath(clientPath));  

@@ -34,7 +34,7 @@
         String type = "";  
         if(request.getParameter("type") != null)//获取文件分类  
             type = request.getParameter("type").toLowerCase() + "/";  
-        String clientPath = "/upload/"+year+"/"+user_id +"/"+ type;
+        String clientPath = Config.get("upload.path")+"/"+year+"/"+user_id +"/"+ type;
         File root = new File(request.getSession().getServletContext().getRealPath(clientPath));  
         if(!root.exists()){  
             root.mkdirs();  
