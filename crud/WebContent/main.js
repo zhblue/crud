@@ -76,12 +76,29 @@
 		if(input[0].nodeName=="SPAN")  //view use span for tag, text() for value
 			 	default_value=input.text();
 		var tbname=input_name.substring(0,input_name.length-3);
-	//	if(input.attr("fr")!=undefined) tbname=input.attr("fr");;
+		if(input.attr("fr")!=undefined) tbname=input.attr("fr");;
 		var td=input.parent();
 		td.load("select.jsp?tbname="+tbname+"&input_name="+input_name+"&value="+default_value+"&"+append);
 		
 	}
+	function loadFile(input){
+		var input_name=input.attr("name");
+		var default_value=input.val();
+		if(input[0].nodeName=="SPAN")  //view use span for tag, text() for value
+			 	default_value=input.text();
+		var td=input.parent();
+		input[0].id=input_name;
+		input[0].type="hidden";
+
+		var html=$(td).html()+"<iframe width='50%' height='100%' src='upload.jsp?input_name="+input_name+"'></iframe>";
+
+		$(td).html(html);
+		
+	}
 	function reformatform(){
+		$("input[name$=_file]").each(function(){
+			loadFile($(this));
+		});
 		$("input[name$=_id]").each(function(){
 			loadSelect($(this));
 		});

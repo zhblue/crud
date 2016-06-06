@@ -31,6 +31,8 @@ try{
 String path = request.getContextPath() ;  
 if(ServletFileUpload.isMultipartContent(request)){  
     String type = "";  
+    String input_name=request.getParameter("input_name");
+
     if(request.getParameter("type") != null)//获取文件分类  
         type = request.getParameter("type").toLowerCase() + "/";  
     String callback = request.getParameter("CKEditorFuncNum");//获取回调JS的函数Num  
@@ -56,7 +58,12 @@ if(ServletFileUpload.isMultipartContent(request)){
             item.write(file);  
   
             //打印一段JS，调用parent页面的CKEditor的函数，传递函数编号和上传后文件的路径；这句很重要，成败在此一句  
-            out.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("+callback+",'"+path+clientPath+"')</script>");  
+	    if(callback==null){
+
+            	out.println("<script type='text/javascript'>window.parent.$('#"+input_name+"').val('"+path+clientPath+"')</script>");  
+	    }else{
+            	out.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("+callback+",'"+path+clientPath+"')</script>");  
+	    }
             break;  
         }  
     }  
