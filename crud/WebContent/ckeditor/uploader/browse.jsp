@@ -30,7 +30,7 @@
     	if(!Auth.canUploadFile(user_id)) return;
     }catch(Exception e){return;}
 
-        String path = request.getContextPath() + "/";  
+        String path = request.getContextPath() ;  
         String type = "";  
         if(request.getParameter("type") != null)//获取文件分类  
             type = request.getParameter("type").toLowerCase() + "/";  

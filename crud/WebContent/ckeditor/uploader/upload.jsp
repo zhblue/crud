@@ -28,7 +28,7 @@ try{
 	if(!Auth.canUploadFile(user_id)) return;
 }catch(Exception e){return;}
 
-String path = request.getContextPath() + "/";  
+String path = request.getContextPath() ;  
 if(ServletFileUpload.isMultipartContent(request)){  
     String type = "";  
     if(request.getParameter("type") != null)//获取文件分类  
