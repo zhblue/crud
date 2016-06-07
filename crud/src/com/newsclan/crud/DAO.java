@@ -170,8 +170,13 @@ public class DAO {
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
+				if(field.name.endsWith("_file")){
+					row.add("<span name='" + field.name + "'><a href=\""
+							+ String.valueOf(values[0].get(i++)) + "\" target='_blank'>下载</a></span>");
+				}else{
 				row.add("<span name='" + field.name + "'>"
 						+ String.valueOf(values[0].get(i++)) + "</span>");
+				}	
 			} else {
 				row.add("");
 			}
@@ -392,7 +397,7 @@ public class DAO {
 		tbname = tbname.replace("`", "");
 		//String select=getSelectOfTable(tbname);
 		String sql = "select * from `" + tbname + "`";
-		Tools.debug(sql);
+		//Tools.debug(sql);
 		sql = DAO.getJoinTableSQL(tbname, true);
 		String[] values = {};
 		String where = DAO.getKeywordLike(tbname);
@@ -602,8 +607,11 @@ public class DAO {
 				subtable = table_prefix + subtable;
 			}
 			if(field.ftable!=null&&field.transview!=null&&!"".equals(field.transview.trim())){
-
-				sb.append(String.format(" %s like ? or",field.transview));
+				if("".equals(field.ftable)){
+					sb.append(String.format(" %s like ? or",field.transview));
+				}else{
+					sb.append(String.format(" `%s`.`%s` like ? or",field.ftable,field.transview));
+				}
 				
 			}else	if (field.name.endsWith("_id") && hasTable(subtable)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
@@ -628,7 +636,7 @@ public class DAO {
 		return sb.toString();
 	}
 
-	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
+	public static String getJoinTableSQL(String tbname, boolean... withoutID) { 
 		// TODO Auto-generated method stub
 		Field[] fds = getFieldsOfTable(tbname);
 		String ret = "select ";
@@ -636,27 +644,18 @@ public class DAO {
 
 		String tables = String.format("`%s` `%s`", tbname, tbname);
 		for (Field field : fds) {
-			String join = field.name.endsWith("_id") ? field.name.substring(0,
-					field.name.length() - 3) : "";
-			
-			if(field.ftable!=null&&hasTable(field.ftable)){//有指定的外键表时，优先使用
-				join = field.ftable;
-			}else{
-				if (!DAO.hasTable(join)&&hasTable(table_prefix + join)) {
-					join = table_prefix + join;
-				}
-			}
-			if ((field.name.endsWith("_id")||field.ftable!=null) && !join.equals(tbname)
-					&& hasTable(join)
+			String join = getJoinTableOfField(tbname, field);
+			if ((field.name.endsWith("_id") || field.ftable != null)
+					&& !join.equals(tbname) && hasTable(join)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
-				String dataFieldName=getFirstCharFieldName(join);
-				
-				if(field.transview!=null){
-					dataFieldName=field.transview;
+				String dataFieldName = getFirstCharFieldName(join);
+
+				if (field.transview != null&&!"".equals(field.transview)) {
+					dataFieldName = field.transview;
 				}
 
-				fields += "," + join + "." + dataFieldName
-						+ " as `" + join + "`";
+				fields += "," + join + "." + dataFieldName + " as `" + join
+						+ "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
 					fields += "," + join + "." + getPrimaryKeyFieldName(join)
 							+ " as `" + field.name + "_value`";
@@ -664,16 +663,16 @@ public class DAO {
 				tables += " left join `" + join + "` `" + join + "` on "
 						+ tbname + "." + field.name + "=" + join + "."
 						+ getPrimaryKeyFieldName(join) + "";
-				
+
 			} else {
-				String transview=field.transview;
-				if(transview==null){
+				String transview = field.transview;
+				if (transview == null) {
 					fields += "," + tbname + "." + field.name + " as `"
-						+ field.name + "`";
-				}else{
-					transview=transview.replace("#",  tbname + "." + field.name);
-					fields += "," + transview+ " as `"
 							+ field.name + "`";
+				} else {
+					transview = transview.replace("#", tbname + "."
+							+ field.name);
+					fields += "," + transview + " as `" + field.name + "`";
 				}
 			}
 		}
@@ -682,7 +681,21 @@ public class DAO {
 			System.out.println(ret);
 		return ret;
 	}
+	public static String getJoinTableOfField(String tbname, Field field) {
+		String join = field.name.endsWith("_id") ? field.name.substring(0,
+				field.name.length() - 3) : "";
 
+		if (field.ftable != null && hasTable(field.ftable)) {
+			join = field.ftable;
+		} else {
+			if (!DAO.hasTable(join) && hasTable(table_prefix + join)) {
+				join = table_prefix + join;
+			}
+		}
+		
+		return join;
+	}
+ 
 	public static boolean hasTable(String join) {
 		// TODO Auto-generated method stub
 		String yes = DAO.queryString(
