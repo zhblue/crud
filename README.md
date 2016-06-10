@@ -25,6 +25,9 @@ datadic表用于翻译英文表名列名到中文,建表语句在db.sql。
 
 ![image](https://github.com/zhblue/crud/blob/master/crud/crud.png)
 
+约定如下：
+
+新增用户没有权限，权限表里增加记录，rightstr格式为[表名]权限，如[config]read为读取config表权限，[]admin为管理员权限。
 正常连接数据库后，新建符合上述要求的数据表，刷新页面会自动出现新的菜单，点击可以展开数据进行增删改。
 
 需要中文含义，在数据字典表中进行添加即可，刷新页面立刻生效。
@@ -35,6 +38,8 @@ text类型自动以CKEditor进行编辑，支持上传图片与附件。
 
 以_file结尾的varchar字段可以上传文件，并记录路径。
 
+_id结尾的外键，自动显示为下拉选择。
 
+在config/配置中增加记录，以“报表”两字结尾的记录将出现在报表菜单中。value里可以自定义sql，START_DATE END_DATE用于日期筛选，USER_ID用于用户筛选。
 
 
