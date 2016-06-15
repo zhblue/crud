@@ -49,7 +49,7 @@ public class Tools {
 	}
 	public static int getUserId(HttpSession session){
 		Integer user_id = (Integer) session.getAttribute("user_id");
-		if(user_id==null) user_id=0;
+		if(user_id==null) user_id=0;  //guest
 		return user_id;
 	}
 	public static String getHash(String origin,String salt){
