@@ -1,9 +1,5 @@
 package com.newsclan.crud;
 
-import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
-import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -25,87 +21,6 @@ public class Tools {
 		System.out.println(msg);
 	}
 
-	private static final String HEX_DIGITS = "0123456789abcdef";
-	public static byte[] computeSha1OfString(String arg) {
-	    ByteBuffer buf = StandardCharsets.UTF_8.encode(CharBuffer.wrap(arg)); 
-		byte[] utf8 = new byte[buf.limit()]; buf.get(utf8); 
-		return computeSha1OfByteArray(utf8);
-	}
-
-	private static byte[] computeSha1OfByteArray(byte[] arg) {
-	    try {
-	        MessageDigest md = MessageDigest.getInstance("SHA-1");
-	        md.update(arg);
-	        byte[] res = md.digest();
-	        return (res);
-	    } catch (NoSuchAlgorithmException ex) {
-	        throw new UnsupportedOperationException(ex);
-	    } catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return null;
-	}
-
-	static String toHexString(byte[] v) {
-	    StringBuilder sb = new StringBuilder(v.length * 2);
-	    for (int i = 0; i < v.length; i++) {
-	        int b = v[i] & 0xFF;
-	        sb.append(HEX_DIGITS.charAt(b >>> 4)).append(HEX_DIGITS.charAt(b & 0xF));
-	    }
-	    return sb.toString();
-	}
-	 public static String encodeBase64(byte[] v) throws Exception{  
-	        Class clazz=Class.forName("com.sun.org.apache.xerces.internal.impl.dv.util.Base64");  
-	        Method mainMethod= clazz.getMethod("encode", byte[].class);  
-	        mainMethod.setAccessible(true);  
-	         Object retObj=mainMethod.invoke(null, new Object[]{v});  
-	         return (String)retObj;  
-	    }  
-	 private static String dump(byte[] bs) {
-		// TODO Auto-generated method stub
-		 StringBuilder sb=new StringBuilder();
-		 for(byte b:bs){
-			 sb.append(String.format("%x", b));
-		 }
-		return sb.toString();
-	}
-	static byte[] concat(byte[] sha1, byte[] salt) {
-		// TODO Auto-generated method stub
-		byte []ret=new byte[sha1.length+salt.length];
-		for(int i=0;i<sha1.length;i++){
-			ret[i]=sha1[i];
-		}
-		for(int i=0;i<salt.length;i++){
-			ret[sha1.length+i]=salt[i];
-		}
-		return ret;
-	}
-	static String deBase64(String input) {
-		StringBuilder sb=new StringBuilder();
-		// TODO Auto-generated method stub
-		byte[] bs=null;
-		try {
-			bs = decodeBase64(input);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		if(bs!=null){
-		for(byte b:bs){
-			sb.append(String.format("%x",b));
-		}
-		
-		}
-		return sb.toString();
-	}
-	public static byte[] decodeBase64(String input) throws Exception{  
-	        Class clazz=Class.forName("com.sun.org.apache.xerces.internal.impl.dv.util.Base64");  
-	        Method mainMethod= clazz.getMethod("decode", String.class);  
-	        mainMethod.setAccessible(true);  
-	         Object retObj=mainMethod.invoke(null, input);  
-	         return (byte[])retObj;  
-	    }  
 	public static boolean login(String username,String password){
 		boolean ret=false;
 		Connection conn=DB.getConnection();
