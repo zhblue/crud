@@ -30,6 +30,8 @@ public class HUSTOJ {
 		System.out.println(checkPassword(hash, pass));
 		System.out.println(getSalt(hash));
 		System.out.println(getHash(pass, "1234"));
+		System.out.println(getHash(pass));
+		System.out.println(checkPassword(getHash(pass),pass));
 		
 	}
 
@@ -52,6 +54,11 @@ public class HUSTOJ {
 		}
 		String salt = s.substring(s.length()-4);
 		return salt;
+	}
+	public static String getHash(String password){
+		String salt=Tools.getRandomSalt().substring(0,4);
+		System.out.println(salt);
+		return getHash(password,salt); 
 	}
 	public static String getHash(String pass,String salt){
 		byte[] sha1 = computeSha1OfString(Tools.Md5(pass) + salt);
