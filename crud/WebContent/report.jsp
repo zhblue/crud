@@ -4,7 +4,7 @@
 <html>
 <link rel=stylesheet href='../bootstrap/css/bootstrap.min.css' type='text/css'>
 
-<body background="bg2.jpg" >
+<body>
 <div width=80%>
 
 <%

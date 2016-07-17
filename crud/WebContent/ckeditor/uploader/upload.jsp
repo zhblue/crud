@@ -49,18 +49,16 @@ if(ServletFileUpload.isMultipartContent(request)){
             fileName = "file" + System.currentTimeMillis() + ext;  
             //定义文件路径，根据你的文件夹结构，可能需要做修改  
             String clientPath = Config.get("upload.path")+"/"+year+"/"+user_id +"/"+ type + fileName;  
-  
-            //保存文件到服务器上  
-            File file = new File(request.getSession().getServletContext().getRealPath(clientPath));  
+  	         //保存文件到服务器上  
+            File file = new File(pageContext.getServletContext().getRealPath(clientPath));  
             if (!file.getParentFile().exists()) {  
                 file.getParentFile().mkdirs();  
             }  
             item.write(file);  
-  
+        
             //打印一段JS，调用parent页面的CKEditor的函数，传递函数编号和上传后文件的路径；这句很重要，成败在此一句  
 	    if(callback==null){
-
-            	out.println("<script type='text/javascript'>window.parent.$('#"+input_name+"').val('"+path+clientPath+"')</script>");  
+	        out.println("上传完成！<script type='text/javascript'>window.parent.$('#"+input_name+"').val('"+clientPath+"')</script>");  
 	    }else{
             	out.println("<script type='text/javascript'>window.parent.CKEDITOR.tools.callFunction("+callback+",'"+path+clientPath+"')</script>");  
 	    }

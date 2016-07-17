@@ -121,7 +121,10 @@
 			loadSelect($(this));
 		});
 	}
-	
+	function loadImport(){
+		window.clearInterval(inter);
+		$("#main").load("import.jsp?"+Math.random(),{},reformatform);
+	}
 	function loadReport(){
 		window.clearInterval(inter);
 		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
@@ -217,6 +220,6 @@
 	}
 	var inter=null;
 	//var stid=null;
-	var tableName="node";
+	var tableName="datadic";
 	var searchKeyword="";
 	var thepage=0;

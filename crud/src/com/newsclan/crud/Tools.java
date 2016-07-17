@@ -1,5 +1,7 @@
 package com.newsclan.crud;
 
+import java.io.File;
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -13,6 +15,11 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import jxl.Cell;
+import jxl.Sheet;
+import jxl.Workbook;
+import jxl.read.biff.BiffException;
+
 import org.apache.commons.lang3.StringEscapeUtils;
 
 
@@ -20,6 +27,35 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
+	public static void importXLS(String path) {
+		System.out.println(path);
+		try {
+			// 打开文件
+			Workbook book = Workbook.getWorkbook(new File(path));
+			// 取得第一个sheet
+			Sheet sheet = book.getSheet(0);
+			// 取得行数
+			int rows = sheet.getRows();
+			//System.out.println(rows);
+			for (int i = 0; i < rows; i++) {
+				Cell[] cell = sheet.getRow(i);
+				//System.out.println(cell.length);
+				for (int j = 0; j < cell.length; j++) {
+					// getCell(列，行)
+					System.out.print(cell[j].getContents());
+					System.out.print(" ");
+				}
+				System.out.println("		");
+			}
+			// 关闭文件
+			book.close();
+		} catch (BiffException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 
 	public static boolean login(String username,String password){
 		boolean ret=false;

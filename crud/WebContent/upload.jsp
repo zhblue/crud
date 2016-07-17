@@ -19,7 +19,7 @@
 	
 	%>
 <form style="margin:0px;display: inline" method="post" action="ckeditor/uploader/upload.jsp?input_name=<%=Tools.toHTML(input_name)%>" enctype='multipart/form-data'>
-<span style="white-space:nowarp"><input type="file" name="upload"><input type="submit"></span>
+<span style="white-space:nowarp"><input type="file" name="upload"><input type="submit" value="上传"></span>
 </form>	
 </body>
 </html>
