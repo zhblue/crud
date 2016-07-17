@@ -18,7 +18,7 @@
 		System.out.println(path);
 		System.out.println(realpath);
 		if(realpath!=null){
-			Tools.importXLS(realpath);
+			Tools.importXLS(realpath); 
 		}
 	}
 %>
