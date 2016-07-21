@@ -1,7 +1,7 @@
 system.name=CRUD
-system.debug=true
+system.debug=false
 db.driver =com.mysql.jdbc.Driver
-db.connectString = jdbc:mysql://localhost:3306/crud?useUnicode=true&characterEncoding=UTF-8
+db.connectString = jdbc:mysql://localhost/crud?useUnicode=true&characterEncoding=UTF-8
 db.username=root
 db.password=
 db.pool=true

@@ -445,7 +445,7 @@ public class DAO {
 	public static List<List> queryList(String sql, boolean title,
 			String... values) {
 		// TODO Auto-generated method stub
-		System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
+		if(Config.debug)System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
 		
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -493,7 +493,8 @@ public class DAO {
 	}
 
 	public static int executeUpdate(String sql, String... values) {
-		System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
+		if(Config.debug)
+			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		int ret = -1;
@@ -526,7 +527,7 @@ public class DAO {
 	}
 
 	public static int update(String sql, Object... values) {
-		System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
+		if(Config.debug)System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
 		
 		int ret = 0;
 		Connection conn = DB.getConnection();

@@ -173,14 +173,14 @@ public class Tools {
 		String sql = "select id," + (nameFD) + " from `" + filteSQL(tbname) + "`";
 		boolean noDefault=true;
 		if(keys.length>=2){
-			System.out.println(keys[0]);
+			if(Config.debug)	System.out.println(keys[0]);
 			Field[] fds = DAO.getFieldsOfTable(tbname);
 			for(Field fd:fds){
 				if(fd.name.equals(keys[0])){
 					sql+=" where "+filteSQL(keys[0])+"="+filteSQL(keys[1]);
 					break;
 				}
-				System.out.println(fd.name);
+				if(Config.debug)System.out.println(fd.name);
 			}
 		}
 		List<List> data = DAO.queryList(sql, false);

@@ -216,7 +216,7 @@
 	}
 	function autoRefresh(){
 		window.clearTimeout(inter);
-		inter=window.setTimeout('refresh()',1000);
+		inter=window.setTimeout('refresh()',5000);
 	}
 	var inter=null;
 	//var stid=null;
