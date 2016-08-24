@@ -183,6 +183,8 @@ public class Tools {
 				if(Config.debug)System.out.println(fd.name);
 			}
 		}
+		sql+=" order by "+nameFD;
+		
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");

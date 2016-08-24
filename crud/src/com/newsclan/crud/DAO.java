@@ -83,6 +83,11 @@ public class DAO {
 					d = "0";
 				}
 			}
+			if (DAO.isFieldDate(field)) {
+				if ("".equals(d)) {
+					d = null;
+				}
+			}
 			if ("password".equals(field.name)) {
 				d = Tools.getHash(d, Tools.getRandomSalt());
 			}
@@ -443,7 +448,7 @@ public class DAO {
 	}
 
 	public static List<List> queryList(String sql, boolean title,
-			String... values) {
+			Object... values) {
 		// TODO Auto-generated method stub
 		if(Config.debug)System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
 		
@@ -454,7 +459,8 @@ public class DAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			for (int i = 0; i < values.length; i++) {
-				pstmt.setString(i + 1, values[i]);
+				
+				pstmt.setObject(i + 1, values[i]);
 			}
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -493,26 +499,26 @@ public class DAO {
 	}
 
 	public static int executeUpdate(String sql, String... values) {
-		if(Config.debug)
-			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
-		Connection conn = DB.getConnection();
-		PreparedStatement pstmt = null;
-		int ret = -1;
-		try {
-			pstmt = conn.prepareStatement(sql);
-			for (int i = 0; i < values.length; i++) {
-				pstmt.setString(i + 1, values[i]);
-			}
-			ret = pstmt.executeUpdate();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-
-			DB.close(pstmt);
-			DB.close(conn);
-		}
-		return ret;
+//		if(Config.debug)
+//			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
+//		Connection conn = DB.getConnection();
+//		PreparedStatement pstmt = null;
+//		int ret = -1;
+//		try {
+//			pstmt = conn.prepareStatement(sql);
+//			for (int i = 0; i < values.length; i++) {
+//				pstmt.setString(i + 1, values[i]);
+//			}
+//			ret = pstmt.executeUpdate();
+//		} catch (SQLException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} finally {
+//
+//			DB.close(pstmt);
+//			DB.close(conn);
+//		}
+		return update(sql,values);
 	}
 
 	public static String queryString(String sql, String... values) {

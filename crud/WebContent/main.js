@@ -125,6 +125,10 @@
 		window.clearInterval(inter);
 		$("#main").load("import.jsp?"+Math.random(),{},reformatform);
 	}
+	function loadDisImport(){
+		window.clearInterval(inter);
+		$("#main").load("import_dis.jsp?"+Math.random(),{},reformatform);
+	}
 	function loadReport(){
 		window.clearInterval(inter);
 		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
