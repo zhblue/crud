@@ -1,9 +1,9 @@
 system.name=CRUD
 system.debug=false
 db.driver =com.mysql.jdbc.Driver
-db.connectString = jdbc:mysql://localhost/crud?useUnicode=true&characterEncoding=UTF-8
-db.username=root
-db.password=
+db.connectString = jdbc:mysql://office/405_aobao?useUnicode=true&characterEncoding=UTF-8
+db.username=405_root
+db.password=ausadmin2015
 db.pool=true
 db.table.prefix=t_
 db.sys.prefix=
