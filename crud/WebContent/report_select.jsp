@@ -62,6 +62,9 @@ if(id==null){
 	String end=request.getParameter("end");
 	sql=sql.replace("START_DATE",start);
 	sql=sql.replace("END_DATE",end);
+	sql=sql.replace("USER_ID",String.valueOf(session.getAttribute("user_id")));
+	sql=sql.replace("USER_NAME",(String)session.getAttribute("user_name"));
+	
 	session.setAttribute("sql",sql);
 	session.setAttribute("report_name", name+"_"+start+"-"+end);
 	response.sendRedirect("report.jsp?"+Math.random());
