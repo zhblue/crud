@@ -612,6 +612,7 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
+			//if(!isFieldText(field)) continue;
 			String subtable = field.name.endsWith("_id") ? field.name
 					.substring(0, field.name.length() - 3) : "";
 			if (!DAO.hasTable(subtable)&&hasTable(table_prefix + subtable)) {
@@ -619,24 +620,25 @@ public class DAO {
 			}
 			if(field.ftable!=null&&field.transview!=null&&!"".equals(field.transview.trim())){
 				if("".equals(field.ftable)){
-					sb.append(String.format(" %s like ? or",field.transview));
+					sb.append(String.format(" %s like BINARY  ? or",field.transview));
 				}else{
-					sb.append(String.format(" `%s`.`%s` like ? or",field.ftable,field.transview));
+					field.ftable=getJoinTableOfField(tbname,field);
+					sb.append(String.format(" `%s`.`%s` like BINARY  ? or",field.ftable,field.transview));
 				}
 				
 			}else	if (field.name.endsWith("_id") && hasTable(subtable)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
 
-				sb.append(String.format(" `%s`.`%s` like ? or", subtable,
+				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", subtable,
 						getFirstCharFieldName(subtable)));
 
 			} else if(field.type==Types.TIMESTAMP||field.type==Types.DATE){
-				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%%Y-%%m-%%d %%H:%%i:%%s') like ? or", field.table,
+				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%%Y-%%m-%%d %%H:%%i:%%s') like BINARY  ? or", field.table,
 						field.name));
 
 				
 			}else {
-				sb.append(String.format(" `%s`.`%s` like ? or", field.table,
+				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", field.table,
 						field.name));
 
 			}
