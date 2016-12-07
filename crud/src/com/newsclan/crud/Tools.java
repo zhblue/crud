@@ -27,6 +27,15 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
+	public static String update(HttpServletRequest request){
+		Long id=Long.parseLong(request.getParameter("id"));
+		String tbname=request.getParameter("tbname").replace("`", "");
+		String fdname=request.getParameter("fdname").replace("`", "");
+		String value=request.getParameter("value");
+		String sql="update `"+tbname+"` set `"+fdname+"`=? where id=?";
+		DAO.update(sql, value,id);
+		return "reload();";
+	}
 	public static void importXLS(String path) {
 		System.out.println(path);
 		try {
