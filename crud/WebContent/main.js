@@ -19,19 +19,25 @@
 		return parseInt(data);
 	}
 	function view(rowid){
-		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatview);
 		
 		//window.open("view.jsp?tb="+tbname+"&id="+rowid);
 	}
 	function edit(rowid){
-		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
+	
+	function report_row_del(tbname,rowid){
+		var ans=confirm('确定删除编号'+rowid);
+		if(ans){
+			$.post("del.jsp",{"tbname":tbname,"id":rowid},new function(){
+				 window.setTimeout("$('#main').load('report.jsp?page=0')",1000);
+			});
+		}
+	}
 	function del(rowid){
-		window.clearTimeout(inter);
 		var ans=confirm('确定删除编号'+rowid);
 		var tbname=$("#tbname").val();
 		if(ans){
@@ -43,10 +49,14 @@
 	
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		$("#main tr").append("<td>"+
-				"<span class='glyphicon glyphicon-eye-open'></span>"+
-				"<span class='glyphicon glyphicon-edit'></span>"
-										+"<span class='glyphicon glyphicon-trash' ></span></td>");
+		var buttons="<td>"+
+		"<span class='glyphicon glyphicon-eye-open'></span>"+
+		"<span class='glyphicon glyphicon-edit'></span>"
+								+"<span class='glyphicon glyphicon-trash' ></span>";
+		
+		buttons+="</td>";
+		
+		$("#main tr").append(buttons);
 		$(".glyphicon-eye-open").bind("click",function(evt){
 			view(dbid(evt));
 		});
@@ -55,6 +65,9 @@
 		});
 		$(".glyphicon-edit").bind("click",function(evt){
 			edit(dbid(evt));
+		});
+		$(".glyphicon-refresh").bind("click",function(evt){
+			goodsPriceSync(dbid(evt));
 		});
 		
 		
@@ -99,8 +112,12 @@
 		$("input[name$=_file]").each(function(){
 			loadFile($(this));
 		});
+	
 		$("input[name$=_id]").each(function(){
-			loadSelect($(this));
+			if($(this).attr("name")!="detailContent_id"){
+				loadSelect($(this));
+				console.log($(this).attr("name"));
+			}
 		});
 		$("input[postLoad=1]").each(function(){
 			loadSelect($(this));
@@ -132,7 +149,7 @@
 						"id":rid
 							
 							},new function(){
-						 window.setTimeout("$('#main').load('report.jsp?page=0',null,reformatform);",500);
+						 window.setTimeout("refresh();",500);
 					});
 					
 				}
@@ -144,6 +161,7 @@
 			loadSelect($(this));
 		});
 	}
+	
 	function loadImport(){
 		window.clearInterval(inter);
 		$("#main").load("import.jsp?"+Math.random(),{},reformatform);
@@ -155,6 +173,10 @@
 	function loadReport(){
 		window.clearInterval(inter);
 		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
+	}
+	function loadDisReport(){
+		window.clearInterval(inter);
+		$("#main").load("report_dis_select.jsp?"+Math.random(),{},reformatform);
 	}
 	function passChange(){ 
 		window.clearInterval(inter);
@@ -173,11 +195,12 @@
 		if (typeof(keyword)=='undefined'||keyword=="") keyword=searchKeyword;
 		thepage=pageNum;
 		searchKeyword=keyword;
-		window.clearTimeout(inter);
+		window.clearInterval(inter);
 		$("#main").load("list.jsp",{"tb":tbname,"pageNum":pageNum,"keyword":keyword},function(text,status,http){
 			
 			if(status=="success"){
 				addButton($("#main"));
+				reformatform();
 				$("#tbname").after("<span id='addrow' class='glyphicon glyphicon-plus'></span>");
 				$("#addrow").click(function(){
 					$("#main").load("add.jsp",{tb:tbname},reformatform);
@@ -187,19 +210,27 @@
 				}
 			}
 		});
+		lastLoad="mainLoad('"+tbname+"',"+pageNum+",'"+keyword+"');";
 		
 	}
+	function reportPage(page){
+		$('#main').load('report.jsp?page='+page);
+		lastLoad="reportPage("+page+");";
+	}
 	function pageUp(tbname,pageNum){
-		thepage=pageNum-1;
-		mainLoad(tbname,thepage,searchKeyword);
+		mainLoad(tbname,pageNum-1,searchKeyword);
 	}
 	function pageDown(tbname,pageNum){
-		thepage=pageNum+1;
-		mainLoad(tbname,thepage,searchKeyword);
+		mainLoad(tbname,pageNum+1,searchKeyword);
 	}
 	function showReport(frm){
 		var data=$(frm).serialize();
 		$("#main").load("report_select.jsp?"+Math.random(),data,reformatform);
+		return false;
+	}
+	function showDisReport(frm){
+		var data=$(frm).serialize();
+		$("#main").load("report_dis_select.jsp?"+Math.random(),data);
 		return false;
 	}
 	function submitAdd(tbname){
@@ -238,8 +269,14 @@
 		searchKeyword=keyword;
 		inter=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
 	}
+	function reload(){
+		$("#main").empty();
+		$("#main").append("<span class='glyphicon glyphicon-refresh' ></span>");
+		window.setTimeout("mainLoad('"+tableName+"',0);",500);
+		alert("reload");
+	}
 	function refresh(){
-		mainLoad(tableName,thepage,searchKeyword);
+		eval(lastLoad);
 	}
 	function autoRefresh(){
 		window.clearTimeout(inter);
@@ -247,6 +284,7 @@
 	}
 	var inter=null;
 	//var stid=null;
-	var tableName="datadic";
+	var tableName="t_order";
 	var searchKeyword="";
 	var thepage=0;
+	var lastLoad="";
