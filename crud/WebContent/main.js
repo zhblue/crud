@@ -19,12 +19,14 @@
 		return parseInt(data);
 	}
 	function view(rowid){
+		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("view.jsp",{"tb":tbname,"id":rowid},reformatview);
 		
 		//window.open("view.jsp?tb="+tbname+"&id="+rowid);
 	}
 	function edit(rowid){
+		window.clearTimeout(inter);
 		var tbname=$("#tbname").val();
 		$("#main").load("add.jsp",{"tb":tbname,"id":rowid},reformatform);
 	}
@@ -112,12 +114,8 @@
 		$("input[name$=_file]").each(function(){
 			loadFile($(this));
 		});
-	
 		$("input[name$=_id]").each(function(){
-			if($(this).attr("name")!="detailContent_id"){
 				loadSelect($(this));
-				console.log($(this).attr("name"));
-			}
 		});
 		$("input[postLoad=1]").each(function(){
 			loadSelect($(this));
@@ -166,18 +164,12 @@
 		window.clearInterval(inter);
 		$("#main").load("import.jsp?"+Math.random(),{},reformatform);
 	}
-	function loadDisImport(){
-		window.clearInterval(inter);
-		$("#main").load("import_dis.jsp?"+Math.random(),{},reformatform);
-	}
+	
 	function loadReport(){
 		window.clearInterval(inter);
 		$("#main").load("report_select.jsp?"+Math.random(),{},reformatform);
 	}
-	function loadDisReport(){
-		window.clearInterval(inter);
-		$("#main").load("report_dis_select.jsp?"+Math.random(),{},reformatform);
-	}
+	
 	function passChange(){ 
 		window.clearInterval(inter);
 		$("#main").load("passChange.jsp?"+Math.random());
@@ -228,11 +220,7 @@
 		$("#main").load("report_select.jsp?"+Math.random(),data,reformatform);
 		return false;
 	}
-	function showDisReport(frm){
-		var data=$(frm).serialize();
-		$("#main").load("report_dis_select.jsp?"+Math.random(),data);
-		return false;
-	}
+	
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
 		$.post("add.jsp",data,new function(){
@@ -284,7 +272,7 @@
 	}
 	var inter=null;
 	//var stid=null;
-	var tableName="t_order";
+	var tableName="datadic";
 	var searchKeyword="";
 	var thepage=0;
 	var lastLoad="";
