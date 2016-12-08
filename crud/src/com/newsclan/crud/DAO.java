@@ -432,7 +432,7 @@ public class DAO {
 		sql += " order by id desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
-		return queryList(sql, true, values);
+		return DAO.editableList(sql, true,true, values);
 
 	}
 
@@ -447,10 +447,11 @@ public class DAO {
 		return false;
 	}
 
-	public static List<List> queryList(String sql, boolean title,
-			Object... values) {
+	public static List<List> editableList(String sql, boolean title,boolean editable,
+			String... values) {
 		// TODO Auto-generated method stub
-		if(Config.debug)System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
+		if(Config.debug)
+			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
 		
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -459,8 +460,7 @@ public class DAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			for (int i = 0; i < values.length; i++) {
-				
-				pstmt.setObject(i + 1, values[i]);
+				pstmt.setString(i + 1, values[i]);
 			}
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -469,6 +469,9 @@ public class DAO {
 				row = new LinkedList();
 				int shortLen = Integer.parseInt(Config.get("text.shortLen"));
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
+					
+					
+					
 					row.add(Tools.shortString(
 							translate(rsmd.getColumnLabel(i)), shortLen));
 				}
@@ -479,10 +482,26 @@ public class DAO {
 				row = new LinkedList();
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 					Object v = rs.getObject(i);
+					
 					if (v == null) {
 						row.add("");
 					} else {
-						row.add(v);
+						if(i>1&&editable){
+						StringBuilder sb=new StringBuilder();
+						sb.append("<span class='modifiable'");
+						sb.append("tb='");
+						sb.append(rsmd.getTableName(i));
+						sb.append("' fd='");
+						sb.append(rsmd.getColumnName(i));
+						sb.append("' rid='");
+						sb.append(rs.getObject(1)); 
+						sb.append("' >");
+						sb.append(v.toString());
+						sb.append("</span>");
+						row.add(sb.toString());
+						}else{
+							row.add(v);
+						}
 					}
 				}
 				ret.add(row);
@@ -497,6 +516,14 @@ public class DAO {
 		}
 		return ret;
 	}
+	
+	public static List<List> queryList(String sql, boolean title,
+			String... values) {
+		// TODO Auto-generated method stub
+		
+		return editableList(sql,title,false,values);
+	}
+	
 
 	public static int executeUpdate(String sql, String... values) {
 //		if(Config.debug)
