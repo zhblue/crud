@@ -263,10 +263,10 @@ public class Tools {
 
 			}
 
-			ret.append("</tr>");
+			ret.append("</tr>\n");
 			if (title) {
-				ret.append("</thead>");
-				ret.append("<tbody>");
+				ret.append("</thead>\n");
+				ret.append("<tbody>\n");
 			}
 			title = false;
 		}
