@@ -132,26 +132,28 @@
 				$("textarea").ckeditor();
 		$("span[class='modifiable']").each(function(){
 			var tbname=$(this).attr("tb");
-			var fdname=$(this).attr("fd");
-			var rid=$(this).attr("rid");
-			$(this)[0].title="双击修改";
-			$(this).dblclick(function(){
-				var newValue=prompt("手工修改",$(this).text());
-				if(newValue!=null&&newValue!=$(this).text()){
-					//alert("update "+tbname+" set "+fdname+"="+newValue+" where id="+rid);
-					
-					$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"update",
-						"tbname":tbname,
-						"fdname":fdname,
-						"value":newValue,
-						"id":rid
-							
-							},new function(){
-						 window.setTimeout("refresh();",500);
-					});
-					
-				}
-			});
+			if(tbname==tableName||lastLoad.indexOf("report")!=-1){
+				var fdname=$(this).attr("fd");
+				var rid=$(this).attr("rid");
+				$(this)[0].title="双击修改";
+				$(this).dblclick(function(){
+					var newValue=prompt("手工修改",$(this).text());
+					if(newValue!=null&&newValue!=$(this).text()){
+						//alert("update "+tbname+" set "+fdname+"="+newValue+" where id="+rid);
+						
+						$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"update",
+							"tbname":tbname,
+							"fdname":fdname,
+							"value":newValue,
+							"id":rid
+								
+								},new function(){
+							 window.setTimeout("refresh();",500);
+						});
+						
+					}
+				});
+			}
 		});
 	}
 	function reformatview(){
@@ -218,6 +220,7 @@
 	function showReport(frm){
 		var data=$(frm).serialize();
 		$("#main").load("report_select.jsp?"+Math.random(),data,reformatform);
+		lastLoad="reportPage(0);";
 		return false;
 	}
 	

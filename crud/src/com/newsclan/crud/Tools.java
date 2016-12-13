@@ -32,7 +32,7 @@ public class Tools {
 		String tbname=request.getParameter("tbname").replace("`", "");
 		String fdname=request.getParameter("fdname").replace("`", "");
 		String value=request.getParameter("value");
-		String sql="update `"+tbname+"` set `"+fdname+"`=? where id=?";
+		String sql="update `"+tbname+"` set `"+fdname+"`=? where "+DAO.getPrimaryKeyFieldName(tbname)+"=?";
 		DAO.update(sql, value,id);
 		return "reload();";
 	}
