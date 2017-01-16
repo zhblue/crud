@@ -363,7 +363,7 @@ public class DAO {
 
 			return getList(tbname, keyword, pageNum, pageSize);
 
-		} else if (Auth.canInsertTable(user_id, tbname)) {
+		} else if (Auth.canInsertTable(user_id, tbname)||Auth.canUpdateTable(user_id, tbname)) {
 
 			return getList(tbname, keyword, pageNum, pageSize, user_id);
 

@@ -12,3 +12,4 @@ text.shortLen=60
 page.size=10
 login.check=true
 upload.path=/upload
+privilege.auto=[news]insert,[news]update

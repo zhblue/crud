@@ -9,8 +9,12 @@ public class Auth {
 	public static boolean checkPrivilegeForRightOfTable(int user_id, String tbname,
 			String right) {
 		if(Config.get("login.check").equalsIgnoreCase("false")) return true;
+		if(Config.get("privilege.auto")!=null&&
+				Config.get("privilege.auto").contains(String.format("[%s]%s", tbname,right))) return true;
+		
 		String sql="select `right` from "+Config.sysPrefix+"privilege where `user_id`=? and `right`=?";
 		String ret=DAO.queryString(sql, String.valueOf(user_id),String.format("[%s]%s", tbname,right));
+		
 		return ret!=null;
 	}
 	public static boolean canInsertTable(int user_id, String tbname) {
