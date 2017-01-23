@@ -736,10 +736,10 @@ public class DAO {
 		return join;
 	}
  
-	public static boolean hasTable(String join) {
+	public static boolean hasTable(String table) {
 		// TODO Auto-generated method stub
 		String yes = DAO.queryString(
-				"select 'yes' from `" + join + "` limit 1", new String[] {});
+				"select 'yes' from `" + table + "` limit 1", new String[] {});
 		return "yes".equals(yes);
 	}
 

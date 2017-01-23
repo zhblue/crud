@@ -7,8 +7,7 @@
 	int user_id=(Integer)session.getAttribute("user_id");
 	if (!(
 			Auth.isAdmin(user_id)
-			||Auth.checkPrivilegeForRightOfTable(user_id, "", "report")
-			||Auth.checkPrivilegeForRightOfTable(user_id, "", "disreport")
+			||Auth.checkPrivilegeForRightOfTable(user_id, "", "import")
 			
 		))
 		return;

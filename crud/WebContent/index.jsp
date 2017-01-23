@@ -52,11 +52,7 @@
       %>
       	 <a class="btn navbar-brand" href="#" onclick='loadImport();'>导入</a>
       <%} %>
-       <%
-      if(Auth.checkPrivilegeForRightOfTable(user_id, "", "dis_import")||Auth.isAdmin(user_id)){
-      %>
-      	 <a class="btn navbar-brand" href="#" onclick='loadDisImport();'>导入分销商订单</a>
-      <%} %>
+    
       <form class="navbar-form navbar-left" role="search">
         <div class="form-group">
           <input placeholder="查找" class="nav-brand form-control" onkeyup="search(this.value)" type="text">
