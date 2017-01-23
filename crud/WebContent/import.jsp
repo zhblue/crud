@@ -35,7 +35,7 @@
 function do_import(){
 	var data=$("#frm_import").serialize();
 	$.post("import.jsp",data,new function(){
-		 window.setTimeout("mainLoad('"+tableName+"',0,'"+searchKeyword+"')",1000);
+		 window.setTimeout("window.location.reload();",1000);
 	});
 	
 }

@@ -234,7 +234,7 @@ public class Tools {
 		// TODO Auto-generated method stub
 		int rows = sheet.getRows();
 		int max_length = 0;
-		int precision = 2;
+		int precision = 0;
 		boolean canBeDecimal = true;
 		boolean canBeInt = true;
 		for (int j = 1; j < rows; j++) {
@@ -263,7 +263,7 @@ public class Tools {
 
 		}
 		if (canBeInt) {
-			return String.format("int(%d)", max_length > 20 ? max_length + 2
+			return String.format("bigint(%d)", max_length > 20 ? max_length + 2
 					: 20);
 		}
 		if (canBeDecimal) {
@@ -298,7 +298,7 @@ public class Tools {
 	private static boolean isInt(String data) {
 		// TODO Auto-generated method stub
 		try {
-			if (String.valueOf(Integer.parseInt(data)).equals(data))
+			if (String.valueOf(Long.parseLong(data)).equals(data))
 				return true;
 		} catch (Exception e) {
 		}
@@ -308,7 +308,7 @@ public class Tools {
 	public static void addTable(String tb_name, String tb_title,
 			String[] fd_names, String[] fd_types, String[] fd_titles) {
 		StringBuffer sql = new StringBuffer("create table " + tb_name + "(");
-		sql.append("id int(10) unsigned NOT NULL auto_increment");
+		sql.append("id bigint(20) unsigned NOT NULL auto_increment");
 
 		String dict = "INSERT INTO `datadic` (`field`,`name`) VALUES (?,?)";
 
