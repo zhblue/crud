@@ -694,11 +694,11 @@ public class DAO {
 					dataFieldName = field.transview;
 				}
 
-				fields += "," + join + "." + dataFieldName + " as `" + join
+				fields += ",`" + join + "`.`" + dataFieldName + "` as `" + join
 						+ "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
-					fields += "," + join + "." + getPrimaryKeyFieldName(join)
-							+ " as `" + field.name + "_value`";
+					fields += ",`" + join + "`.`" + getPrimaryKeyFieldName(join)
+							+ "` as `" + field.name + "_value`";
 				}
 				tables += " left join `" + join + "` `" + join + "` on "
 						+ tbname + "." + field.name + "=" + join + "."
@@ -707,11 +707,11 @@ public class DAO {
 			} else {
 				String transview = field.transview;
 				if (transview == null) {
-					fields += "," + tbname + "." + field.name + " as `"
+					fields += ",`" + tbname + "`.`" + field.name + "` as `"
 							+ field.name + "`";
 				} else {
-					transview = transview.replace("#", tbname + "."
-							+ field.name);
+					transview = transview.replace("#", "`"+tbname + "`.`"
+							+ field.name+"`");
 					fields += "," + transview + " as `" + field.name + "`";
 				}
 			}
