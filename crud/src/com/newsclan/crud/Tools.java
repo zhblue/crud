@@ -288,6 +288,7 @@ public class Tools {
 		// TODO Auto-generated method stub
 		try {
 			double d = Double.parseDouble(data);
+			if(data.startsWith("00")) return false;
 			if (Double.parseDouble(String.format("%." + precision + "f", d)) == d)
 				return true;
 		} catch (Exception e) {
