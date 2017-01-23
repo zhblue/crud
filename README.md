@@ -43,4 +43,8 @@ _id结尾的外键，自动显示为下拉选择。
 在config/配置中增加记录，以“报表”两字结尾的记录将出现在报表菜单中。value里可以自定义sql，START_DATE END_DATE用于日期筛选，USER_ID用于用户筛选。
 
 
-
+支持导入xls文件，直接生成表格，若表格已存在则导入数据。
+![image](https://github.com/zhblue/crud/blob/master/crud/demo1.png)
+![image](https://github.com/zhblue/crud/blob/master/crud/demo2.png)
+![image](https://github.com/zhblue/crud/blob/master/crud/demo3.png)
+![image](https://github.com/zhblue/crud/blob/master/crud/demo4.png)
