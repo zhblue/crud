@@ -44,6 +44,8 @@ _id结尾的外键，自动显示为下拉选择。
 
 
 支持导入xls文件，直接生成表格，若表格已存在则导入数据。
+支持查看界面，双击修改数据。
+
 ![image](https://github.com/zhblue/crud/blob/master/crud/demo1.png)
 ![image](https://github.com/zhblue/crud/blob/master/crud/demo2.png)
 ![image](https://github.com/zhblue/crud/blob/master/crud/demo3.png)
