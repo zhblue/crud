@@ -132,9 +132,10 @@
 				$("textarea").ckeditor();
 		$("span[class='modifiable']").each(function(){
 			var tbname=$(this).attr("tb");
+			var fdname=$(this).attr("fd");
+			var rid=$(this).attr("rid");
+		
 			if(tbname==tableName||lastLoad.indexOf("report")!=-1){
-				var fdname=$(this).attr("fd");
-				var rid=$(this).attr("rid");
 				$(this)[0].title="双击修改";
 				$(this).dblclick(function(){
 					var newValue=prompt("手工修改",$(this).text());
@@ -153,6 +154,42 @@
 						
 					}
 				});
+			}else{
+				$(this)[0].title="双击选择";
+				$(this).dblclick(function(){
+					var oldValue=$(this).html();
+					var selectURL="select.jsp?tbname="+tbname+"&input_name="+tbname+"_id&value=-1";
+					$(this).load("select.jsp",{"tbname":tbname,"input_name":tbname+"_id","value":-1},
+						function(text,status,http){
+							if(status=="success"){
+								var sel=$("select[name="+tbname+"_id"+"]");
+								var opt=$("option");
+								var nowValue=opt.map(function(){if($(this).text()==oldValue) return($(this).val())});
+								sel.val(nowValue);
+								sel.removeAttr("onchange");
+								sel.change(function(){
+									var newValue=$(this).val();
+									$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"update",
+										"tbname":tableName,
+										"fdname":tbname+"_id",
+										"value":newValue,
+										"id":rid
+											
+											},new function(){
+										 window.setTimeout("refresh();",500);
+									});
+								});
+							}
+						}
+					
+					);
+					//	alert("update "+tableName+" set "+tbname+"_id="+oldValue+" where id="+rid);
+						
+
+						
+					
+				});
+				
 			}
 		});
 	}
