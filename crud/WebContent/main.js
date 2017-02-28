@@ -157,8 +157,7 @@
 			}else{
 				$(this)[0].title="双击选择";
 				$(this).dblclick(function(){
-					var oldHTML=$(this).html();
-					var td=$(this);
+					var span=$(this);
 					var oldValue=$(this).html();
 					var selectURL="select.jsp?tbname="+tbname+"&input_name="+tbname+"_id&value=-1";
 					$(this).load("select.jsp",{"tbname":tbname,"input_name":tbname+"_id","value":-1},
@@ -182,7 +181,7 @@
 									});
 								});
 								sel.blur(function(){
-									 td.html(oldHTML);
+									span.html(oldValue);
 								});
 								sel.focus();
 							}
