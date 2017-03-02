@@ -159,11 +159,14 @@
 				$(this).dblclick(function(){
 					var span=$(this);
 					var oldValue=$(this).html();
-					var selectURL="select.jsp?tbname="+tbname+"&input_name="+tbname+"_id&value=-1";
-					$(this).load("select.jsp",{"tbname":tbname,"input_name":tbname+"_id","value":-1},
+					var fdname=tbname+"_id";
+					//if(fdname.startsWith("t_")) fdname=fdname.substring(2);
+					
+					var selectURL="select.jsp?tbname="+tbname+"&input_name="+fdname+"&value=-1";
+					$(this).load("select.jsp",{"tbname":tbname,"input_name":fdname,"value":-1},
 						function(text,status,http){
 							if(status=="success"){
-								var sel=$("select[name="+tbname+"_id"+"]");
+								var sel=$("select[name="+fdname+"]");
 								var opt=$("option");
 								var nowValue=opt.map(function(){if($(this).text()==oldValue) return($(this).val())});
 								sel.val(nowValue);
@@ -172,7 +175,7 @@
 									var newValue=$(this).val();
 									$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"update",
 										"tbname":tableName,
-										"fdname":tbname+"_id",
+										"fdname":fdname,
 										"value":newValue,
 										"id":rid
 											
@@ -189,10 +192,6 @@
 					
 					);
 					//	alert("update "+tableName+" set "+tbname+"_id="+oldValue+" where id="+rid);
-						
-
-						
-					
 				});
 				
 			}
