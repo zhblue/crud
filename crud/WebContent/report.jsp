@@ -21,11 +21,12 @@
 	int ipage=Integer.parseInt(spage);
 	%>
 	<a class='btn btn-success' target=_blank href="export.jsp">导出</a> 
-	<%if(ipage>0){ %>
-		<a class='btn' href="#" onclick="reportPage(<%=(ipage-1)%>),null,reformatform);">上一页</a>
+		<%if(ipage>0){ %>
+		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>',null,reformatform);">上一页</a>
 	<%} %>
-	<a class='btn' href="#" onclick="reportPage(<%=(ipage+1)%>,null,reformatform);">下一页</a>
-	<a class='btn' href="#" onclick="refresh()',null,reformatform);">刷新</a>
+	<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage+1)%>',null,reformatform);">下一页</a>
+	<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage)%>',null,reformatform);">刷新</a>
+	
 	<table class="table table-striped"  >
 	
 	<% 
