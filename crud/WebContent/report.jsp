@@ -20,7 +20,7 @@
 	if (spage==null) spage="0";
 	int ipage=Integer.parseInt(spage);
 	%>
-	<a class='btn btn-success' target=_blank href="export.jsp">导出</a> 
+	<a class='btn btn-success' target=_blank href="export.jsp?<%=Math.random() %>">导出</a> 
 		<%if(ipage>0){ %>
 		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>',null,reformatform);">上一页</a>
 	<%} %>
