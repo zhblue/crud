@@ -314,6 +314,18 @@
 		window.clearTimeout(inter);
 		inter=window.setTimeout('refresh()',5000);
 	}
+	function keyDownSearch(e) {
+        // 兼容FF和IE和Opera
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if (code == 13) {
+            search($("#keyword").val());
+            $("#keyword")[0].select();
+            return false;
+        }
+        return true;
+    }
+    document.onkeydown=keyDownSearch;
 	var inter=null;
 	//var stid=null;
 	var tableName="datadic";
