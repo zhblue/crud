@@ -53,27 +53,27 @@ public class Auth {
 			String fdname) {
 		if (isAdmin(user_id))
 			return true;
-		return true;
+		return checkPrivilegeForRightOfTable(user_id, tbname+"."+fdname, "insert");
 	}
 
 	public static boolean canReadField(int user_id, String tbname, String fdname) {
 		if (isAdmin(user_id))
 			return true;
-		return true;
+		return checkPrivilegeForRightOfTable(user_id, tbname+"."+fdname, "read");
 	}
 
 	public static boolean canUpdateField(int user_id, String tbname,
 			String fdname) {
 		if (isAdmin(user_id))
 			return true;
-		return true;
+		return checkPrivilegeForRightOfTable(user_id, tbname+"."+fdname, "update");
 	}
 
 	public static boolean canDeleteField(int user_id, String tbname,
 			String fdname) {
 		if (isAdmin(user_id))
 			return true;
-		return true;
+		return checkPrivilegeForRightOfTable(user_id, tbname+"."+fdname, "delete");
 	}
 
 }

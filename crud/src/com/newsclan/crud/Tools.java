@@ -35,7 +35,10 @@ public class Tools {
 		String value = request.getParameter("value");
 		String sql = "update `" + tbname + "` set `" + fdname + "`=? where "
 				+ DAO.getPrimaryKeyFieldName(tbname) + "=?";
-		DAO.update(sql, value, id);
+		Integer user_id=(Integer) request.getSession().getAttribute("user_id");
+		if(Auth.canUpdateTable(user_id, tbname)||Auth.canUpdateField(user_id, tbname, fdname)){
+			DAO.update(sql, value, id);
+		}
 		return "reload();";
 	}
 
