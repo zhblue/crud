@@ -1,7 +1,7 @@
 CRUD
 ====
 
-CRUD is Really Urgly coDed -- 课设毕设快速原型
+CRUD is Really Urgly coDed -- 快速原型系统与通用后台
 
 默认账号admin 密码admin
 
