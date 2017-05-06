@@ -319,6 +319,7 @@ public class Tools {
 		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
 
 		for (int i = 0; i < fd_names.length; i++) {
+			if("id".equalsIgnoreCase(fd_names[i])) continue;
 			fd_names[i] = filteSQL(fd_names[i]);
 			fd_titles[i] = filteSQL(fd_titles[i]);
 			String[] values = { fd_names[i], fd_titles[i] };
