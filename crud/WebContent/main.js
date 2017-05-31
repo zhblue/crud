@@ -128,8 +128,11 @@
 		            stepMinute: 1,
 		            stepSecond: 1
 		        });
-		if(tableName!='config')
+		if(tableName.endsWith('config')){
+			$("textarea").attr("rows",20).attr("cols",80);
+		}else{
 				$("textarea").ckeditor();
+		}
 		$("span[class='modifiable']").each(function(){
 			var tbname=$(this).attr("tb");
 			var fdname=$(this).attr("fd");
