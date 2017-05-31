@@ -334,7 +334,7 @@
     document.onkeydown=keyDownSearch;
 	var inter=null;
 	//var stid=null;
-	var tableName="datadic";
+	var tableName="userdata";
 	var searchKeyword="";
 	var thepage=0;
 	var lastLoad="";

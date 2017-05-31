@@ -5,6 +5,7 @@
 <link rel=stylesheet href='../bootstrap/css/bootstrap.min.css' type='text/css'>
 
 <body>
+<%=session.getAttribute("report_name")%>
 <div width=80%>
 
 <%
@@ -21,7 +22,8 @@
 	int ipage=Integer.parseInt(spage);
 	%>
 	<a class='btn btn-success' target=_blank href="export.jsp?<%=Math.random() %>">导出</a> 
-		<%if(ipage>0){ %>
+	<span class="btn btn-primary" onclick="testPrint();">打印当前页</span>
+	<%if(ipage>0){ %>
 		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>',null,reformatform);">上一页</a>
 	<%} %>
 	<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage+1)%>',null,reformatform);">下一页</a>

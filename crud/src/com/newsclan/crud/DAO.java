@@ -272,7 +272,7 @@ public class DAO {
 		else if (f.type == Types.TIMESTAMP || f.name.endsWith("_time"))
 			return "input_datetime";
 		else
-			return "input_text";
+			return "form-control";
 	}
 
 	public static List<String> getTables(int user_id) {

@@ -13,7 +13,7 @@ if (request.getMethod().equals("POST")) {
 
 	name=request.getParameter("name");
 	password=request.getParameter("password");
-	String sql="update user set `password`=? where id=?";
+	String sql="update "+Config.sysPrefix+"user set `password`=? where id=?";
 	PreparedStatement pstmt=conn.prepareStatement(sql);
 	//System.out.println(password);
 	password=Tools.getHash(password, Tools.getRandomSalt());
@@ -28,7 +28,7 @@ response.sendRedirect( "index.jsp");
 
 }else{%>
 <%
-String sql="select * from `"+Config.sysPrefix+"user` where user.id="+session.getAttribute("user_id");
+String sql="select * from `"+Config.sysPrefix+"user` where id="+session.getAttribute("user_id");
 
 Statement stmt=conn.createStatement();
 

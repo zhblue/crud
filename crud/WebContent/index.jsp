@@ -31,7 +31,7 @@
   
   <!-- Collect the nav links, forms, and other content for toggling -->
   <div class="navbar bs-navbar" >
-    <a class="navbar-brand" href="https://github.com/zhblue/crud" target='_blank'><%=Config.get("system.name") %></a>
+    <a class="navbar-brand" href="." target='_blank'><%=Config.get("system.name") %></a>
       <%
       
       int user_id=Tools.getUserId(session);
@@ -74,8 +74,24 @@
   </div><!-- /.navbar-collapse -->
 </div>
 
-<div id=main class="container"></div>
-	
+<div id="main" class="container"></div>
+
+
 </body>
-<script src="main.js"></script>
+<script src="main.js?v=0.1"></script>
+<script src="LodopFuncs.js"></script>
+<object id="LODOP1" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
+</object> 
+<script type="text/javascript">
+	var LODOP;
+	function testPrint(){
+		if(LODOP==null) LODOP=getLodop(LODOP1);
+		LODOP.PRINT_INIT("打印控件功能演示_Lodop功能_表单一");
+		LODOP.SET_PRINT_STYLE("FontSize",18);
+		LODOP.SET_PRINT_STYLE("Bold",1);
+		LODOP.ADD_PRINT_RECT(0,0,555,370,0,1);
+		LODOP.ADD_PRINT_HTM(0,0,555,370,document.getElementById("main").innerHTML);
+		LODOP.PREVIEW();
+	}
+</script>
 </html>
