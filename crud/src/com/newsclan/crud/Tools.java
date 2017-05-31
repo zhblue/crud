@@ -168,8 +168,15 @@ public class Tools {
 
 	public static int getUserId(HttpSession session) {
 		Integer user_id = (Integer) session.getAttribute("user_id");
-		if (user_id == null)
-			user_id = 0; // guest
+		if (user_id == null){
+			if(Config.loginCheck){
+				user_id = 0; // guest
+			}else{
+				user_id=1;//admin
+				session.setAttribute("user_id", 1);
+				session.setAttribute("user_name", "admin");
+			}
+		}
 		return user_id;
 	}
 

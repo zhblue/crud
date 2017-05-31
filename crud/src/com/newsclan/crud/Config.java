@@ -19,7 +19,7 @@ public class Config implements ServletContextListener{
 	public static boolean debug;
 	public static int pageSize;
 	public static boolean loginCheck;
-	public static String sysPrefix=Config.get("db.sys.prefix");
+	public static String sysPrefix="";
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
@@ -38,7 +38,7 @@ public class Config implements ServletContextListener{
 			DB.pool="true".equalsIgnoreCase(prop.getProperty("db.pool"));
 			Config.debug="true".equalsIgnoreCase(prop.getProperty("system.debug"));
 			Config.loginCheck="true".equalsIgnoreCase(prop.getProperty("login.check"));
-			if(sysPrefix==null)sysPrefix="";
+			Config.sysPrefix=Config.get("db.sys.prefix");
 			pageSize=Integer.parseInt(prop.getProperty("page.size"));
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block

@@ -429,7 +429,7 @@ public class DAO {
 		}
 
 		// if (tbname.endsWith("log"))
-		sql += " order by id desc";
+		sql += " order by "+DAO.getPrimaryKeyFieldName(tbname)+" desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
 		return DAO.editableList(sql, true,true, values);
