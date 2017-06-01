@@ -1,20 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="com.newsclan.crud.*,java.util.*"%>
-<%@ include file="checkLogin.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Select</title>
-</head>
-<body>
-	<%
-		request.setCharacterEncoding("UTF8");
+<%@ include file="checkLogin.jsp" %><%
+		request.setCharacterEncoding("UTF-8");
 		String tbname = request.getParameter("tbname");
 		String value=request.getParameter("value");
 		String keyword=request.getParameter("keyword");
 		String keyvalue=request.getParameter("keyvalue");
-		String input_name=request.getParameter("input_name");
+		String input_name=new String(request.getParameter("input_name").getBytes("ISO8859_1"),"UTF-8");
 		
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
@@ -24,6 +16,3 @@
 		} 
 		
 	%>
-	
-</body>
-</html>

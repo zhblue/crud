@@ -78,7 +78,7 @@
 
 
 </body>
-<script src="main.js?v=0.1"></script>
+<script src="main.js?v=0.2"></script>
 <script src="LodopFuncs.js"></script>
 <script src="printTemple.js?v=0.1" type="text/javascript">
 </script>

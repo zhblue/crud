@@ -356,7 +356,7 @@ public class Tools {
 		String transview = DAO.transview(input_name);
 		if (transview != null)
 			nameFD = transview;
-		String sql = "select id," + (nameFD) + " from `" + filteSQL(tbname)
+		String sql = "select "+DAO.getPrimaryKeyFieldName(tbname)+"," + (nameFD) + " from `" + filteSQL(tbname)
 				+ "`";
 		boolean noDefault = true;
 		if (keys.length >= 2) {
@@ -378,8 +378,13 @@ public class Tools {
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
-		if (null == input_name)
+		if (null == input_name){
 			input_name = tbname + "_id";
+		}
+		if("pcdata_id".equals(input_name)){
+			input_name="批次uid";	
+		}
+		System.err.println(input_name);
 		ret.append(input_name);
 		ret.append("' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");
 

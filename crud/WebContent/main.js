@@ -78,7 +78,7 @@
 		console.log("pre:",preSelect.name,preSelect.value);
 		var tr=$(preSelect).parent().parent();
 		var nextSelect=tr.next().children().last().children().last();
-		if(nextSelect!=null&&nextSelect[0].tagName=="SELECT"){
+		if(nextSelect!=null&&nextSelect.length>0&&nextSelect[0].tagName=="SELECT"){
 			var keyword=preSelect.name;
 			var keyvalue=preSelect.value;
 			console.log("reload:",keyword,keyvalue);
@@ -164,18 +164,25 @@
 					var oldValue=$(this).html();
 					var fdname=tbname+"_id";
 					//if(fdname.startsWith("t_")) fdname=fdname.substring(2);
-					
+					var td=$(this).parent();
+					if(fdname=="pcdata_id"){ //适配某易语言系统中文字段名
+						fdname="批次uid";
+					}
 					var selectURL="select.jsp?tbname="+tbname+"&input_name="+fdname+"&value=-1";
 					$(this).load("select.jsp",{"tbname":tbname,"input_name":fdname,"value":-1},
 						function(text,status,http){
 							if(status=="success"){
 								var sel=$("select[name="+fdname+"]");
+								if(sel.length==0){
+									sel=td.find("select");
+								}
 								var opt=$("option");
 								var nowValue=opt.map(function(){if($(this).text()==oldValue) return($(this).val())});
 								sel.val(nowValue);
 								sel.removeAttr("onchange");
 								sel.change(function(){
 									var newValue=$(this).val();
+									//alert(fdname);
 									$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"update",
 										"tbname":tableName,
 										"fdname":fdname,
