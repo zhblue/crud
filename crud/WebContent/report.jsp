@@ -20,6 +20,7 @@
 	int ipage=Integer.parseInt(spage);
 	%>
 	<a class='btn btn-success' target=_blank href="export.jsp?<%=Math.random() %>">导出</a> 
+	<span class="btn btn-primary" onclick="stickyPrint('BE874488137AU',1,2,3,4,5,6,7,8,9,10,11,12);">打印当前页</span>
 	<%if(ipage>0){ %>
 		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>',null,reformatform);">上一页</a>
 	<%} %>

@@ -80,27 +80,6 @@
 </body>
 <script src="main.js?v=0.1"></script>
 <script src="LodopFuncs.js"></script>
-<object id="LODOP1" classid="clsid:2105C259-1E0C-4534-8141-A753534CB4CA" width=0 height=0> 
-</object> 
-<script type="text/javascript">
-	var LODOP;
-	function A4Print(){
-		//alert(arguments.length);
-		var baseline,i;
-		var title=new Array("条码","代理号","寄件人姓名","寄件人电话","寄件人地址","收件人姓名","收件人地址","收件人邮编","收件人电话","备注信息","身份证号码","快递单号","内件品名");
-		if(LODOP==null) LODOP=getLodop(LODOP1);
-		LODOP.PRINT_INIT("A4面单打印");
-		LODOP.SET_PRINT_STYLEA(2,"FontName","宋体");
-		LODOP.SET_PRINT_STYLEA(2,"FontSize",15);
-		for(baseline=0;baseline<1000;baseline+=513){
-			LODOP.ADD_PRINT_RECT(baseline,55,600,1,0,1);
-			LODOP.ADD_PRINT_IMAGE(baseline+15,15,120,120,"<img border='0' height=120 width=120 src='download/logo.png'>");
-			LODOP.ADD_PRINT_BARCODE(baseline+33,314,300,80,"128Auto",arguments[0]);
-			for(i=1;i<arguments.length;i++){
-				LODOP.ADD_PRINT_TEXT(baseline+126+i*25,41,546,22,title[i]+"："+arguments[i]);
-			}
-		}
-		LODOP.PREVIEW();
-	}
+<script src="printTemple.js?v=0.1" type="text/javascript">
 </script>
 </html>
