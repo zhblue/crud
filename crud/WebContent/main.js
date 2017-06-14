@@ -338,6 +338,17 @@
         }
         return true;
     }
+	function selectMenu(id){
+ 		if(arguments.length==1){
+ 			lastLoad="selectMenu("+id+")";
+ 			$("#main").load("report_select.jsp?id="+id);
+ 		}else{
+ 			id=arguments[0];
+ 			filter=arguments[1];
+ 			lastLoad="selectMenu("+id+",'"+filter+"')";
+ 			$("#main").load("report_select.jsp?id="+id+"&filter="+filter);
+ 		}
+	}
     document.onkeydown=keyDownSearch;
 	var inter=null;
 	//var stid=null;

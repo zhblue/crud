@@ -55,6 +55,7 @@ CREATE TABLE `config` (
   `id` int(10) unsigned NOT NULL auto_increment,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
+  `type` varchar(15) NOT NULL default 'report',
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
 

@@ -28,7 +28,7 @@ if(id==null){
 	PreparedStatement pstmt;
 	String selection="";
 	try {
-		pstmt = conn.prepareStatement("select * from "+Config.sysPrefix+"config where name like '%报表'");
+		pstmt = conn.prepareStatement("select * from "+Config.sysPrefix+"config where type='report'");
 		// pstmt.setInt(1, id);
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
