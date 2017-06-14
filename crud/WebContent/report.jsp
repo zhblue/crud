@@ -20,7 +20,6 @@
 	int ipage=Integer.parseInt(spage);
 	%>
 	<a class='btn btn-success' target=_blank href="export.jsp?<%=Math.random() %>">导出</a> 
-	<span class="btn btn-primary" onclick="stickyPrint('BE874488137AU',1,2,3,4,5,6,7,8,9,10,11,12);">打印当前页</span>
 	<%if(ipage>0){ %>
 		<a class='btn' href="#" onclick="$('#main').load('report.jsp?page=<%=(ipage-1)%>',null,reformatform);">上一页</a>
 	<%} %>
@@ -38,9 +37,10 @@
 	Field[] fds = DAO.getFields(sql);
 	Connection conn = DB.getConnection();
 	Statement stmt = conn.createStatement();
+	//stmt.execute("set names utf8;");
 	ResultSet rs = stmt.executeQuery(sql);
 	out.print("<tr>");
-	for (int i = 0; i < fds.length&&i<10; i++) {
+	for (int i = 0; i < fds.length&&i<20; i++) {
 		out.print("<th>");
 		out.print(fds[i].label);
 		out.println("</th>");
@@ -51,7 +51,7 @@
 	while (rs.next()) {
 		out.print("<tr>");
 		
-		for (int i = 0; i < fds.length&&i<10; i++) {
+		for (int i = 0; i < fds.length&&i<20; i++) {
 			out.println("<td>");
 			value=rs.getString(i + 1);
 			if(value!=null)out.print(value);

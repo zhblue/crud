@@ -448,7 +448,7 @@ public class DAO {
 	}
 
 	public static List<List> editableList(String sql, boolean title,boolean editable,
-			String... values) {
+			Object... values) {
 		// TODO Auto-generated method stub
 		if(Config.debug)
 			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
@@ -460,7 +460,7 @@ public class DAO {
 		try {
 			pstmt = conn.prepareStatement(sql);
 			for (int i = 0; i < values.length; i++) {
-				pstmt.setString(i + 1, values[i]);
+				pstmt.setObject(i + 1, values[i]);
 			}
 			rs = pstmt.executeQuery();
 			ResultSetMetaData rsmd = rs.getMetaData();
@@ -518,7 +518,7 @@ public class DAO {
 	}
 	
 	public static List<List> queryList(String sql, boolean title,
-			String... values) {
+			Object... values) {
 		// TODO Auto-generated method stub
 		
 		return editableList(sql,title,false,values);
@@ -548,7 +548,7 @@ public class DAO {
 		return update(sql,values);
 	}
 
-	public static String queryString(String sql, String... values) {
+	public static String queryString(String sql, Object ... values) {
 		List<List> ll = queryList(sql, false, values);
 		if (ll != null && ll.size() > 0) {
 			List l = ll.get(0);

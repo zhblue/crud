@@ -28,7 +28,7 @@ if(id==null){
 	PreparedStatement pstmt;
 	String selection="";
 	try {
-		pstmt = conn.prepareStatement("select * from "+Config.sysPrefix+"config where type='report'");
+		pstmt = conn.prepareStatement("select * from "+Config.sysPrefix+"config where type='report' ");
 		// pstmt.setInt(1, id);
 		ResultSet rs = pstmt.executeQuery();
 		while (rs.next()) {
@@ -50,18 +50,21 @@ if(id==null){
 	</select>
 	<input class="input_date" name=start value="<%=Tools.today()%>">
 	<input class="input_date" name=end value="<%=Tools.tomorrow()%>">
+	<input class="text" name=filter  >
 	<input type=submit>
 	</form>
 	</p>
 	<%	
 }else{
-	int iid=Integer.parseInt(id);
-	String sql=DAO.queryString("select value from "+Config.sysPrefix+"config where id="+iid);
-	String name=DAO.queryString("select name from "+Config.sysPrefix+"config where id="+iid);
+	int iid=Integer.parseInt(id); 
+	String sql=DAO.queryString("select value from "+Config.sysPrefix+"config where id=?",iid);
+	String name=DAO.queryString("select name from "+Config.sysPrefix+"config where id=?",iid);
 	String start=request.getParameter("start");
 	String end=request.getParameter("end");
-	sql=sql.replace("START_DATE",start);
-	sql=sql.replace("END_DATE",end);
+	String filter=request.getParameter("filter");
+	if(null!=start)sql=sql.replace("START_DATE",start);else start="";
+	if(null!=end)sql=sql.replace("END_DATE",end);else end="";
+	if(null!=filter)sql=sql.replace("FILTER",filter);else end="";
 	sql=sql.replace("USER_ID",String.valueOf(session.getAttribute("user_id")));
 	sql=sql.replace("USER_NAME",(String)session.getAttribute("user_name"));
 	
@@ -69,6 +72,6 @@ if(id==null){
 	session.setAttribute("report_name", name+"_"+start+"-"+end);
 	response.sendRedirect("report.jsp?"+Math.random());
 }
-%>
+%> 
 </body>
 </html>
