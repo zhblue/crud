@@ -346,22 +346,22 @@ public class DAO {
 			return ret;
 		}
 	}
-
-	public static List<List> getList(String tbname) {
-
-		return getList(tbname, 0, Config.pageSize);
-	}
-
-	public static List<List> getList(int user_id, String tbname, int pageNum,
-			int pageSize) {
-		return getList(user_id, tbname, "", pageNum, pageSize);
-	}
+//
+//	public static List<List> getList(String tbname) {
+//
+//		return getList(tbname, 0, Config.pageSize);
+//	}
+//
+//	public static List<List> getList(int user_id, String tbname, int pageNum,
+//			int pageSize) {
+//		return getList(user_id, tbname, "", pageNum, pageSize);
+//	}
 
 	public static List<List> getList(int user_id, String tbname,
 			String keyword, int pageNum, int pageSize) {
 		if (Auth.canReadTable(user_id, tbname)) {
 
-			return getList(tbname, keyword, pageNum, pageSize);
+			return getList(tbname, keyword, pageNum, pageSize,user_id);
 
 		} else if (Auth.canInsertTable(user_id, tbname)||Auth.canUpdateTable(user_id, tbname)) {
 
@@ -371,16 +371,16 @@ public class DAO {
 			return new Vector();
 		}
 	}
+//
+//	private static List<List> getList(String tbname, int pageNum, int pageSize) {
+//		// TODO Auto-generated method stub
+//		return getList(tbname, "", pageNum, pageSize);
+//	}
 
-	private static List<List> getList(String tbname, int pageNum, int pageSize) {
-		// TODO Auto-generated method stub
-		return getList(tbname, "", pageNum, pageSize);
-	}
-
-	private static List<List> getList(String tbname, String keyword,
-			int pageNum, int pageSize) {
-		return getList(tbname, keyword, pageNum, pageSize, 1);
-	}
+//	private static List<List> getList(String tbname, String keyword,
+//			int pageNum, int pageSize) {
+//		return getList(tbname, keyword, pageNum, pageSize, 1);
+//	}
 
 	public static String getSelectOfTable(String tbname){
 		StringBuilder sb=new StringBuilder();
