@@ -333,7 +333,9 @@
             		search($("#keyword").val());
             		$("#keyword")[0].select();
             }
-            	
+            if(theEvent.target.tagName=="INPUT"){
+         	   $(theEvent.target).parent().parent().next("tr").find("input").focus();
+            }	
             return false;
         }
         return true;
