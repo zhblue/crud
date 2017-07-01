@@ -308,8 +308,12 @@
 	}
 	function search(keyword){
 		window.clearTimeout(inter);
-		searchKeyword=keyword;
-		inter=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
+		if(lastLoad.indexOf("selectMenu")!=-1){
+			selectMenu(menu_id,keyword);
+		}else{
+			searchKeyword=keyword;
+			inter=window.setTimeout("mainLoad(tableName,0,'"+keyword+"');",500);
+		}
 	}
 	function reload(){
 		$("#main").empty();
@@ -340,10 +344,14 @@
         }
         return true;
     }
-	function selectMenu(id){
+ 	function selectMenu(id){
+ 		menu_id=id;
  		if(arguments.length==1){
- 			lastLoad="selectMenu("+id+")";
- 			$("#main").load("report_select.jsp?id="+id);
+ 			
+ 			filter=$("#keyword").val();
+ 	 		lastLoad="selectMenu("+id+",'"+filter+"')";
+ 	 		$("#main").load("report_select.jsp?id="+id+"&filter="+filter);
+ 			
  		}else{
  			id=arguments[0];
  			filter=arguments[1];
@@ -358,3 +366,4 @@
 	var searchKeyword="";
 	var thepage=0;
 	var lastLoad="";
+	var menu_id=0;
