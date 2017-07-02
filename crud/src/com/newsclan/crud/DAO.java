@@ -199,13 +199,14 @@ public class DAO {
 		title.add("值");
 
 		ret.add(title);
-
+		
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
+		String pkName=DAO
+				.getPrimaryKeyFieldName(tbname);
 		for (Field field : fds) {
 			if (!edit
-					&& ("id".equals(field.name) || field.name.equals(DAO
-							.getPrimaryKeyFieldName(tbname))))
+					&& ("id".equals(field.name) || field.name.equals(pkName)))
 				continue;
 			if (!edit && "input_user".equals(field.name))
 				continue;
@@ -222,7 +223,6 @@ public class DAO {
 		return ret;
 
 	}
-
 	public static String getInputForm(Field field, String... value) {
 		// TODO Auto-generated method stub
 		StringBuffer ret = new StringBuffer();
