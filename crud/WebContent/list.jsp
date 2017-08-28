@@ -21,13 +21,13 @@ String keyword=request.getParameter("keyword");
 <script></script>
 
 <%
- List data=null;
+ List data=null; 
  int user_id=Tools.getUserId(session);
  if(keyword!=null&&!keyword.equals("")){
 	 System.out.format("keyword=%s\n",keyword);
 	data=DAO.getList(user_id, tbname,keyword,pageNum,Config.pageSize);
  }else{
-	data=DAO.getList(user_id, tbname,pageNum,Config.pageSize);
+	data=DAO.getList(user_id, tbname,"",pageNum,Config.pageSize);
  }
 %>
 <%=Tools.toTable(data,"table table-striped table-hover") %>	

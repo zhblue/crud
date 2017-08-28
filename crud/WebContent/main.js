@@ -140,6 +140,7 @@
 		
 			if(tbname==tableName||lastLoad.indexOf("report")!=-1){
 				$(this)[0].title="双击修改";
+				if($(this).html()=="")$(this).html("_");
 				$(this).dblclick(function(){
 					var newValue=prompt("手工修改",$(this).text());
 					if(newValue!=null&&newValue!=$(this).text()){
