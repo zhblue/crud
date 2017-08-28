@@ -14,8 +14,7 @@ public class DAO {
 
 	public static String table_prefix = Config.get("db.table.prefix");
 
-	public static int insert(int user_id, String tbname,
-			Map<String, String> values) {
+	public static int insert(int user_id, String tbname, Map<String, String> values) {
 		if (!Auth.canInsertTable(user_id, tbname))
 			return -1;
 		Field[] fds = getFieldsOfTable(tbname);
@@ -56,8 +55,7 @@ public class DAO {
 
 	}
 
-	public static int update(int user_id, String tbname, int id,
-			Map<String, String> values) {
+	public static int update(int user_id, String tbname, int id, Map<String, String> values) {
 		if (!Auth.canUpdateTable(user_id, tbname))
 			return -1;
 		Field[] fds = getFieldsOfTable(tbname);
@@ -122,10 +120,10 @@ public class DAO {
 				fd.label = translate(fd.name);
 				fd.table = rs.getString("TABLE_NAME");
 				fd.transview = transview(fd.name);
-				if(fd.transview!=null){
-					fd.transview=fd.transview.replace("#",  tbname + "." + fd.name);
+				if (fd.transview != null) {
+					fd.transview = fd.transview.replace("#", tbname + "." + fd.name);
 				}
-				fd.ftable=transname(fd.name);
+				fd.ftable = transname(fd.name);
 				ret.add(fd);
 			}
 		} catch (SQLException e) {
@@ -137,18 +135,15 @@ public class DAO {
 		return ret.toArray(new Field[0]);
 	}
 
-	public static List<List> getForm(int user_id, String tbname, boolean edit,
-			List<String>... values) {
-		if (Auth.canReadTable(user_id, tbname)
-				|| Auth.canInsertTable(user_id, tbname)) {
+	public static List<List> getForm(int user_id, String tbname, boolean edit, List<String>... values) {
+		if (Auth.canReadTable(user_id, tbname) || Auth.canInsertTable(user_id, tbname)) {
 			return getForm(tbname, edit, values);
 		} else {
 			return null;
 		}
 	}
 
-	public static List<List> getView(int user_id, String tbname, boolean edit,
-			List<String>... values) {
+	public static List<List> getView(int user_id, String tbname, boolean edit, List<String>... values) {
 		if (Auth.canReadTable(user_id, tbname)) {
 			return getView(tbname, edit, values);
 		} else {
@@ -156,8 +151,7 @@ public class DAO {
 		}
 	}
 
-	private static List<List> getView(String tbname, boolean edit,
-			List<String>... values) {
+	private static List<List> getView(String tbname, boolean edit, List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
 		title.add("字段");
@@ -168,20 +162,17 @@ public class DAO {
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
 		for (Field field : fds) {
-			if (!edit
-					&& ("id".equals(field.name) || field.name.equals(DAO
-							.getPrimaryKeyFieldName(tbname))))
+			if (!edit && ("id".equals(field.name) || field.name.equals(DAO.getPrimaryKeyFieldName(tbname))))
 				continue;
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
-				if(field.name.endsWith("_file")){
-					row.add("<span name='" + field.name + "'><a href=\""
-							+ String.valueOf(values[0].get(i++)) + "\" target='_blank'>下载</a></span>");
-				}else{
-				row.add("<span name='" + field.name + "'>"
-						+ String.valueOf(values[0].get(i++)) + "</span>");
-				}	
+				if (field.name.endsWith("_file")) {
+					row.add("<span name='" + field.name + "'><a href=\"" + String.valueOf(values[0].get(i++))
+							+ "\" target='_blank'>下载</a></span>");
+				} else {
+					row.add("<span name='" + field.name + "'>" + String.valueOf(values[0].get(i++)) + "</span>");
+				}
 			} else {
 				row.add("");
 			}
@@ -191,22 +182,19 @@ public class DAO {
 
 	}
 
-	private static List<List> getForm(String tbname, boolean edit,
-			List<String>... values) {
+	private static List<List> getForm(String tbname, boolean edit, List<String>... values) {
 		List<List> ret = new LinkedList<List>();
 		List title = new LinkedList();
 		title.add("字段名");
 		title.add("值");
 
 		ret.add(title);
-		
+
 		Field[] fds = getFieldsOfTable(tbname);
 		int i = 0;
-		String pkName=DAO
-				.getPrimaryKeyFieldName(tbname);
+		String pkName = DAO.getPrimaryKeyFieldName(tbname);
 		for (Field field : fds) {
-			if (!edit
-					&& ("id".equals(field.name) || field.name.equals(pkName)))
+			if (!edit && ("id".equals(field.name) || field.name.equals(pkName)))
 				continue;
 			if (!edit && "input_user".equals(field.name))
 				continue;
@@ -223,6 +211,7 @@ public class DAO {
 		return ret;
 
 	}
+
 	public static String getInputForm(Field field, String... value) {
 		// TODO Auto-generated method stub
 		StringBuffer ret = new StringBuffer();
@@ -233,8 +222,7 @@ public class DAO {
 		return ret.toString();
 	}
 
-	private static void getTextArea(Field field, StringBuffer ret,
-			String[] value) {
+	private static void getTextArea(Field field, StringBuffer ret, String[] value) {
 		ret.append("<textarea class=ckeditor name='");
 		ret.append(field.name);
 		ret.append("' ");
@@ -246,12 +234,10 @@ public class DAO {
 
 	private static boolean isFieldLongText(Field field) {
 		// TODO Auto-generated method stub
-		return field.type == Types.LONGVARCHAR
-				|| field.type == Types.LONGNVARCHAR;
+		return field.type == Types.LONGVARCHAR || field.type == Types.LONGNVARCHAR;
 	}
 
-	public static void getInputText(Field field, StringBuffer ret,
-			String... value) {
+	public static void getInputText(Field field, StringBuffer ret, String... value) {
 		ret.append("<input name='");
 		ret.append(field.name);
 		ret.append("' ");
@@ -260,10 +246,10 @@ public class DAO {
 			ret.append(Tools.toHTML(value[0]));
 		ret.append("' type='text' class='");
 		ret.append(getFormType(field));
-		if(field.ftable!=null&&!field.ftable.equals(""))
-			ret.append("' postLoad='1' fr='"+field.ftable);
+		if (field.ftable != null && !field.ftable.equals(""))
+			ret.append("' postLoad='1' fr='" + field.ftable);
 		ret.append("'>");
-	} 
+	}
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
@@ -280,11 +266,10 @@ public class DAO {
 		List ret = getTables();
 		for (Iterator tbit = ret.iterator(); tbit.hasNext();) {
 			String tbname = (String) tbit.next();
-			if (!(Auth.canReadTable(user_id, tbname) 
-					|| Auth.canInsertTable(user_id, tbname)
+			if (!(Auth.canReadTable(user_id, tbname) || Auth.canInsertTable(user_id, tbname)
 					|| Auth.canUpdateTable(user_id, tbname)
-					
-					)) {
+
+			)) {
 				tbit.remove();
 			}
 		}
@@ -317,53 +302,54 @@ public class DAO {
 		if (value.endsWith("_id")) {
 			value = value.substring(0, value.length() - 3);
 		}
-		ret = queryString("select name from "+Config.sysPrefix+"datadic where field=?", value);
+		ret = queryString("select name from " + Config.sysPrefix + "datadic where field=?", value);
 		if (ret == null) {
 			return value;
 		} else {
 			return ret;
 		}
 	}
+
 	public static String transname(String value) {
 		value = value.replace("'", "\\'");
 		String ret = value;
-	
-		ret = queryString("select ftable from "+Config.sysPrefix+"datadic where field=?", value);
+
+		ret = queryString("select ftable from " + Config.sysPrefix + "datadic where field=?", value);
 		if (ret == null) {
 			return null;
 		} else {
 			return ret;
 		}
 	}
+
 	public static String transview(String value) {
 		value = value.replace("'", "\\'");
 		String ret = value;
-		
-		ret = queryString("select transview from "+Config.sysPrefix+"datadic where field=?", value);
-		if (ret == null||"".equals(ret.trim())) {
+
+		ret = queryString("select transview from " + Config.sysPrefix + "datadic where field=?", value);
+		if (ret == null || "".equals(ret.trim())) {
 			return null;
 		} else {
 			return ret;
 		}
 	}
-//
-//	public static List<List> getList(String tbname) {
-//
-//		return getList(tbname, 0, Config.pageSize);
-//	}
-//
-//	public static List<List> getList(int user_id, String tbname, int pageNum,
-//			int pageSize) {
-//		return getList(user_id, tbname, "", pageNum, pageSize);
-//	}
+	//
+	// public static List<List> getList(String tbname) {
+	//
+	// return getList(tbname, 0, Config.pageSize);
+	// }
+	//
+	// public static List<List> getList(int user_id, String tbname, int pageNum,
+	// int pageSize) {
+	// return getList(user_id, tbname, "", pageNum, pageSize);
+	// }
 
-	public static List<List> getList(int user_id, String tbname,
-			String keyword, int pageNum, int pageSize) {
+	public static List<List> getList(int user_id, String tbname, String keyword, int pageNum, int pageSize) {
 		if (Auth.canReadTable(user_id, tbname)) {
 
-			return getList(tbname, keyword, pageNum, pageSize,user_id);
+			return getList(tbname, keyword, pageNum, pageSize, user_id);
 
-		} else if (Auth.canInsertTable(user_id, tbname)||Auth.canUpdateTable(user_id, tbname)) {
+		} else if (Auth.canInsertTable(user_id, tbname) || Auth.canUpdateTable(user_id, tbname)) {
 
 			return getList(tbname, keyword, pageNum, pageSize, user_id);
 
@@ -371,38 +357,39 @@ public class DAO {
 			return new Vector();
 		}
 	}
-//
-//	private static List<List> getList(String tbname, int pageNum, int pageSize) {
-//		// TODO Auto-generated method stub
-//		return getList(tbname, "", pageNum, pageSize);
-//	}
+	//
+	// private static List<List> getList(String tbname, int pageNum, int
+	// pageSize) {
+	// // TODO Auto-generated method stub
+	// return getList(tbname, "", pageNum, pageSize);
+	// }
 
-//	private static List<List> getList(String tbname, String keyword,
-//			int pageNum, int pageSize) {
-//		return getList(tbname, keyword, pageNum, pageSize, 1);
-//	}
+	// private static List<List> getList(String tbname, String keyword,
+	// int pageNum, int pageSize) {
+	// return getList(tbname, keyword, pageNum, pageSize, 1);
+	// }
 
-	public static String getSelectOfTable(String tbname){
-		StringBuilder sb=new StringBuilder();
+	public static String getSelectOfTable(String tbname) {
+		StringBuilder sb = new StringBuilder();
 		Field[] fds = DAO.getFieldsOfTable(tbname);
-		for(Field fd:fds){
-			String transview=transview(fd.name);
-			if(transview!=null)
-			sb.append(transview);
+		for (Field fd : fds) {
+			String transview = transview(fd.name);
+			if (transview != null)
+				sb.append(transview);
 			sb.append(" ");
 			sb.append(fd.name);
 			sb.append(",");
 		}
-		sb.deleteCharAt(sb.length()-1);
+		sb.deleteCharAt(sb.length() - 1);
 		return sb.toString();
 	}
-	private static List<List> getList(String tbname, String keyword,
-			int pageNum, int pageSize, int user_id) {
+
+	private static List<List> getList(String tbname, String keyword, int pageNum, int pageSize, int user_id) {
 
 		tbname = tbname.replace("`", "");
-		//String select=getSelectOfTable(tbname);
+		// String select=getSelectOfTable(tbname);
 		String sql = "select * from `" + tbname + "`";
-		//Tools.debug(sql);
+		// Tools.debug(sql);
 		sql = DAO.getJoinTableSQL(tbname, true);
 		String[] values = {};
 		String where = DAO.getKeywordLike(tbname);
@@ -417,9 +404,7 @@ public class DAO {
 			}
 			values = (String[]) v.toArray(values);
 		}
-		if ((!Auth.canReadTable(user_id, tbname))
-				&& Auth.canInsertTable(user_id, tbname)
-				&& DAO.hasInputer(tbname)) {
+		if ((!Auth.canReadTable(user_id, tbname)) && Auth.canInsertTable(user_id, tbname) && DAO.hasInputer(tbname)) {
 			if ("".equals(keyword)) {
 				sql += " where ";
 			} else {
@@ -429,10 +414,10 @@ public class DAO {
 		}
 
 		// if (tbname.endsWith("log"))
-		sql += " order by "+DAO.getPrimaryKeyFieldName(tbname)+" desc";
+		sql += " order by " + DAO.getPrimaryKeyFieldName(tbname) + " desc";
 		sql += " limit " + (pageNum * pageSize) + "," + pageSize;
 		Tools.debug(sql);
-		return DAO.editableList(sql, true,true, values);
+		return DAO.editableList(sql, true, true, values);
 
 	}
 
@@ -447,12 +432,11 @@ public class DAO {
 		return false;
 	}
 
-	public static List<List> editableList(String sql, boolean title,boolean editable,
-			Object... values) {
+	public static List<List> editableList(String sql, boolean title, boolean editable, Object... values) {
 		// TODO Auto-generated method stub
-		if(Config.debug)
-			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
-		
+		if (Config.debug)
+			System.out.format(sql.replace("%", "%%").replace("?", "'%s'") + "\n", values);
+
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
@@ -469,11 +453,8 @@ public class DAO {
 				row = new LinkedList();
 				int shortLen = Integer.parseInt(Config.get("text.shortLen"));
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
-					
-					
-					
-					row.add(Tools.shortString(
-							translate(rsmd.getColumnLabel(i)), shortLen));
+
+					row.add(Tools.shortString(translate(rsmd.getColumnLabel(i)), shortLen));
 				}
 				ret.add(row);
 			}
@@ -482,28 +463,29 @@ public class DAO {
 				row = new LinkedList();
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 					Object v = rs.getObject(i);
-					
-					if (v == null) {
-						row.add("");
-					} else {
-						if(i>1&&editable){
-						StringBuilder sb=new StringBuilder();
+
+					if (i > 1 && editable) {
+						StringBuilder sb = new StringBuilder();
 						sb.append("<span class='modifiable'");
 						sb.append("tb='");
 						sb.append(rsmd.getTableName(i));
 						sb.append("' fd='");
 						sb.append(rsmd.getColumnName(i));
 						sb.append("' rid='");
-						sb.append(rs.getObject(1)); 
+						if (v == null) {
+							sb.append("");
+						} else {
+							sb.append(rs.getObject(1));
+						}
 						sb.append("' >");
 						sb.append(v.toString());
 						sb.append("</span>");
 						row.add(sb.toString());
-						}else{
-							row.add(v);
-						}
+					} else {
+						row.add(v);
 					}
 				}
+
 				ret.add(row);
 			}
 		} catch (SQLException e) {
@@ -516,39 +498,38 @@ public class DAO {
 		}
 		return ret;
 	}
-	
-	public static List<List> queryList(String sql, boolean title,
-			Object... values) {
+
+	public static List<List> queryList(String sql, boolean title, Object... values) {
 		// TODO Auto-generated method stub
-		
-		return editableList(sql,title,false,values);
+
+		return editableList(sql, title, false, values);
 	}
-	
 
 	public static int executeUpdate(String sql, String... values) {
-//		if(Config.debug)
-//			System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
-//		Connection conn = DB.getConnection();
-//		PreparedStatement pstmt = null;
-//		int ret = -1;
-//		try {
-//			pstmt = conn.prepareStatement(sql);
-//			for (int i = 0; i < values.length; i++) {
-//				pstmt.setString(i + 1, values[i]);
-//			}
-//			ret = pstmt.executeUpdate();
-//		} catch (SQLException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} finally {
-//
-//			DB.close(pstmt);
-//			DB.close(conn);
-//		}
-		return update(sql,values);
+		// if(Config.debug)
+		// System.out.format(sql.replace("%", "%%").replace("?",
+		// "'%s'")+"\n",values);
+		// Connection conn = DB.getConnection();
+		// PreparedStatement pstmt = null;
+		// int ret = -1;
+		// try {
+		// pstmt = conn.prepareStatement(sql);
+		// for (int i = 0; i < values.length; i++) {
+		// pstmt.setString(i + 1, values[i]);
+		// }
+		// ret = pstmt.executeUpdate();
+		// } catch (SQLException e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// } finally {
+		//
+		// DB.close(pstmt);
+		// DB.close(conn);
+		// }
+		return update(sql, values);
 	}
 
-	public static String queryString(String sql, Object ... values) {
+	public static String queryString(String sql, Object... values) {
 		List<List> ll = queryList(sql, false, values);
 		if (ll != null && ll.size() > 0) {
 			List l = ll.get(0);
@@ -560,8 +541,9 @@ public class DAO {
 	}
 
 	public static int update(String sql, Object... values) {
-		if(Config.debug)System.out.format(sql.replace("%", "%%").replace("?", "'%s'")+"\n",values);
-		
+		if (Config.debug)
+			System.out.format(sql.replace("%", "%%").replace("?", "'%s'") + "\n", values);
+
 		int ret = 0;
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
@@ -613,8 +595,7 @@ public class DAO {
 		// TODO Auto-generated method stub
 		String ret = "name";
 		Connection conn = DB.getConnection();
-		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL(
-				"select * from `" + tbname + "`", conn);
+		ResultSetMetaData rsmd = DAO.getRecordSetMetaDataOfSQL("select * from `" + tbname + "`", conn);
 		try {
 			for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 				int type = rsmd.getColumnType(i);
@@ -639,34 +620,30 @@ public class DAO {
 		for (Field field : fds) {
 			if ("password".equals(field.name))
 				continue;
-			//if(!isFieldText(field)) continue;
-			String subtable = field.name.endsWith("_id") ? field.name
-					.substring(0, field.name.length() - 3) : "";
-			if (!DAO.hasTable(subtable)&&hasTable(table_prefix + subtable)) {
+			// if(!isFieldText(field)) continue;
+			String subtable = field.name.endsWith("_id") ? field.name.substring(0, field.name.length() - 3) : "";
+			if (!DAO.hasTable(subtable) && hasTable(table_prefix + subtable)) {
 				subtable = table_prefix + subtable;
 			}
-			if(field.ftable!=null&&field.transview!=null&&!"".equals(field.transview.trim())){
-				if("".equals(field.ftable)){
-					sb.append(String.format(" %s like BINARY  ? or",field.transview));
-				}else{
-					field.ftable=getJoinTableOfField(tbname,field);
-					sb.append(String.format(" `%s`.`%s` like BINARY  ? or",field.ftable,field.transview));
+			if (field.ftable != null && field.transview != null && !"".equals(field.transview.trim())) {
+				if ("".equals(field.ftable)) {
+					sb.append(String.format(" %s like BINARY  ? or", field.transview));
+				} else {
+					field.ftable = getJoinTableOfField(tbname, field);
+					sb.append(String.format(" `%s`.`%s` like BINARY  ? or", field.ftable, field.transview));
 				}
-				
-			}else	if (field.name.endsWith("_id") && hasTable(subtable)
+
+			} else if (field.name.endsWith("_id") && hasTable(subtable)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
 
-				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", subtable,
-						getFirstCharFieldName(subtable)));
+				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", subtable, getFirstCharFieldName(subtable)));
 
-			} else if(field.type==Types.TIMESTAMP||field.type==Types.DATE){
-				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%%Y-%%m-%%d %%H:%%i:%%s') like BINARY  ? or", field.table,
-						field.name));
+			} else if (field.type == Types.TIMESTAMP || field.type == Types.DATE) {
+				sb.append(String.format(" DATE_FORMAT(`%s`.`%s` ,'%%Y-%%m-%%d %%H:%%i:%%s') like BINARY  ? or",
+						field.table, field.name));
 
-				
-			}else {
-				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", field.table,
-						field.name));
+			} else {
+				sb.append(String.format(" `%s`.`%s` like BINARY  ? or", field.table, field.name));
 
 			}
 		}
@@ -676,7 +653,7 @@ public class DAO {
 		return sb.toString();
 	}
 
-	public static String getJoinTableSQL(String tbname, boolean... withoutID) { 
+	public static String getJoinTableSQL(String tbname, boolean... withoutID) {
 		// TODO Auto-generated method stub
 		Field[] fds = getFieldsOfTable(tbname);
 		String ret = "select ";
@@ -685,33 +662,27 @@ public class DAO {
 		String tables = String.format("`%s` `%s`", tbname, tbname);
 		for (Field field : fds) {
 			String join = getJoinTableOfField(tbname, field);
-			if ((field.name.endsWith("_id") || field.ftable != null)
-					&& !join.equals(tbname) && hasTable(join)
+			if ((field.name.endsWith("_id") || field.ftable != null) && !join.equals(tbname) && hasTable(join)
 					&& !field.name.equals(getPrimaryKeyFieldName(tbname))) {
 				String dataFieldName = getFirstCharFieldName(join);
 
-				if (field.transview != null&&!"".equals(field.transview)) {
+				if (field.transview != null && !"".equals(field.transview)) {
 					dataFieldName = field.transview;
 				}
 
-				fields += ",`" + join + "`.`" + dataFieldName + "` as `" + join
-						+ "`";
+				fields += ",`" + join + "`.`" + dataFieldName + "` as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
-					fields += ",`" + join + "`.`" + getPrimaryKeyFieldName(join)
-							+ "` as `" + field.name + "_value`";
+					fields += ",`" + join + "`.`" + getPrimaryKeyFieldName(join) + "` as `" + field.name + "_value`";
 				}
-				tables += " left join `" + join + "` `" + join + "` on "
-						+ tbname + "." + field.name + "=" + join + "."
+				tables += " left join `" + join + "` `" + join + "` on " + tbname + "." + field.name + "=" + join + "."
 						+ getPrimaryKeyFieldName(join) + "";
 
 			} else {
 				String transview = field.transview;
 				if (transview == null) {
-					fields += ",`" + tbname + "`.`" + field.name + "` as `"
-							+ field.name + "`";
+					fields += ",`" + tbname + "`.`" + field.name + "` as `" + field.name + "`";
 				} else {
-					transview = transview.replace("#", "`"+tbname + "`.`"
-							+ field.name+"`");
+					transview = transview.replace("#", "`" + tbname + "`.`" + field.name + "`");
 					fields += "," + transview + " as `" + field.name + "`";
 				}
 			}
@@ -721,9 +692,9 @@ public class DAO {
 			System.out.println(ret);
 		return ret;
 	}
+
 	public static String getJoinTableOfField(String tbname, Field field) {
-		String join = field.name.endsWith("_id") ? field.name.substring(0,
-				field.name.length() - 3) : "";
+		String join = field.name.endsWith("_id") ? field.name.substring(0, field.name.length() - 3) : "";
 
 		if (field.ftable != null && hasTable(field.ftable)) {
 			join = field.ftable;
@@ -732,14 +703,13 @@ public class DAO {
 				join = table_prefix + join;
 			}
 		}
-		
+
 		return join;
 	}
- 
+
 	public static boolean hasTable(String table) {
 		// TODO Auto-generated method stub
-		String yes = DAO.queryString(
-				"select 'yes' from `" + table + "` limit 1", new String[] {});
+		String yes = DAO.queryString("select 'yes' from `" + table + "` limit 1", new String[] {});
 		return "yes".equals(yes);
 	}
 
@@ -772,8 +742,7 @@ public class DAO {
 		}
 	}
 
-	public static ResultSetMetaData getRecordSetMetaDataOfSQL(String sql,
-			Connection conn) {
+	public static ResultSetMetaData getRecordSetMetaDataOfSQL(String sql, Connection conn) {
 
 		ResultSetMetaData ret = null;
 		Statement stmt = null;
