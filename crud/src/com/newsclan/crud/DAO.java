@@ -472,17 +472,23 @@ public class DAO {
 						sb.append("' fd='");
 						sb.append(rsmd.getColumnName(i));
 						sb.append("' rid='");
+
+						sb.append(rs.getObject(1));
+
+						sb.append("' >");
 						if (v == null) {
 							sb.append("");
 						} else {
-							sb.append(rs.getObject(1));
+							sb.append(v.toString());
 						}
-						sb.append("' >");
-						sb.append(v.toString());
 						sb.append("</span>");
 						row.add(sb.toString());
 					} else {
-						row.add(v);
+						if (v == null) {
+							row.add("");
+						} else {
+							row.add(v);
+						}
 					}
 				}
 
