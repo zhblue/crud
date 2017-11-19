@@ -1,5 +1,6 @@
 CRUD
 ====
+[安装使用图文说明](https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656402150&idx=1&sn=0ae818d2984e51e22cb79f54c81a7d42&scene=21#wechat_redirect)
 
 CRUD is Really Urgly coDed -- 快速原型系统与通用后台
 
