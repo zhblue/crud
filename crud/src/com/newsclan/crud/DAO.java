@@ -463,7 +463,7 @@ public class DAO {
 				row = new LinkedList();
 				for (int i = 1; i <= rsmd.getColumnCount(); i++) {
 					Object v = rs.getObject(i);
-					
+					if(v==null) v="";
 					if (i > 1 && editable) {
 						StringBuilder sb = new StringBuilder();
 						sb.append("<span class='modifiable'");
@@ -478,11 +478,7 @@ public class DAO {
 							sb.append(rs.getObject(1));
 						}
 						sb.append("' >");
-						if (v == null) {
-							sb.append(" ");
-						} else {
-							sb.append(v.toString());
-						}
+						sb.append(v.toString());
 						sb.append("</span>");
 						row.add(sb.toString());
 					} else {
