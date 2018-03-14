@@ -91,6 +91,8 @@ public class Tools {
 					}else{
 						if(DAO.isFieldNumber(fds[j+1])){
 							data[j]="0";
+						}else if (DAO.isFieldDate(fds[j+1])){
+							data[j]=null;
 						}else{
 							data[j]="";
 						}
