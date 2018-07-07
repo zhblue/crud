@@ -131,7 +131,7 @@
 		if(tableName.endsWith('config')){
 			$("textarea").attr("rows",20).attr("cols",80);
 		}else{
-				$("textarea").ckeditor();
+			try{	$("textarea").ckeditor();   }catch(e){}
 		}
 		$("span[class='modifiable']").each(function(){
 			var tbname=$(this).attr("tb");
