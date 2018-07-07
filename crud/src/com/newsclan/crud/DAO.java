@@ -404,7 +404,7 @@ public class DAO {
 			}
 			values = (String[]) v.toArray(values);
 		}
-		if ((!Auth.canReadTable(user_id, tbname)) && Auth.canInsertTable(user_id, tbname) && DAO.hasInputer(tbname)) {
+		if ((!Auth.canReadTable(user_id, tbname)) && DAO.hasInputer(tbname)) {
 			if ("".equals(keyword)) {
 				sql += " where ";
 			} else {
@@ -539,7 +539,16 @@ public class DAO {
 		}
 		return null;
 	}
-
+	public static Object queryObject(String sql, Object... values) {
+		List<List> ll = queryList(sql, false, values);
+		if (ll != null && ll.size() > 0) {
+			List l = ll.get(0);
+			if (l != null && l.size() > 0) {
+				return l.get(0);
+			}
+		}
+		return null;
+	}
 	public static int update(String sql, Object... values) {
 		if (Config.debug)
 			System.out.format(sql.replace("%", "%%").replace("?", "'%s'") + "\n", values);

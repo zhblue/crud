@@ -41,7 +41,7 @@
 			response.sendRedirect("index.jsp");
 		}else{
 			session.invalidate();
-			response.sendRedirect("login.jsp");
+			response.sendRedirect("login_zjicm.jsp");
 		}
 	} else {
 		System.out.println(1);

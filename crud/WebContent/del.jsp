@@ -14,10 +14,10 @@
 		int user_id=(Integer)session.getAttribute("user_id");
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
-			String id=request.getParameter("id");
-			if(Auth.canDeleteTable(user_id, tbname))
+			int id=Integer.parseInt(request.getParameter("id"));
+			if(Auth.canDeleteTableById(user_id, tbname,id))
 				DAO.update("delete from `"+tbname+"` where id=?", id);
 		}
-		%>
+		%> 
 </body>
 </html>
