@@ -1,434 +1,177 @@
--- MySQL Administrator dump 1.4
+-- MySQL dump 10.13  Distrib 5.7.18, for Linux (x86_64)
 --
+-- Host: localhost    Database: crud
 -- ------------------------------------------------------
--- Server version	5.0.45-community-nt
-
+-- Server version	5.7.18-1
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8 */;
-
+/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
+/*!40103 SET TIME_ZONE='+00:00' */;
 /*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
 /*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-
-
---
--- Create schema crud
---
-
-CREATE DATABASE IF NOT EXISTS crud;
-USE crud;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Definition of table `comment`
+-- Table structure for table `s_config`
 --
 
-DROP TABLE IF EXISTS `comment`;
-CREATE TABLE `comment` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `news_id` varchar(45) NOT NULL,
-  `comment` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `comment`
---
-
-/*!40000 ALTER TABLE `comment` DISABLE KEYS */;
-INSERT INTO `comment` (`id`,`news_id`,`comment`) VALUES 
- (3,'1','<p>asdfasdfsdfsdfsdf</p>\r\n'),
- (4,'1','<p>jhjhjhdfjshdfadsf</p>\r\n'),
- (5,'1','<p>sdfsdfsdfsdfdsf</p>\r\n'),
- (2,'1','<p><a href=\"/crud/ckeditor/uploader/upload/file1404374238041.pdf\">还能上传文件</a></p>\r\n');
-/*!40000 ALTER TABLE `comment` ENABLE KEYS */;
-
-
---
--- Definition of table `config`
---
-
-DROP TABLE IF EXISTS `config`;
-CREATE TABLE `config` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+DROP TABLE IF EXISTS `s_config`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s_config` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(45) NOT NULL,
   `value` text NOT NULL,
-  `type` varchar(15) NOT NULL default 'report',
-  PRIMARY KEY  (`id`)
+  `type` varchar(15) NOT NULL DEFAULT 'report',
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `config`
+-- Dumping data for table `s_config`
 --
 
-/*!40000 ALTER TABLE `config` DISABLE KEYS */;
-INSERT INTO `config` (`id`,`name`,`value`) VALUES 
- (16,'存货报表','select g.id,g.name,sum(s.number) number from tb_storage s\r\nleft join tb_goods g on s.tb_goods_id= g.id\r\ngroup by s.tb_goods_id');
-/*!40000 ALTER TABLE `config` ENABLE KEYS */;
-
-
---
--- Definition of table `datadic`
---
-
-DROP TABLE IF EXISTS `datadic`;
-CREATE TABLE `datadic` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `field` varchar(45) collate utf8_bin default NULL,
-  `name` varchar(45) collate utf8_bin default NULL,
-  `transview` varchar(45) collate utf8_bin default NULL,
-  `ftable` varchar(45) collate utf8_bin default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+LOCK TABLES `s_config` WRITE;
+/*!40000 ALTER TABLE `s_config` DISABLE KEYS */;
+/*!40000 ALTER TABLE `s_config` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Dumping data for table `datadic`
+-- Table structure for table `s_datadic`
 --
 
-/*!40000 ALTER TABLE `datadic` DISABLE KEYS */;
-INSERT INTO `datadic` (`id`,`field`,`name`,`transview`,`ftable`) VALUES 
- (1,0x74657374,0xE6B58BE8AF95,NULL,NULL),
- (2,0x64617461646963,0xE695B0E68DAEE5AD97E585B8,NULL,NULL),
- (3,0x6E657773,0xE696B0E997BB,NULL,NULL),
- (4,0x6669656C64,0xE5AD97E6AEB5,NULL,NULL),
- (5,0x6E616D65,0xE5908DE7A7B0,NULL,NULL),
- (6,0x7469746C65,0xE6A087E9A298,NULL,NULL),
- (7,0x636F6E74656E74,0xE58685E5AEB9,NULL,NULL),
- (8,0x74625F77617265686F757365,0xE4BB93E5BA93,NULL,NULL),
- (9,0x77686E616D65,0xE4BB93E5BA93E5908DE7A7B0,NULL,NULL),
- (10,0x61646472657373,0xE59CB0E59D80,NULL,NULL),
- (11,0x70686F6E65,0xE794B5E8AF9D,NULL,NULL),
- (12,0x77686F776E6572,0xE5BA93E4B8BB,NULL,NULL),
- (13,0x74625F77617265726F6F6D,0xE5BA93E688BF,NULL,NULL),
- (14,0x77726E616D65,0xE5BA93E688BFE5908D,NULL,NULL),
- (15,0x74625F77617265686F7573655F6964,0xE4BB93E5BA93,NULL,NULL),
- (16,0x746F74616C7370616365,0xE680BBE5AEB9E9878F,NULL,NULL),
- (17,0x696E636861726765,0xE8B49FE8B4A3E4BABA,NULL,NULL),
- (18,0x74625F73746F72616765,0xE5BA93E5AD98,NULL,NULL),
- (19,0x74625F676F6F64735F6964,'',NULL,NULL),
- (20,0x74625F77617265686F7573655F6964,'',NULL,NULL),
- (21,0x74625F77617265726F6F6D5F6964,'',NULL,NULL),
- (22,0x6E756D626572,0xE695B0E9878F,NULL,NULL),
- (23,0x756E6974,0xE58D95E4BD8D,NULL,NULL),
- (24,0x74625F676F6F6473,0xE8B4A7E789A9,NULL,NULL),
- (25,0x6E616D65,0xE5908DE7A7B0,NULL,NULL),
- (26,0x6C6F636174696F6E,0xE4BAA7E59CB0,NULL,NULL),
- (27,0x74625F7368656C66,0xE8B4A7E69EB6,NULL,NULL),
- (28,0x6E616D65,'',NULL,NULL),
- (29,0x74625F77617265686F7573655F6964,'',NULL,NULL),
- (30,0x74625F77617265726F6F6D5F6964,'',NULL,NULL),
- (31,0x74625F7368656C66,0xE8B4A7E69EB6,NULL,NULL),
- (32,0x6E616D65,'',NULL,NULL),
- (33,0x74625F77617265686F7573655F6964,'',NULL,NULL),
- (34,0x74625F77617265726F6F6D5F6964,'',NULL,NULL),
- (35,0x70726976696C656765,0xE69D83E99990,'',NULL),
- (36,0x636F6E666967,0xE9858DE7BDAE,'',NULL),
- (37,0x75736572,0xE794A8E688B7,'',0x75736572),
- (38,0x696E7075745F75736572,0xE8BE93E585A5E88085,'',0x75736572),
- (39,0x74625F7465737432,0xE6B58BE8AF9532,NULL,NULL);
-/*!40000 ALTER TABLE `datadic` ENABLE KEYS */;
-
+DROP TABLE IF EXISTS `s_datadic`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s_datadic` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `field` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `name` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `transview` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `ftable` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=48 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Definition of table `news`
+-- Dumping data for table `s_datadic`
 --
 
-DROP TABLE IF EXISTS `news`;
-CREATE TABLE `news` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `title` varchar(45) NOT NULL,
-  `content` text NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+LOCK TABLES `s_datadic` WRITE;
+/*!40000 ALTER TABLE `s_datadic` DISABLE KEYS */;
+INSERT INTO `s_datadic` VALUES (2,'s_datadic','数据字典',NULL,NULL),(40,'classroom','教室','',''),(4,'field','字段',NULL,NULL),(5,'name','名称',NULL,NULL),(6,'title','标题',NULL,NULL),(7,'content','内容',NULL,NULL),(41,'t_class','课程','',''),(11,'phone','电话',NULL,NULL),(42,'schedule','上课时间','',''),(43,'maxnum','最大人数','',''),(44,'t_student_class','选课',NULL,NULL),(45,'stu_name','姓名','',''),(46,'stu_phone','电话','',''),(47,'qq','QQ','',''),(35,'s_privilege','权限','',NULL),(36,'s_config','配置','',NULL),(37,'s_user','用户','','user'),(38,'input_user','输入者','','user');
+/*!40000 ALTER TABLE `s_datadic` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Dumping data for table `news`
+-- Table structure for table `s_privilege`
 --
 
-/*!40000 ALTER TABLE `news` DISABLE KEYS */;
-INSERT INTO `news` (`id`,`title`,`content`) VALUES 
- (1,'asdasd','<p>asdasd</p>\r\n');
-/*!40000 ALTER TABLE `news` ENABLE KEYS */;
-
-
---
--- Definition of table `privilege`
---
-
-DROP TABLE IF EXISTS `privilege`;
-CREATE TABLE `privilege` (
-  `id` int(10) unsigned NOT NULL auto_increment,
+DROP TABLE IF EXISTS `s_privilege`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s_privilege` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(10) unsigned NOT NULL,
   `right` varchar(45) NOT NULL,
-  PRIMARY KEY  (`id`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `privilege`
+-- Dumping data for table `s_privilege`
 --
 
-/*!40000 ALTER TABLE `privilege` DISABLE KEYS */;
-INSERT INTO `privilege` (`id`,`user_id`,`right`) VALUES 
- (8,1,'[]admin'),
- (9,1,'[user]read'),
- (10,1,'[datadic]read');
-/*!40000 ALTER TABLE `privilege` ENABLE KEYS */;
-
+LOCK TABLES `s_privilege` WRITE;
+/*!40000 ALTER TABLE `s_privilege` DISABLE KEYS */;
+INSERT INTO `s_privilege` VALUES (8,1,'[]admin'),(9,1,'[user]read'),(10,1,'[datadic]read');
+/*!40000 ALTER TABLE `s_privilege` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Definition of table `something`
+-- Table structure for table `s_user`
 --
 
-DROP TABLE IF EXISTS `something`;
-CREATE TABLE `something` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `pubdate` date NOT NULL,
-  `content` text NOT NULL,
-  `user` varchar(45) NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `something`
---
-
-/*!40000 ALTER TABLE `something` DISABLE KEYS */;
-INSERT INTO `something` (`id`,`pubdate`,`content`,`user`) VALUES 
- (4,'2014-07-09','<p><a href=\"/crud/ckeditor/uploader/upload/file1404449859312.exe\">12 </a><br />\r\n&nbsp;</p>\r\n','234'),
- (3,'2001-01-01','123','zhblue'),
- (5,'2015-01-03','<p>1</p>\r\n','1'),
- (6,'2001-01-01','123','zhblue'),
- (7,'2001-01-01','123','zhblue'),
- (9,'2001-01-01','123','zhblue');
-/*!40000 ALTER TABLE `something` ENABLE KEYS */;
-
-
---
--- Definition of table `student`
---
-
-DROP TABLE IF EXISTS `student`;
-CREATE TABLE `student` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) NOT NULL,
-  `pass` varchar(45) NOT NULL,
-  `email` varchar(45) NOT NULL,
-  `brief` text NOT NULL,
-  `birth` date NOT NULL,
-  `input_user` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
-
---
--- Dumping data for table `student`
---
-
-/*!40000 ALTER TABLE `student` DISABLE KEYS */;
-INSERT INTO `student` (`id`,`name`,`pass`,`email`,`brief`,`birth`,`input_user`) VALUES 
- (1,'123','asdf','asdf','','2014-07-23',1),
- (2,'sadf','sadf','asdf','<p>asdf</p>\r\n','2015-04-15',0),
- (3,'13信管1','1','10982766@qq.com','<p>123</p>\r\n','2015-04-29',6),
- (5,'adsf','asdf','sdf','<p>sdf</p>\r\n','2015-04-22',20080775);
-/*!40000 ALTER TABLE `student` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_goods`
---
-
-DROP TABLE IF EXISTS `tb_goods`;
-CREATE TABLE `tb_goods` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(32) collate utf8_bin default NULL,
-  `location` varchar(32) collate utf8_bin default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_goods`
---
-
-/*!40000 ALTER TABLE `tb_goods` DISABLE KEYS */;
-INSERT INTO `tb_goods` (`id`,`name`,`location`) VALUES 
- (1,0xE8A5BFE7939C,0xE696B0E79686),
- (2,0xE59C9FE8B186,0xE5B1B1E4B89C);
-/*!40000 ALTER TABLE `tb_goods` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_shelf`
---
-
-DROP TABLE IF EXISTS `tb_shelf`;
-CREATE TABLE `tb_shelf` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(32) collate utf8_bin default NULL,
-  `tb_warehouse_id` int(11) default NULL,
-  `tb_wareroom_id` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_shelf`
---
-
-/*!40000 ALTER TABLE `tb_shelf` DISABLE KEYS */;
-INSERT INTO `tb_shelf` (`id`,`name`,`tb_warehouse_id`,`tb_wareroom_id`) VALUES 
- (1,0xE4B89CE58D9731E58FB7E69EB6,2,3),
- (2,0xE8A5BFE58C97E5818FE58C97E69EB6,1,1);
-/*!40000 ALTER TABLE `tb_shelf` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_storage`
---
-
-DROP TABLE IF EXISTS `tb_storage`;
-CREATE TABLE `tb_storage` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `tb_goods_id` int(11) default NULL,
-  `tb_warehouse_id` int(11) default NULL,
-  `tb_wareroom_id` int(11) default NULL,
-  `tb_shelf_id` int(10) unsigned default NULL,
-  `number` int(10) unsigned default NULL,
-  `unit` varchar(45) collate utf8_bin NOT NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_storage`
---
-
-/*!40000 ALTER TABLE `tb_storage` DISABLE KEYS */;
-INSERT INTO `tb_storage` (`id`,`tb_goods_id`,`tb_warehouse_id`,`tb_wareroom_id`,`tb_shelf_id`,`number`,`unit`) VALUES 
- (1,2,2,4,1,5,0xE585ACE696A4),
- (2,1,2,3,1,1,0xE590A8),
- (3,1,2,3,1,1,0xE590A8),
- (4,1,2,3,1,9,0xE4B8AA),
- (5,2,1,1,2,10,0xE585ACE696A4),
- (6,2,1,1,2,10,0xE585ACE696A4);
-/*!40000 ALTER TABLE `tb_storage` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_test`
---
-
-DROP TABLE IF EXISTS `tb_test`;
-CREATE TABLE `tb_test` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `ddd` datetime default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_test`
---
-
-/*!40000 ALTER TABLE `tb_test` DISABLE KEYS */;
-INSERT INTO `tb_test` (`id`,`ddd`) VALUES 
- (1,'2015-10-17 15:12:00');
-/*!40000 ALTER TABLE `tb_test` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_test2`
---
-
-DROP TABLE IF EXISTS `tb_test2`;
-CREATE TABLE `tb_test2` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(32) collate utf8_bin default NULL,
-  `user` int(11) default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_test2`
---
-
-/*!40000 ALTER TABLE `tb_test2` DISABLE KEYS */;
-/*!40000 ALTER TABLE `tb_test2` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_warehouse`
---
-
-DROP TABLE IF EXISTS `tb_warehouse`;
-CREATE TABLE `tb_warehouse` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `whname` varchar(32) collate utf8_bin default NULL,
-  `address` varchar(32) collate utf8_bin default NULL,
-  `phone` varchar(32) collate utf8_bin default NULL,
-  `whowner` varchar(32) collate utf8_bin default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
---
--- Dumping data for table `tb_warehouse`
---
-
-/*!40000 ALTER TABLE `tb_warehouse` DISABLE KEYS */;
-INSERT INTO `tb_warehouse` (`id`,`whname`,`address`,`phone`,`whowner`) VALUES 
- (1,0xE69DADE5B79EE99B86E695A3,0xE5AE81E6B5B7,0x31323334353637,0xE7BE8EE59BBDE9989FE995BF),
- (2,0xE4B88BE6B299E6B4BEE98081,0x36E58FB7E5A4A7E8A197,0x37383930,0xE992A2E99381E4BEA0);
-/*!40000 ALTER TABLE `tb_warehouse` ENABLE KEYS */;
-
-
---
--- Definition of table `tb_wareroom`
---
-
-DROP TABLE IF EXISTS `tb_wareroom`;
-CREATE TABLE `tb_wareroom` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `wrname` varchar(32) collate utf8_bin default NULL,
-  `tb_warehouse_id` int(11) default NULL,
-  `totalspace` int(11) default NULL,
-  `incharge` varchar(32) collate utf8_bin default NULL,
-  PRIMARY KEY  (`id`)
+DROP TABLE IF EXISTS `s_user`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `s_user` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `password` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `tb_wareroom`
+-- Dumping data for table `s_user`
 --
 
-/*!40000 ALTER TABLE `tb_wareroom` DISABLE KEYS */;
-INSERT INTO `tb_wareroom` (`id`,`wrname`,`tb_warehouse_id`,`totalspace`,`incharge`) VALUES 
- (1,0xE799BEE4B896E6B187E9809A,1,1000,0xE9BB91E5AFA1E5A687),
- (2,0xE4B8ADE9809A,1,2000,0xE58FA3E6A3AE),
- (3,0xE9AB98E69599E59BADE58CBA,2,500,0xE89C98E89B9BE4BEA0),
- (4,0xE5B7A5E4B89AE59BADE58CBA,2,500,0xE7ABA0E9B1BCE58D9AE5A3AB);
-/*!40000 ALTER TABLE `tb_wareroom` ENABLE KEYS */;
-
+LOCK TABLES `s_user` WRITE;
+/*!40000 ALTER TABLE `s_user` DISABLE KEYS */;
+INSERT INTO `s_user` VALUES (0,'guest','guest can not login'),(1,'admin','6c0a6257f490cc55f1cfee6bb568b326472103df');
+/*!40000 ALTER TABLE `s_user` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
--- Definition of table `user`
+-- Table structure for table `t_class`
 --
 
-DROP TABLE IF EXISTS `user`;
-CREATE TABLE `user` (
-  `id` int(10) unsigned NOT NULL auto_increment,
-  `name` varchar(45) collate utf8_bin default NULL,
-  `password` varchar(45) collate utf8_bin default NULL,
-  PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+DROP TABLE IF EXISTS `t_class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_class` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `classroom` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `schedule` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `maxnum` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `user`
+-- Dumping data for table `t_class`
 --
 
-/*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` (`id`,`name`,`password`) VALUES 
- (0,0x6775657374,0x67756573742063616E206E6F74206C6F67696E),
- (1,0x61646D696E,0x36633061363235376634393063633535663163666565366262353638623332363437323130336466);
-/*!40000 ALTER TABLE `user` ENABLE KEYS */;
+LOCK TABLES `t_class` WRITE;
+/*!40000 ALTER TABLE `t_class` DISABLE KEYS */;
+INSERT INTO `t_class` VALUES (1,'基础1','X504A','周一 3-4',40),(2,'基础２','X504A','周一 1-2',40);
+/*!40000 ALTER TABLE `t_class` ENABLE KEYS */;
+UNLOCK TABLES;
 
+--
+-- Table structure for table `t_student_class`
+--
 
+DROP TABLE IF EXISTS `t_student_class`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `t_student_class` (
+  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `t_class_id` int(11) DEFAULT NULL,
+  `input_user` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `stu_name` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `stu_phone` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  `qq` varchar(45) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+/*!40101 SET character_set_client = @saved_cs_client */;
 
+--
+-- Dumping data for table `t_student_class`
+--
+
+LOCK TABLES `t_student_class` WRITE;
+/*!40000 ALTER TABLE `t_student_class` DISABLE KEYS */;
+INSERT INTO `t_student_class` VALUES (1,1,'1',NULL,NULL,NULL),(2,2,'1',NULL,NULL,NULL),(8,2,'20080775',NULL,NULL,NULL),(10,1,'1','zhb7lue','1309372861','10982766'),(11,1,'20080775','20080775','zhblue','13093729617');
+/*!40000 ALTER TABLE `t_student_class` ENABLE KEYS */;
+UNLOCK TABLES;
+/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
@@ -436,4 +179,6 @@ INSERT INTO `user` (`id`,`name`,`password`) VALUES
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
+
+-- Dump completed on 2018-07-07 10:12:45
