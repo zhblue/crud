@@ -323,7 +323,7 @@ public class Tools {
 		StringBuffer sql = new StringBuffer("create table " + tb_name + "(");
 		sql.append("id bigint(20) unsigned NOT NULL auto_increment");
 
-		String dict = "INSERT INTO `datadic` (`field`,`name`) VALUES (?,?)";
+		String dict = "INSERT INTO `"+Config.sysPrefix+"datadic` (`field`,`name`) VALUES (?,?)";
 
 		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
 
