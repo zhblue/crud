@@ -11,5 +11,6 @@ abnormal.fast=true
 text.shortLen=60
 page.size=10
 login.check=true
+login.page=/login_zjicm.jsp
 upload.path=/upload
-privilege.auto=[news]insert,[news]update
+privilege.auto=[student_class]insert,[student_class]update
