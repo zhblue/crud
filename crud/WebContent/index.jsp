@@ -5,6 +5,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
 <title>Home</title>
 <link rel=stylesheet href='bs/css/bootstrap.css' type='text/css'>
 <script src="jq/jquery.min.js"></script>
