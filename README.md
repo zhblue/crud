@@ -1,5 +1,8 @@
 CRUD
 ====
+
+这个分支定制化为一个简易选课系统，可做选课、采集数据、教务等微型系统使用。
+
 [安装使用图文说明](https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656402150&idx=1&sn=0ae818d2984e51e22cb79f54c81a7d42&scene=21#wechat_redirect)
 
 CRUD is Really Urgly coDed -- 快速原型系统与通用后台
@@ -9,7 +12,6 @@ CRUD is Really Urgly coDed -- 快速原型系统与通用后台
 支持导入xls文件，直接生成表格，若表格已存在则导入数据。
 
 支持查看界面，双击修改数据。
-
 
 支持超文本编辑、文件上传。
 
@@ -52,8 +54,6 @@ text类型自动以CKEditor进行编辑，支持上传图片与附件。
 _id结尾的外键，自动显示为下拉选择。
 
 在config/配置中增加记录，以“报表”两字结尾的记录将出现在报表菜单中。value里可以自定义sql，START_DATE END_DATE用于日期筛选，USER_ID用于用户筛选。
-
-
 
 ![image](https://github.com/zhblue/crud/blob/master/crud/demo1.png)
 ![image](https://github.com/zhblue/crud/blob/master/crud/demo2.png)
