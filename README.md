@@ -51,7 +51,11 @@ text类型自动以CKEditor进行编辑，支持上传图片与附件。
 
 _id结尾的外键，自动显示为下拉选择。
 
-在config/配置中增加记录，以“报表”两字结尾的记录将出现在报表菜单中。value里可以自定义sql，START_DATE END_DATE用于日期筛选，USER_ID用于用户筛选。
+在config/配置中增加记录
+type=report记录将出现在报表菜单中。
+value里可以自定义sql，START_DATE END_DATE用于日期筛选，USER_ID用于用户筛选,FILTER用于关键词查询。
+
+type=menu的记录直接出现在主菜单里, 相当于没有起止日期和过滤词的报表的快捷方式。
 
 
 
