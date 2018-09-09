@@ -28,7 +28,11 @@
 			Map<String, String> values = new HashMap<String, String>();
 			while (names.hasMoreElements()) {
 				String name = names.nextElement();
-				values.put(name, request.getParameter(name));
+				if("t_student_class".equals(tbname)&&"stu_name".equals(name)){
+					values.put(name, (String)session.getAttribute("user_name"));
+				}else{
+					values.put(name, request.getParameter(name));
+				}
 			}
 			if (sid != null && id != -1) {
 				if (DAO.update(user_id,tbname, id, values) ==0)

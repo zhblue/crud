@@ -139,6 +139,34 @@ public class Tools {
 		DB.close(conn);
 		return ret;
 	}
+	public static boolean login_cyoc(String username, String password) {
+		boolean ret = false;
+		Connection conn = DB.getConnection();
+		String sql = "select password from "
+				+ "t_students where 学号=? and password=?";
+		PreparedStatement pstmt = null;
+		ResultSet rs = null;
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, username);
+			pstmt.setString(2, password);
+			rs = pstmt.executeQuery();
+			if (rs.next()) {
+				ret = true;
+				System.out.println("登录成功"+username);
+			}else {
+				System.out.println("登录失败"+username);
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		DB.close(rs);
+		DB.close(pstmt);
+		DB.close(conn);
+		return ret;
+	}
 
 	public static boolean login_zfc(String username, String password) {
 		boolean ret = false;
