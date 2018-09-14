@@ -388,6 +388,7 @@ public class Tools {
 			nameFD = transview;
 		String sql = "select "+DAO.getPrimaryKeyFieldName(tbname)+"," + (nameFD) + " from `" + filteSQL(tbname)
 				+ "`";
+		
 		boolean noDefault = true;
 		if (keys.length >= 2) {
 			if (Config.debug)
@@ -403,8 +404,9 @@ public class Tools {
 					System.out.println(fd.name);
 			}
 		}
+		if("t_class".equals(tbname)) sql+=" where maxnum>selected";
 		sql += " order by " + nameFD;
-
+		System.out.println(tbname+"->"+sql);
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");

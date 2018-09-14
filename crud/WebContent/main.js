@@ -278,7 +278,10 @@
 	
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
-		$.post("add.jsp",data,new function(){
+		$.post("add.jsp",data,function(response, textStatus, jqXHR){
+			 if(tbname=="t_student_class"&&response.indexOf("课程已满")!=-1){
+				alert("课程已满");
+			 }			 
 			 mainLoad(tbname,0,searchKeyword);
 		});
 	}
