@@ -21,17 +21,21 @@ if(Auth.isAdmin(user_id)||Auth.checkPrivilegeForRightOfTable(user_id, className,
 		m=c.getMethod(methodName);
 		m.invoke(null);
 	}catch(NoSuchMethodException e) {
-		m=c.getMethod(methodName, HttpServletRequest.class);
-		Object ret=m.invoke(null,request);
-		if(ret!=null){
-			out.println(ret.toString());
-		}
+		try{
+			m=c.getMethod(methodName, HttpServletRequest.class);
+			Object ret=m.invoke(null,request);
+			if(ret!=null){
+				out.println(ret.toString());
+			}
+		}catch(NoSuchMethodException e2) {
+			m=c.getMethod(methodName, Long.class);
+			Object ret=m.invoke(null,Long.parseLong(request.getParameter("id")));
+			if(ret!=null){
+				out.println(ret.toString());
+			}
+		}	
 	}
-	
-	
-	
 }
-
 %>
 </body>
 </html>
