@@ -12,7 +12,9 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
-
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
@@ -27,7 +29,36 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-
+        public static void mail(String who,String title,String content) {
+		Properties properties =Config.prop;
+         // 得到回话对象
+         Session session = Session.getInstance(properties);
+         // 获取邮件对象
+         Message message = new MimeMessage(session);
+         // 设置发件人邮箱地址
+         try {
+			message.setFrom(new InternetAddress(Config.get("mail.account")));
+			 message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(who)});
+	         //message.setRecipient(Message.RecipientType.TO, new InternetAddress("xxx@qq.com"));//一个收件人
+	         // 设置邮件标题
+	         message.setSubject(title);
+	         // 设置邮件内容
+	         message.setText(content);
+	         // 得到邮差对象
+	         try(Transport transport = session.getTransport();){
+	         // 连接自己的邮箱账户
+	         transport.connect(Config.get("mail.account"), Config.get("mail.password"));// 密码为QQ邮箱开通的stmp服务后得到的客户端授权码
+	         // 发送邮件
+	         transport.sendMessage(message, message.getAllRecipients());
+	         transport.close();
+	         }catch(MessagingException e){
+	        	 e.printStackTrace();
+	         }
+		} catch (MessagingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public static String update(HttpServletRequest request) {
 		Long id = Long.parseLong(request.getParameter("id"));
 		String tbname = request.getParameter("tbname").replace("`", "");
