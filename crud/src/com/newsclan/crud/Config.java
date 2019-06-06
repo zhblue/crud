@@ -15,7 +15,7 @@ import javax.servlet.ServletContextListener;
 public class Config implements ServletContextListener{
 
 	private static String configFilePath="WEB-INF/classes/db.prop";
-	private static Properties prop=new Properties();
+	public static Properties prop=new Properties();
 	public static boolean debug;
 	public static int pageSize;
 	public static boolean loginCheck;

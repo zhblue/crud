@@ -12,6 +12,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -30,7 +32,7 @@ public class Tools {
 		System.out.println(msg);
 	}
         public static void mail(String who,String title,String content) {
-		Properties properties =Config.prop;
+		Properties properties =Config.prop; 
          // 得到回话对象
          Session session = Session.getInstance(properties);
          // 获取邮件对象
