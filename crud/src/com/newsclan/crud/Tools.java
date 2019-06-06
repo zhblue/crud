@@ -1,7 +1,12 @@
 package com.newsclan.crud;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
@@ -13,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Map.Entry;
 
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
@@ -31,45 +37,150 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-        public static void mail(String who,String title,String content) {
-		Properties properties =Config.prop; 
-         // 得到回话对象
-         Session session = Session.getInstance(properties);
-         // 获取邮件对象
-         Message message = new MimeMessage(session);
-         // 设置发件人邮箱地址
-         try {
+
+	public static String http(String url, Map<String, String> params) {
+
+		URL u = null;
+
+		HttpURLConnection con = null;
+
+		StringBuffer sb = new StringBuffer();
+
+		if (params != null) {
+
+			for (Entry<String, String> e : params.entrySet()) {
+
+				sb.append(e.getKey());
+
+				sb.append("=");
+
+				sb.append(e.getValue());
+
+				sb.append("&");
+
+			}
+
+			sb.substring(0, sb.length() - 1);
+
+		}
+
+		System.out.println("send_url:" + url);
+
+		System.out.println("send_data:" + sb.toString());
+
+		// 尝试发送请求
+
+		try {
+
+			u = new URL(url);
+
+			con = (HttpURLConnection) u.openConnection();
+
+			con.setRequestMethod("POST");
+
+			con.setDoOutput(true);
+
+			con.setDoInput(true);
+
+			con.setUseCaches(false);
+
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
+
+			osw.write(sb.toString());
+
+			osw.flush();
+
+			osw.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			if (con != null) {
+				try {
+					con.disconnect();
+				} finally {
+				}
+
+			}
+
+		}
+
+		// 读取返回内容
+
+		StringBuffer buffer = new StringBuffer();
+
+		try {
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(con
+
+					.getInputStream(), "UTF-8"));
+
+			String temp;
+
+			while ((temp = br.readLine()) != null) {
+
+				buffer.append(temp);
+
+				buffer.append("\n");
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return buffer.toString();
+
+	}
+
+	public static void mail(String who, String title, String content) {
+		Properties properties = Config.prop;
+		// 得到回话对象
+		Session session = Session.getInstance(properties);
+		// 获取邮件对象
+		Message message = new MimeMessage(session);
+		// 设置发件人邮箱地址
+		try {
 			message.setFrom(new InternetAddress(Config.get("mail.account")));
-			 message.setRecipients(Message.RecipientType.TO, new InternetAddress[]{new InternetAddress(who)});
-	         //message.setRecipient(Message.RecipientType.TO, new InternetAddress("xxx@qq.com"));//一个收件人
-	         // 设置邮件标题
-	         message.setSubject(title);
-	         // 设置邮件内容
-	         message.setText(content);
-	         // 得到邮差对象
-	         try(Transport transport = session.getTransport();){
-	         // 连接自己的邮箱账户
-	         transport.connect(Config.get("mail.account"), Config.get("mail.password"));// 密码为QQ邮箱开通的stmp服务后得到的客户端授权码
-	         // 发送邮件
-	         transport.sendMessage(message, message.getAllRecipients());
-	         transport.close();
-	         }catch(MessagingException e){
-	        	 e.printStackTrace();
-	         }
+			message.setRecipients(Message.RecipientType.TO, new InternetAddress[] { new InternetAddress(who) });
+			// message.setRecipient(Message.RecipientType.TO, new
+			// InternetAddress("xxx@qq.com"));//一个收件人
+			// 设置邮件标题
+			message.setSubject(title);
+			// 设置邮件内容
+			message.setText(content);
+			// 得到邮差对象
+			try (Transport transport = session.getTransport();) {
+				// 连接自己的邮箱账户
+				transport.connect(Config.get("mail.account"), Config.get("mail.password"));// 密码为QQ邮箱开通的stmp服务后得到的客户端授权码
+				// 发送邮件
+				transport.sendMessage(message, message.getAllRecipients());
+				transport.close();
+			} catch (MessagingException e) {
+				e.printStackTrace();
+			}
 		} catch (MessagingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
+
 	public static String update(HttpServletRequest request) {
 		Long id = Long.parseLong(request.getParameter("id"));
 		String tbname = request.getParameter("tbname").replace("`", "");
 		String fdname = request.getParameter("fdname").replace("`", "");
 		String value = request.getParameter("value");
-		String sql = "update `" + tbname + "` set `" + fdname + "`=? where "
-				+ DAO.getPrimaryKeyFieldName(tbname) + "=?";
-		Integer user_id=(Integer) request.getSession().getAttribute("user_id");
-		if(Auth.canUpdateTable(user_id, tbname)||Auth.canUpdateField(user_id, tbname, fdname)){
+		String sql = "update `" + tbname + "` set `" + fdname + "`=? where " + DAO.getPrimaryKeyFieldName(tbname)
+				+ "=?";
+		Integer user_id = (Integer) request.getSession().getAttribute("user_id");
+		if (Auth.canUpdateTable(user_id, tbname) || Auth.canUpdateField(user_id, tbname, fdname)) {
 			DAO.update(sql, value, id);
 		}
 		return "reload();";
@@ -86,58 +197,58 @@ public class Tools {
 			int rows = sheet.getRows();
 
 			if (!DAO.hasTable(tbname)) {
-				System.out.println("creating table "+tbname);
+				System.out.println("creating table " + tbname);
 				Cell[] cell = sheet.getRow(0);
 				addTable(sheet);
 			}
 			// 取得行数
-			StringBuilder sql=new StringBuilder("insert into `");
-			StringBuilder values=new StringBuilder("(");
-			sql .append(tbname);
+			StringBuilder sql = new StringBuilder("insert into `");
+			StringBuilder values = new StringBuilder("(");
+			sql.append(tbname);
 			sql.append("`(");
-			String pk=DAO.getPrimaryKeyFieldName(tbname);
-			
-			Field [] fds=DAO.getFieldsOfTable(tbname);
+			String pk = DAO.getPrimaryKeyFieldName(tbname);
+
+			Field[] fds = DAO.getFieldsOfTable(tbname);
 			for (Field field : fds) {
-				if(field.name.equals(pk)) continue;
+				if (field.name.equals(pk))
+					continue;
 				sql.append("`");
 				sql.append(field.name);
 				sql.append("`");
 				sql.append(",");
 				values.append("?,");
 			}
-			sql.deleteCharAt(sql.length()-1);
-			values.deleteCharAt(values.length()-1);
+			sql.deleteCharAt(sql.length() - 1);
+			values.deleteCharAt(values.length() - 1);
 			sql.append(") values ");
 			values.append(")");
 			// System.out.println(rows);
-			StringBuilder sb=new StringBuilder();
-			String insert=sql.toString()+values.toString();
+			StringBuilder sb = new StringBuilder();
+			String insert = sql.toString() + values.toString();
 			System.out.println(insert);
 			for (int i = 1; i < rows; i++) {
 				Cell[] cell = sheet.getRow(i);
-				
-				String []data=new String[fds.length-1];
+
+				String[] data = new String[fds.length - 1];
 				for (int j = 0; j < data.length; j++) {
-					if(cell.length>j){
-						data[j]=(cell[j].getContents());
-					}else{
-						if(DAO.isFieldNumber(fds[j+1])){
-							data[j]="0";
-						}else if (DAO.isFieldDate(fds[j+1])){
-							data[j]=null;
-						}else{
-							data[j]="";
+					if (cell.length > j) {
+						data[j] = (cell[j].getContents());
+					} else {
+						if (DAO.isFieldNumber(fds[j + 1])) {
+							data[j] = "0";
+						} else if (DAO.isFieldDate(fds[j + 1])) {
+							data[j] = null;
+						} else {
+							data[j] = "";
 						}
 					}
-					
+
 				}
-				DAO.executeUpdate(insert,data);
+				DAO.executeUpdate(insert, data);
 			}
 			// 关闭文件
 			book.close();
-			
-		
+
 		} catch (BiffException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
@@ -148,8 +259,7 @@ public class Tools {
 	public static boolean login(String username, String password) {
 		boolean ret = false;
 		Connection conn = DB.getConnection();
-		String sql = "select password from " + Config.sysPrefix
-				+ "user where name=? ";
+		String sql = "select password from " + Config.sysPrefix + "user where name=? ";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
@@ -176,8 +286,7 @@ public class Tools {
 	public static boolean login_zfc(String username, String password) {
 		boolean ret = false;
 		Connection conn = DB.getConnection();
-		String sql = "select cardid from " + Config.sysPrefix
-				+ "user where name=? ";
+		String sql = "select cardid from " + Config.sysPrefix + "user where name=? ";
 		PreparedStatement pstmt = null;
 		ResultSet rs = null;
 		try {
@@ -185,8 +294,7 @@ public class Tools {
 			pstmt.setString(1, username);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				if (password.length() == 6
-						&& rs.getString(1).endsWith(password)) {
+				if (password.length() == 6 && rs.getString(1).endsWith(password)) {
 					ret = true;
 				}
 			}
@@ -203,11 +311,11 @@ public class Tools {
 
 	public static int getUserId(HttpSession session) {
 		Integer user_id = (Integer) session.getAttribute("user_id");
-		if (user_id == null){
-			if(Config.loginCheck){
+		if (user_id == null) {
+			if (Config.loginCheck) {
 				user_id = 0; // guest
-			}else{
-				user_id=1;//admin
+			} else {
+				user_id = 1;// admin
 				session.setAttribute("user_id", 1);
 				session.setAttribute("user_name", "admin");
 			}
@@ -264,13 +372,13 @@ public class Tools {
 		// TODO Auto-generated method stub
 		String tbname = sheet.getName();
 		Cell[] cell = sheet.getRow(0);
-	//	String fd_names[] = new String[cell.length];
+		// String fd_names[] = new String[cell.length];
 		String fd_types[] = new String[cell.length];
 		String fd_titles[] = new String[cell.length];
 		for (int i = 0; i < cell.length; i++) {
 			fd_titles[i] = cell[i].getContents().trim();
 			fd_types[i] = guessType(sheet, i);
-		//	fd_names[i]=tbname+"_fd_"+i;
+			// fd_names[i]=tbname+"_fd_"+i;
 		}
 		addTable(tbname, tbname, fd_titles, fd_types, fd_titles);
 	}
@@ -284,32 +392,31 @@ public class Tools {
 		boolean canBeInt = true;
 		for (int j = 1; j < rows; j++) {
 			Cell cell[] = sheet.getRow(j);
-			try{
-			String data = cell[i].getContents().trim();
-			if (max_length < data.length()) {
-				max_length = data.length();
-			}
-			if (canBeInt) {
-				if (!isInt(data)) {
-					canBeInt = false;
+			try {
+				String data = cell[i].getContents().trim();
+				if (max_length < data.length()) {
+					max_length = data.length();
 				}
-			}
+				if (canBeInt) {
+					if (!isInt(data)) {
+						canBeInt = false;
+					}
+				}
 
-			if (canBeDecimal) {
-				if (precision < getPrecision(data))
-					precision = getPrecision(data);
-				if (!isDecimal(data, precision)) {
-					canBeDecimal = false;
+				if (canBeDecimal) {
+					if (precision < getPrecision(data))
+						precision = getPrecision(data);
+					if (!isDecimal(data, precision)) {
+						canBeDecimal = false;
+					}
 				}
-			}
-			}catch(Exception e){
+			} catch (Exception e) {
 				continue;
 			}
 
 		}
 		if (canBeInt) {
-			return String.format("bigint(%d)", max_length > 20 ? max_length + 2
-					: 20);
+			return String.format("bigint(%d)", max_length > 20 ? max_length + 2 : 20);
 		}
 		if (canBeDecimal) {
 			return String.format("decimal(20,%d)", precision);
@@ -333,7 +440,8 @@ public class Tools {
 		// TODO Auto-generated method stub
 		try {
 			double d = Double.parseDouble(data);
-			if(data.startsWith("00")) return false;
+			if (data.startsWith("00"))
+				return false;
 			if (Double.parseDouble(String.format("%." + precision + "f", d)) == d)
 				return true;
 		} catch (Exception e) {
@@ -351,17 +459,18 @@ public class Tools {
 		return false;
 	}
 
-	public static void addTable(String tb_name, String tb_title,
-			String[] fd_names, String[] fd_types, String[] fd_titles) {
+	public static void addTable(String tb_name, String tb_title, String[] fd_names, String[] fd_types,
+			String[] fd_titles) {
 		StringBuffer sql = new StringBuffer("create table " + tb_name + "(");
 		sql.append("id bigint(20) unsigned NOT NULL auto_increment");
 
-		String dict = "INSERT INTO `"+Config.sysPrefix+"datadic` (`field`,`name`) VALUES (?,?)";
+		String dict = "INSERT INTO `" + Config.sysPrefix + "datadic` (`field`,`name`) VALUES (?,?)";
 
 		DAO.executeUpdate(dict, new String[] { tb_name, tb_title });
 
 		for (int i = 0; i < fd_names.length; i++) {
-			if("id".equalsIgnoreCase(fd_names[i])) continue;
+			if ("id".equalsIgnoreCase(fd_names[i]))
+				continue;
 			fd_names[i] = filteSQL(fd_names[i]);
 			fd_titles[i] = filteSQL(fd_titles[i]);
 			String[] values = { fd_names[i], fd_titles[i] };
@@ -391,7 +500,7 @@ public class Tools {
 		String transview = DAO.transview(input_name);
 		if (transview != null)
 			nameFD = transview;
-		String sql = "select "+DAO.getPrimaryKeyFieldName(tbname)+"," + (nameFD) + " from `" + filteSQL(tbname)
+		String sql = "select " + DAO.getPrimaryKeyFieldName(tbname) + "," + (nameFD) + " from `" + filteSQL(tbname)
 				+ "`";
 		boolean noDefault = true;
 		if (keys.length >= 2) {
@@ -400,8 +509,7 @@ public class Tools {
 			Field[] fds = DAO.getFieldsOfTable(tbname);
 			for (Field fd : fds) {
 				if (fd.name.equals(keys[0])) {
-					sql += " where " + filteSQL(keys[0]) + "="
-							+ filteSQL(keys[1]);
+					sql += " where " + filteSQL(keys[0]) + "=" + filteSQL(keys[1]);
 					break;
 				}
 				if (Config.debug)
@@ -413,11 +521,11 @@ public class Tools {
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
 		ret.append(" name='");
-		if (null == input_name){
+		if (null == input_name) {
 			input_name = tbname + "_id";
 		}
-		if("pcdata_id".equals(input_name)){
-			input_name="批次uid";	
+		if ("pcdata_id".equals(input_name)) {
+			input_name = "批次uid";
 		}
 		System.err.println(input_name);
 		ret.append(input_name);
@@ -514,8 +622,7 @@ public class Tools {
 		Calendar cal = Calendar.getInstance();
 		cal.add(cal.DATE, +1);
 		// cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
-		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
-				.getTime());
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 	}
 
 	public static String lastMonthFirstDay() {
@@ -523,23 +630,20 @@ public class Tools {
 		Calendar cal = Calendar.getInstance();
 		cal.add(cal.MONTH, -1);
 		cal.set(cal.DATE, 1);
-		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
-				.getTime());
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 	}
 
 	public static String lastMonthLastDay() {
 		Calendar cal = Calendar.getInstance();
 		cal.add(cal.MONTH, -1);
 		cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
-		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
-				.getTime());
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 	}
 
 	public static String today() {
 		Calendar cal = Calendar.getInstance();
 		// cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
-		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal
-				.getTime());
+		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 	}
 
 	public static void debug(String msg) {
