@@ -38,6 +38,90 @@ public class Tools {
 		System.out.println(msg);
 	}
 
+	public static String http(String url) {
+		// TODO Auto-generated method stub
+		URL u = null;
+
+		HttpURLConnection con = null;
+
+		StringBuffer sb = new StringBuffer();
+
+		System.out.println("send_url:" + url);
+
+		System.out.println("send_data:" + sb.toString());
+
+		// 尝试发送请求
+
+		try {
+
+			u = new URL(url);
+
+			con = (HttpURLConnection) u.openConnection();
+
+			con.setRequestMethod("GET");
+
+			con.setDoOutput(true);
+
+			con.setDoInput(true);
+
+			con.setUseCaches(false);
+
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
+
+			osw.write(sb.toString());
+
+			osw.flush();
+
+			osw.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			if (con != null) {
+				try {
+					con.disconnect();
+				} finally {
+				}
+
+			}
+
+		}
+
+		// 读取返回内容
+
+		StringBuffer buffer = new StringBuffer();
+
+		try {
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(con
+
+					.getInputStream(), "UTF-8"));
+
+			String temp;
+
+			while ((temp = br.readLine()) != null) {
+
+				buffer.append(temp);
+
+				buffer.append("\n");
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return buffer.toString();
+
+	}
+
 	public static String http(String url, Map<String, String> params) {
 
 		URL u = null;
