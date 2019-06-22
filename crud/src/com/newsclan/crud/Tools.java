@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -15,6 +16,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
@@ -32,23 +34,26 @@ import jxl.Workbook;
 import jxl.read.biff.BiffException;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
 
 public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
 
-	public static String http(String url) {
+	public static String http_taobao(String url,String referer) {
 		// TODO Auto-generated method stub
+		if (referer==null) referer=url;
 		URL u = null;
 
 		HttpURLConnection con = null;
 
 		StringBuffer sb = new StringBuffer();
 
-		System.out.println("send_url:" + url);
-
-		System.out.println("send_data:" + sb.toString());
+//		System.out.println("send_url:" + url);
+//
+//		System.out.println("send_data:" + sb.toString());
 
 		// 尝试发送请求
 
@@ -62,19 +67,32 @@ public class Tools {
 
 			con.setDoOutput(true);
 
-			con.setDoInput(true);
+			//con.setDoInput(true);
 
 			con.setUseCaches(false);
-
-			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
-
-			osw.write(sb.toString());
-
-			osw.flush();
-
-			osw.close();
+		
+//			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+//			con.setRequestProperty("Authority", "item.taobao.com");
+//			con.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+//			con.setRequestProperty("Accept-encoding","gzip, deflate, br");
+//			con.setRequestProperty("User-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
+			
+			con.setRequestProperty("authority","item.taobao.com");
+			con.setRequestProperty("cache-control","max-age=0");
+			con.setRequestProperty("upgrade-insecure-requests","0");
+			con.setRequestProperty("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"); 
+			con.setRequestProperty("dnt","1");
+			con.setRequestProperty("referer",referer);
+			con.setRequestProperty("accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			con.setRequestProperty("accept-language","zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
+	
+//			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
+//
+//			osw.write(sb.toString());
+//
+//			osw.flush();
+//
+//			osw.close();
 
 		} catch (Exception e) {
 
@@ -100,7 +118,7 @@ public class Tools {
 
 			BufferedReader br = new BufferedReader(new InputStreamReader(con
 
-					.getInputStream(), "UTF-8"));
+					.getInputStream(), "GBK"));
 
 			String temp;
 
@@ -735,5 +753,109 @@ public class Tools {
 		if (Config.debug)
 			System.out.println(msg);
 	}
+	public static String http(String url) {
+		// TODO Auto-generated method stub
+		URL u = null;
 
+		HttpURLConnection con = null;
+
+	
+	
+
+		// 尝试发送请求
+
+		try {
+
+			u = new URL(url);
+
+			con = (HttpURLConnection) u.openConnection();
+
+			con.setRequestMethod("GET");
+
+			con.setDoOutput(true);
+
+			con.setDoInput(true);
+
+			con.setUseCaches(false);
+
+			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+
+			
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		} finally {
+
+			if (con != null) {
+				try {
+					con.disconnect();
+				} finally {
+				}
+
+			}
+
+		}
+
+		// 读取返回内容
+
+		StringBuffer buffer = new StringBuffer();
+
+		try {
+
+			BufferedReader br = new BufferedReader(new InputStreamReader(con
+
+					.getInputStream(), "UTF-8"));
+
+			String temp;
+
+			while ((temp = br.readLine()) != null) {
+
+				buffer.append(temp);
+
+				buffer.append("\n");
+
+			}
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+
+		}
+
+		return buffer.toString();
+
+	}
+	public static void main(String [] args){
+		String url="https://item.taobao.com/item.htm?spm=a1z10.5-c-s.w4002-21768955287.13.7fdc6374rE4jwf&id=596049223621";
+		Map data = getTaobao(url);
+		System.out.println(data.toString());
+	}
+
+	public static Map getTaobao(String url) {
+		Map ret=new HashMap();
+		String html=http_taobao(url,null);
+		Document doc = Jsoup.parse(html);
+		
+		String image="http:"+(doc.getElementsByAttributeValue("id", "J_ImgBooth").attr("src"));
+		String title=(doc.getElementsByAttributeValue("class", "tb-main-title").text());
+		String price=(doc.getElementsByAttributeValue("class", "tb-rmb-num").text());
+		String attributes=(doc.getElementsByAttributeValue("id", "attributes").html());
+		int  start_descUrl=html.indexOf("descUrl");
+		start_descUrl=html.indexOf("//",start_descUrl);
+		int  end_descUrl=html.indexOf(":",start_descUrl)-2;
+		String descUrl="https:"+html.substring(start_descUrl, end_descUrl);
+		//System.out.println(descUrl);
+		String desc=http_taobao(descUrl,url);
+		desc=desc.substring(10, desc.length()-2);
+		String description=(desc);
+		ret.put("image", image);
+		ret.put("title", title);
+		ret.put("price", new BigDecimal(price));
+		ret.put("attributes", attributes);
+		ret.put("description", description);
+		
+		return ret;
+	}
 }
