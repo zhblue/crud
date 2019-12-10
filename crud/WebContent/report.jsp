@@ -18,6 +18,8 @@
 	String spage=request.getParameter("page");
 	if (spage==null) spage="0";
 	int ipage=Integer.parseInt(spage);
+	String report_name=(String) session.getAttribute("report_name");
+	if(report_name!=null) out.println(report_name);
 	%>
 	<a class='btn btn-success' target=_blank href="export.jsp?<%=Math.random() %>">导出</a> 
 	<%if(ipage>0){ %>
