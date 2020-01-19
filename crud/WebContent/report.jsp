@@ -63,7 +63,10 @@
 		out.println();
 
 	}
-	
+	%>
+                <script>document.title="<%=report_name%>";</script>
+        <%
+
 	DB.close(conn);
 %>
 </table>
