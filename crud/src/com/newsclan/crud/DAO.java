@@ -283,7 +283,8 @@ public class DAO {
 			DatabaseMetaData dbmd = conn.getMetaData();
 			ResultSet tbs = dbmd.getTables(null, null, null, null);
 			while (tbs.next()) {
-				ret.add(tbs.getString("TABLE_NAME"));
+				if(!Character.isUpperCase(tbs.getString("TABLE_NAME").charAt(0)))
+					ret.add(tbs.getString("TABLE_NAME"));
 			}
 			DB.close(tbs);
 		} catch (SQLException e) {
