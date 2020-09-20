@@ -404,8 +404,7 @@ public class Tools {
 					System.out.println(fd.name);
 			}
 		}
-		if("t_class".equals(tbname)) sql+=" where maxnum>selected";
-		sql += " order by " + nameFD;
+		
 		System.out.println(tbname+"->"+sql);
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
