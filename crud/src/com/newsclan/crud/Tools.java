@@ -287,7 +287,11 @@ public class Tools {
 		}
 		return "reload();";
 	}
-
+	public static String cleanChars(String in){
+		String out=in.replace(" ", "");
+		out=out.replace("#", "");
+		return out;
+	}
 	public static void importXLS(String path) {
 		System.out.println(path);
 		try {
@@ -296,6 +300,8 @@ public class Tools {
 			// 取得第一个sheet
 			Sheet sheet = book.getSheet(0);
 			String tbname = sheet.getName().trim();
+			tbname=cleanChars(tbname);
+			
 			int rows = sheet.getRows();
 
 			if (!DAO.hasTable(tbname)) {
@@ -315,7 +321,7 @@ public class Tools {
 				if (field.name.equals(pk))
 					continue;
 				sql.append("`");
-				sql.append(field.name);
+				sql.append(cleanChars(field.name));
 				sql.append("`");
 				sql.append(",");
 				values.append("?,");
@@ -472,13 +478,13 @@ public class Tools {
 
 	private static void addTable(Sheet sheet) {
 		// TODO Auto-generated method stub
-		String tbname = sheet.getName();
+		String tbname = cleanChars(sheet.getName());
 		Cell[] cell = sheet.getRow(0);
 		// String fd_names[] = new String[cell.length];
 		String fd_types[] = new String[cell.length];
 		String fd_titles[] = new String[cell.length];
 		for (int i = 0; i < cell.length; i++) {
-			fd_titles[i] = cell[i].getContents().trim();
+			fd_titles[i] = cleanChars(cell[i].getContents().trim());
 			fd_types[i] = guessType(sheet, i);
 			// fd_names[i]=tbname+"_fd_"+i;
 		}
@@ -488,7 +494,7 @@ public class Tools {
 	private static String guessType(Sheet sheet, int i) {
 		// TODO Auto-generated method stub
 		int rows = sheet.getRows();
-		int max_length = 0;
+		int max_length = 16;
 		int precision = 0;
 		boolean canBeDecimal = true;
 		boolean canBeInt = true;
@@ -597,12 +603,12 @@ public class Tools {
 	public static String toSelect(String tbname, String value, String... keys) {
 		StringBuilder ret = new StringBuilder();
 		StringBuilder options = new StringBuilder();
-		String nameFD = DAO.getFirstCharFieldName(tbname);
+		String nameFD = "`"+DAO.getFirstCharFieldName(tbname)+"`";
 		String input_name = filteSQL(keys[2]);
 		String transview = DAO.transview(input_name);
 		if (transview != null)
 			nameFD = transview;
-		String sql = "select " + DAO.getPrimaryKeyFieldName(tbname) + "," + (nameFD) + " from `" + filteSQL(tbname)
+		String sql = "select `" + DAO.getPrimaryKeyFieldName(tbname) + "`," + (nameFD) + " from `" + filteSQL(tbname)
 				+ "`";
 		boolean noDefault = true;
 		if (keys.length >= 2) {
@@ -618,7 +624,7 @@ public class Tools {
 					System.out.println(fd.name);
 			}
 		}
-		sql += " order by " + nameFD;
+		sql += " order by " + nameFD+"";
 
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
@@ -629,7 +635,7 @@ public class Tools {
 		if ("pcdata_id".equals(input_name)) {
 			input_name = "批次uid";
 		}
-		System.err.println(input_name);
+		System.err.println(sql);
 		ret.append(input_name);
 		ret.append("' onChange='filteNext(this);' onLoad='filteNext(this);'>\n");
 
