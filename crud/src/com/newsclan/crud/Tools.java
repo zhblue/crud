@@ -290,6 +290,8 @@ public class Tools {
 	public static String cleanChars(String in){
 		String out=in.replace(" ", "");
 		out=out.replace("#", "");
+		out=out.replace("\n", "");
+		out=out.replace("\r", "");
 		return out;
 	}
 	public static void importXLS(String path) {
@@ -321,7 +323,7 @@ public class Tools {
 				if (field.name.equals(pk))
 					continue;
 				sql.append("`");
-				sql.append(cleanChars(field.name));
+				sql.append(field.name);
 				sql.append("`");
 				sql.append(",");
 				values.append("?,");
