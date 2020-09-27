@@ -138,7 +138,7 @@
 			var fdname=$(this).attr("fd");
 			var rid=$(this).attr("rid");
 		
-			if(tbname==tableName||lastLoad.indexOf("report")!=-1){
+			if(tbname==tableName){
 				$(this)[0].title="双击修改";
 				if($(this).html()=="")$(this).html("_");
 				$(this).dblclick(function(){
