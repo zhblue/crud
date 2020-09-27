@@ -51,6 +51,7 @@ public class DAO {
 		sql.append(") ");
 		sql.append(value);
 		sql.append(") ");
+		
 		return update(sql.toString(), data.toArray());
 
 	}
@@ -469,7 +470,10 @@ public class DAO {
 						StringBuilder sb = new StringBuilder();
 						sb.append("<span class='modifiable'");
 						sb.append("tb='");
-						sb.append(rsmd.getTableName(i));
+						if(rsmd.getTableName(i)!=null&&!rsmd.getTableName(i).equals(""))
+							sb.append(rsmd.getTableName(i));
+						else
+							sb.append(rsmd.getColumnName(i));
 						sb.append("' fd='");
 						sb.append(rsmd.getColumnName(i));
 						sb.append("' rid='");
@@ -499,7 +503,6 @@ public class DAO {
 		}
 		return ret;
 	}
-
 	public static List<List> queryList(String sql, boolean title, Object... values) {
 		// TODO Auto-generated method stub
 
@@ -669,9 +672,13 @@ public class DAO {
 
 				if (field.transview != null && !"".equals(field.transview)) {
 					dataFieldName = field.transview;
+					fields += "," +field.transview + " as `" + join + "`";
+					
+				}else{
+					fields += ",`" + join + "`.`" + dataFieldName + "` as `" + join + "`";
+					
 				}
 
-				fields += ",`" + join + "`.`" + dataFieldName + "` as `" + join + "`";
 				if (withoutID.length == 0 || !withoutID[0]) {
 					fields += ",`" + join + "`.`" + getPrimaryKeyFieldName(join) + "` as `" + field.name + "_value`";
 				}
