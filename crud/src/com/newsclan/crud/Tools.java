@@ -42,18 +42,19 @@ public class Tools {
 		System.out.println(msg);
 	}
 
-	public static String http_taobao(String url,String referer) {
+	public static String http_taobao(String url, String referer) {
 		// TODO Auto-generated method stub
-		if (referer==null) referer=url;
+		if (referer == null)
+			referer = url;
 		URL u = null;
 
 		HttpURLConnection con = null;
 
 		StringBuffer sb = new StringBuffer();
 
-//		System.out.println("send_url:" + url);
-//
-//		System.out.println("send_data:" + sb.toString());
+		// System.out.println("send_url:" + url);
+		//
+		// System.out.println("send_data:" + sb.toString());
 
 		// 尝试发送请求
 
@@ -67,32 +68,38 @@ public class Tools {
 
 			con.setDoOutput(true);
 
-			//con.setDoInput(true);
+			// con.setDoInput(true);
 
 			con.setUseCaches(false);
-		
-//			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-//			con.setRequestProperty("Authority", "item.taobao.com");
-//			con.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-//			con.setRequestProperty("Accept-encoding","gzip, deflate, br");
-//			con.setRequestProperty("User-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
-			
-			con.setRequestProperty("authority","item.taobao.com");
-			con.setRequestProperty("cache-control","max-age=0");
-			con.setRequestProperty("upgrade-insecure-requests","0");
-			con.setRequestProperty("user-agent","Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36"); 
-			con.setRequestProperty("dnt","1");
-			con.setRequestProperty("referer",referer);
-			con.setRequestProperty("accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
-			con.setRequestProperty("accept-language","zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
-	
-//			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
-//
-//			osw.write(sb.toString());
-//
-//			osw.flush();
-//
-//			osw.close();
+
+			// con.setRequestProperty("Content-Type",
+			// "application/x-www-form-urlencoded");
+			// con.setRequestProperty("Authority", "item.taobao.com");
+			// con.setRequestProperty("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			// con.setRequestProperty("Accept-encoding","gzip, deflate, br");
+			// con.setRequestProperty("User-agent","Mozilla/5.0 (Windows NT
+			// 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+			// Chrome/74.0.3729.169 Safari/537.36");
+
+			con.setRequestProperty("authority", "item.taobao.com");
+			con.setRequestProperty("cache-control", "max-age=0");
+			con.setRequestProperty("upgrade-insecure-requests", "0");
+			con.setRequestProperty("user-agent",
+					"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36");
+			con.setRequestProperty("dnt", "1");
+			con.setRequestProperty("referer", referer);
+			con.setRequestProperty("accept",
+					"text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3");
+			con.setRequestProperty("accept-language", "zh-CN,zh;q=0.9,en;q=0.8,zh-TW;q=0.7");
+
+			// OutputStreamWriter osw = new
+			// OutputStreamWriter(con.getOutputStream(), "UTF-8");
+			//
+			// osw.write(sb.toString());
+			//
+			// osw.flush();
+			//
+			// osw.close();
 
 		} catch (Exception e) {
 
@@ -287,13 +294,17 @@ public class Tools {
 		}
 		return "reload();";
 	}
-	public static String cleanChars(String in){
-		String out=in.replace(" ", "");
-		out=out.replace("#", "");
-		out=out.replace("\n", "");
-		out=out.replace("\r", "");
+
+	public static String cleanChars(String in) {
+		String out = in.replace(" ", "");
+		out = out.replace("#", "");
+		out = out.replace("\n", "");
+		out = out.replace("\r", "");
+		out = out.replace("\\", "");
+		out = out.replace("/", "");
 		return out;
 	}
+
 	public static void importXLS(String path) {
 		System.out.println(path);
 		try {
@@ -302,8 +313,8 @@ public class Tools {
 			// 取得第一个sheet
 			Sheet sheet = book.getSheet(0);
 			String tbname = sheet.getName().trim();
-			tbname=cleanChars(tbname);
-			
+			tbname = cleanChars(tbname);
+
 			int rows = sheet.getRows();
 
 			if (!DAO.hasTable(tbname)) {
@@ -500,6 +511,7 @@ public class Tools {
 		int precision = 0;
 		boolean canBeDecimal = true;
 		boolean canBeInt = true;
+		boolean canBeDate = true;
 		for (int j = 1; j < rows; j++) {
 			Cell cell[] = sheet.getRow(j);
 			try {
@@ -510,6 +522,11 @@ public class Tools {
 				if (canBeInt) {
 					if (!isInt(data)) {
 						canBeInt = false;
+					}
+				}
+				if (canBeDate) {
+					if (!isDate(data)) {
+						canBeDate = false;
 					}
 				}
 
@@ -525,6 +542,9 @@ public class Tools {
 			}
 
 		}
+		if (canBeDate) {
+			return String.format("date");
+		}
 		if (canBeInt) {
 			return String.format("bigint(%d)", max_length > 20 ? max_length + 2 : 20);
 		}
@@ -535,6 +555,33 @@ public class Tools {
 			return String.format("varchar(%d)", max_length);
 		}
 		return "text";
+	}
+
+	private static boolean isDate(String data) {
+		// TODO Auto-generated method stub
+		String split[];
+		if(data.contains("/")){
+			split=data.split("/");
+			if(split.length == 3){
+				if(split[0].length()==4 || split[0].length()==2){
+					if(split[1].length()==2 || split[1].length()==1){
+						return split[2].length()==2 || split[2].length()==1;
+					}
+				}
+			}
+		}else if(data.contains("-")){
+			split=data.split("-");
+			if(split.length == 3){
+				if(split[0].length()==4 || split[0].length()==2){
+					if(split[1].length()==2 || split[1].length()==1){
+						return split[2].length()==2 || split[2].length()==1;
+					}
+				}
+			}
+		}else{
+			return isInt(data) && data.length()== 8;
+		}
+		return false;
 	}
 
 	private static int getPrecision(String data) {
@@ -605,13 +652,13 @@ public class Tools {
 	public static String toSelect(String tbname, String value, String... keys) {
 		StringBuilder ret = new StringBuilder();
 		StringBuilder options = new StringBuilder();
-		String nameFD = "`"+DAO.getFirstCharFieldName(tbname)+"`";
+		String nameFD = "`" + DAO.getFirstCharFieldName(tbname) + "`";
 		String input_name = filteSQL(keys[2]);
 		String transview = DAO.transview(input_name);
 		if (transview != null)
 			nameFD = transview;
-		String sql = "select `" + DAO.getPrimaryKeyFieldName(tbname) + "`," + (nameFD) + " from `" + filteSQL(tbname)
-				+ "`";
+		String pk = DAO.getPrimaryKeyFieldName(tbname);
+		String sql = "select `" + pk + "`," + (nameFD) + " from `" + filteSQL(tbname) + "`";
 		boolean noDefault = true;
 		if (keys.length >= 2) {
 			if (Config.debug)
@@ -626,7 +673,7 @@ public class Tools {
 					System.out.println(fd.name);
 			}
 		}
-		sql += " order by " + nameFD+"";
+		sql += " order by `" + pk + "` desc";
 
 		List<List> data = DAO.queryList(sql, false);
 		ret.append("<select");
@@ -761,14 +808,12 @@ public class Tools {
 		if (Config.debug)
 			System.out.println(msg);
 	}
+
 	public static String http(String url) {
 		// TODO Auto-generated method stub
 		URL u = null;
 
 		HttpURLConnection con = null;
-
-	
-	
 
 		// 尝试发送请求
 
@@ -787,8 +832,6 @@ public class Tools {
 			con.setUseCaches(false);
 
 			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
-			
 
 		} catch (Exception e) {
 
@@ -835,35 +878,36 @@ public class Tools {
 		return buffer.toString();
 
 	}
-	public static void main(String [] args){
-		String url="https://item.taobao.com/item.htm?spm=a1z10.5-c-s.w4002-21768955287.13.7fdc6374rE4jwf&id=596049223621";
+
+	public static void main(String[] args) {
+		String url = "https://item.taobao.com/item.htm?spm=a1z10.5-c-s.w4002-21768955287.13.7fdc6374rE4jwf&id=596049223621";
 		Map data = getTaobao(url);
 		System.out.println(data.toString());
 	}
 
 	public static Map getTaobao(String url) {
-		Map ret=new HashMap();
-		String html=http_taobao(url,null);
+		Map ret = new HashMap();
+		String html = http_taobao(url, null);
 		Document doc = Jsoup.parse(html);
-		
-		String image="http:"+(doc.getElementsByAttributeValue("id", "J_ImgBooth").attr("src"));
-		String title=(doc.getElementsByAttributeValue("class", "tb-main-title").text());
-		String price=(doc.getElementsByAttributeValue("class", "tb-rmb-num").text());
-		String attributes=(doc.getElementsByAttributeValue("id", "attributes").html());
-		int  start_descUrl=html.indexOf("descUrl");
-		start_descUrl=html.indexOf("//",start_descUrl);
-		int  end_descUrl=html.indexOf(":",start_descUrl)-2;
-		String descUrl="https:"+html.substring(start_descUrl, end_descUrl);
-		//System.out.println(descUrl);
-		String desc=http_taobao(descUrl,url);
-		desc=desc.substring(10, desc.length()-2);
-		String description=(desc);
+
+		String image = "http:" + (doc.getElementsByAttributeValue("id", "J_ImgBooth").attr("src"));
+		String title = (doc.getElementsByAttributeValue("class", "tb-main-title").text());
+		String price = (doc.getElementsByAttributeValue("class", "tb-rmb-num").text());
+		String attributes = (doc.getElementsByAttributeValue("id", "attributes").html());
+		int start_descUrl = html.indexOf("descUrl");
+		start_descUrl = html.indexOf("//", start_descUrl);
+		int end_descUrl = html.indexOf(":", start_descUrl) - 2;
+		String descUrl = "https:" + html.substring(start_descUrl, end_descUrl);
+		// System.out.println(descUrl);
+		String desc = http_taobao(descUrl, url);
+		desc = desc.substring(10, desc.length() - 2);
+		String description = (desc);
 		ret.put("image", image);
 		ret.put("title", title);
 		ret.put("price", new BigDecimal(price));
 		ret.put("attributes", attributes);
 		ret.put("description", description);
-		
+
 		return ret;
 	}
 }
