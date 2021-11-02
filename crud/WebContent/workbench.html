@@ -1,0 +1,220 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+<title>Home</title>
+<link rel=stylesheet href='bs/css/bootstrap.css' type='text/css'>
+<script src="jq/jquery.min.js"></script>
+<script src="bs/js/bootstrap.js"></script>
+<link rel="stylesheet" type="text/css" href="jq/css/jquery-ui.min.css" />
+<link rel="stylesheet" type="text/css" href="jq/css/jquery.wysiwyg.css" />
+<link type="text/css" href="jq/css/jquery-ui-timepicker-addon.css"
+	rel="stylesheet" />
+
+<script type="text/javascript" src="jq/jquery-ui.min.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-datepicker.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-timepicker-addon.js"></script>
+<script type="text/javascript" src="jq/jquery-ui-timepicker-zh-CN.js"></script>
+
+
+<script src="ckeditor/ckeditor.js"></script>
+<script src="ckeditor/adapters/jquery.js"></script>
+
+</head>
+<body onkeydown="shortKey()">
+
+
+	<div class="navbar navbar-default" role="navigation">
+		<!-- Brand and toggle get grouped for better mobile display -->
+
+		<!-- Collect the nav links, forms, and other content for toggling -->
+		<div class="navbar bs-navbar">
+			<a class="navbar-brand" href="." target='_blank'>视频标注系统</a>
+		
+			<a class="btn navbar-brand" href="#" onclick='loadReport();'>报表</a>
+			
+			<a class="btn navbar-brand" href="#" onclick='loadImport();'>导入</a>
+			
+
+			<form class="navbar-form navbar-left" role="search">
+				<div class="form-group">
+					<input placeholder="查找" class="nav-brand form-control"
+						onkeyup="search(this.value)" type="text">
+				</div>
+				<input id="auto" type="checkbox" onclick="autoRefresh()">自动刷新
+			</form>
+		
+			<a class="btn navbar-brand" href="#passChange"
+				onclick='passChange();'><span class='glyphicon glyphicon-user'></span></a>
+			<a class="btn navbar-brand" href="logout.jsp"><span
+				class='glyphicon glyphicon-log-out'></span></a>
+
+		</div>
+		<!-- /.navbar-collapse -->
+	</div>
+
+	<div id="main" class="container">
+	
+<div class="row" style="height:340px">
+  <div class="col-md-7 label-default align-middle center embed-responsive embed-responsive-16by9"  style="text-align:center;height:100%;"  >
+      <video src="file:///home/pi/Videos/100.mp4" controls='true' style="height:100%;margin:5px;vertical-align: middle;" onfocus="useShort=false;" onblur="useShort=true"> </video>
+  </div>
+  <div class="col-md-5 label-info pre-scrollable"  style="height:100%">
+				<ul  id="tagList" class="list-group">
+					
+				</ul>
+  </div>
+</div>
+<div class="row"  style="height:100px">
+  <div class="col-md-2 label-warning"  style="height:100%">当前时间：<span id="time"></span> s</div>
+  <div class="col-md-8 label-success"  style="height:100%;">
+	  
+				  <div class="col-md-12">
+								 <div class="row" style="margin:3px;">
+									                <div class="col-md-9">
+														                  <div class="input-group">
+																			
+																							 <span class="input-group-addon" id="sizing-addon2">标签</span>
+																							  <input id="currentTag"  type="text" class="form-control" aria-label="..." onfocus="useShort=false;" onblur="useShort=true">
+																							  <span class="input-group-btn"  >
+																								 <button  class="btn btn-default" type="button" onclick="addTag()">确定</button>
+																							 </span>
+																		  </div>
+													</div>
+													<div class="col-md-3">
+																			<select class="form-control"> 
+																						<option>爆炸</option>
+																						<option>燃烧</option>
+																						<option>卡通</option>
+																						<option>男性</option>
+																						<option>女性</option>
+																			</select>
+													 </div>
+								  </div>
+								  	 <div class="row">
+									                <div class="col-md-4">
+														                  <div class="input-group">
+																							 <span class="input-group-btn" >
+																								 <button  class="btn btn-default" type="button"  onclick="setStartTime()" >开始时间(f)</button>
+																							 </span>
+																							 <input type="timestamp"  id="start_time" class="form-control" aria-label="...">
+																		  </div>
+													</div>
+													<div class="col-md-4">
+																		<div class="input-group">
+																							 <span class="input-group-btn" >
+																								 <button  class="btn btn-default" type="button"   onclick="setEndTime()">结束时间(j)</button>
+																							 </span>
+																							  <input type="timestamp" id="end_time" class="form-control" aria-label="...">
+																		  </div>
+													 </div>
+													 <div class="col-md-4">
+														 <button  class="btn btn-default" type="button"  onclick="video.playbackRate=$(this).text()">0.25</button>
+														 <button  class="btn btn-default" type="button"  onclick="video.playbackRate=$(this).text()">0.5</button>
+														 <button  class="btn btn-default" type="button"  onclick="video.playbackRate=$(this).text()">1.0</button>
+														 <button  class="btn btn-default" type="button"  onclick="video.playbackRate=$(this).text()">2.0</button>
+				
+													 </div>
+													 
+								  </div>
+					</div>
+  </div>
+  <div class="col-md-2 label-danger"  style="height:100%"><span id="status"></div>
+</div>
+	
+	
+	</div>
+
+
+</body>
+
+<script>
+var video=null;
+var useShort=true;
+function pad(n) {
+    if (n < 10)
+        return "0" + n;
+    return n;
+}
+function  sec2str(sec){
+	  let integer=parseInt(sec);
+      let dec=sec-integer;
+      let ss=integer %60;
+      integer=(integer-ss)/60;
+      let mm=integer%60;
+      integer=(integer-mm)/60;
+      let hh=integer;
+      return  pad(hh)+":"+pad(mm)+":"+pad(ss)+","+dec.toFixed(3).toString().substring(2);
+}
+function showTime(){
+			  //console.log(video.currentTime);
+	    $("#time").text(sec2str(video.currentTime));
+}
+
+function  setStartTime(){
+	$("#start_time").val(sec2str(video.currentTime));
+}
+
+function  setEndTime(){
+	$("#end_time").val(sec2str(video.currentTime));
+}
+function addTag(){
+     let start_time=$("#start_time").val();
+    let end_time=$("#end_time").val();
+    let tagText=$("#currentTag").val();
+     console.log(start_time+" --"+"> "+end_time);
+     console.log(tagText);
+     let tagNode="  <li class='list-group-item'>"+start_time+" --"+"> "+end_time+"  "+ tagText+"</li>";
+  $("#tagList").append(tagNode);
+  $("#tagList").parent()[0].scrollTop = $("#tagList").parent()[0].scrollHeight;
+}
+$(document).ready(function(){
+	   video=$("video")[0];
+		video.onplay=function(){
+				$("#status").text("Playing...");
+		};
+		video.onpause=function(){
+				$("#status").text("Stoped");
+		};
+	    setStartTime();
+	    setEndTime();
+		window.setInterval("showTime();",100);
+});
+function  shortKey(e) {
+        // 兼容FF和IE和Opera
+        var theEvent = e || window.event;
+        var code = theEvent.keyCode || theEvent.which || theEvent.charCode;
+        if(!useShort) return true;
+        if (code == 13) {
+            if(theEvent.target.tagName=="INPUT"){
+         	      return true;
+            }	
+            return false;
+        }
+        if(code==70) {    // f
+ 			  setStartTime();
+		}
+        if(code==74) {    // j
+ 			  setEndTime();
+		}
+		if(code==32){    // space
+				if(video.paused){
+						video.play();
+				}else{
+					    video.pause();
+				}
+		}
+		if(code==37){  // <-
+			  video.currentTime-=1;
+		}
+		if(code==39){  // ->
+			  video.currentTime+=1;
+		}
+		
+       // console.log("shortKey:"+code);
+        return true;
+    }
+</script>
+
+</html>
