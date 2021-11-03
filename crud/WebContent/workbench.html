@@ -3,7 +3,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
-<title>Home</title>
+<title>工作台</title>
 <link rel=stylesheet href='bs/css/bootstrap.css' type='text/css'>
 <script src="jq/jquery.min.js"></script>
 <script src="bs/js/bootstrap.js"></script>
@@ -57,13 +57,25 @@
 	<div id="main" class="container">
 	
 <div class="row" style="height:340px">
-  <div class="col-md-7 label-default align-middle center embed-responsive embed-responsive-16by9"  style="text-align:center;height:100%;"  >
+  <div class="col-md-6 label-default align-middle center embed-responsive embed-responsive-16by9"  style="text-align:center;height:100%;"  >
       <video src="file:///home/pi/Videos/100.mp4" controls='true' style="height:100%;margin:5px;vertical-align: middle;" onfocus="useShort=false;" onblur="useShort=true"> </video>
   </div>
-  <div class="col-md-5 label-info pre-scrollable"  style="height:100%">
-				<ul  id="tagList" class="list-group">
-					
-				</ul>
+  <div class="col-md-6 label-info pre-scrollable"  style="height:100%">
+				<table  class="table well">
+					  <thead>
+						<tr>
+						  
+						  <th scope="col col-md-1" style="width:125px">开始</th>
+						  <th scope="col col-md-1" style="width:125px">结束</th>
+						  <th scope="col"  style="width:200px">标签</th>
+						 <th scope="col">删除</th>
+						</tr>
+					  </thead>
+					  <tbody id="tagList" >
+						
+						
+					  </tbody>
+					</table>
   </div>
 </div>
 <div class="row"  style="height:100px">
@@ -83,7 +95,11 @@
 																		  </div>
 													</div>
 													<div class="col-md-3">
-																			<select class="form-control"> 
+																			<select  id="typeList" class="form-control" onChange='$("#currentTag").val(this.value)' > 
+																						<option>交谈</option>
+																						<option>射击</option>
+																						<option>血腥</option>
+																						<option>飞机</option>
 																						<option>爆炸</option>
 																						<option>燃烧</option>
 																						<option>卡通</option>
@@ -96,7 +112,7 @@
 									                <div class="col-md-4">
 														                  <div class="input-group">
 																							 <span class="input-group-btn" >
-																								 <button  class="btn btn-default" type="button"  onclick="setStartTime()" >开始时间(f)</button>
+																								 <button  class="btn btn-default" type="button"  onclick="setStartTime()" >开始时间[J]</button>
 																							 </span>
 																							 <input type="timestamp"  id="start_time" class="form-control" aria-label="...">
 																		  </div>
@@ -104,7 +120,7 @@
 													<div class="col-md-4">
 																		<div class="input-group">
 																							 <span class="input-group-btn" >
-																								 <button  class="btn btn-default" type="button"   onclick="setEndTime()">结束时间(j)</button>
+																								 <button  class="btn btn-default" type="button"   onclick="setEndTime()">结束时间[K]</button>
 																							 </span>
 																							  <input type="timestamp" id="end_time" class="form-control" aria-label="...">
 																		  </div>
@@ -137,6 +153,16 @@ function pad(n) {
         return "0" + n;
     return n;
 }
+function jump(timestr){
+        video.currentTime=str2sec(timestr);
+}
+function str2sec(str){
+		let  dec=str.split(",");
+	    let sec=dec[0].split(":");
+	    let ret=parseInt(sec[0]*3600)+parseInt(sec[1]*60)+parseInt(sec[2])+parseFloat("0."+dec[1]);
+	    console.log(str+":"+ret);
+	    return ret;
+}
 function  sec2str(sec){
 	  let integer=parseInt(sec);
       let dec=sec-integer;
@@ -154,29 +180,69 @@ function showTime(){
 
 function  setStartTime(){
 	$("#start_time").val(sec2str(video.currentTime));
+	if(video.paused){
+						video.play();
+	}
 }
 
 function  setEndTime(){
 	$("#end_time").val(sec2str(video.currentTime));
+	  if(!video.paused){
+						video.pause();
+	  }
+}
+function fastEdit(td){
+				let val=$(td).text();
+      $(td).html("<input id='tagContent' type='text' value='"+val+"' onfocus='useShort=false;' onblur='useShort=true'>");
+                let input=$($(td).children()[0]);
+                input.change(function(){
+						let newValue=$(this).val();
+						$(td).html(newValue);
+						$(td).parent().attr("tagText",newValue);
+				});
+
 }
 function addTag(){
      let start_time=$("#start_time").val();
-    let end_time=$("#end_time").val();
-    let tagText=$("#currentTag").val();
-     console.log(start_time+" --"+"> "+end_time);
-     console.log(tagText);
-     let tagNode="  <li class='list-group-item'>"+start_time+" --"+"> "+end_time+"  "+ tagText+"</li>";
-  $("#tagList").append(tagNode);
+     let end_time=$("#end_time").val();
+     let tagText=$("#currentTag").val();
+
+     let newTag="<tr start_time='"+start_time+"' end_time='"+end_time+"' tagText='"+tagText+"'>"
+                                 +"<td><button class='btn' onclick='jump($(this).text())' >"+start_time+"</button></td>"
+                                 +"<td><button class='btn' onclick='jump($(this).text())' >"+end_time+"</button></td><td onDblClick='fastEdit(this)' class='text-center' style='vertical-align:middle'>"+ tagText+"</td>"
+                                 +"<td><span class='glyphicon glyphicon-trash' onclick='$(this).parent().parent().remove()'></span></td>"
+                                 +"</tr>";
+     let tagList=$("#tagList");
+  
+			 let added=false;
+			 let i=0,tag=null;
+		     for(i=0;i<tagList.children().size();i++){
+				   tag=tagList.children()[i];
+				  if(str2sec($(tag).attr("start_time"))>str2sec(start_time)){
+							$(tag).before(newTag);
+							added=true;
+							console.log(start_time+" --"+"> "+tagText);
+							break;
+				   } else  if(str2sec($(tag).attr("start_time"))==str2sec(start_time)){
+					     	$(tag).before(newTag);
+					     	$(tag).remove();
+					       added=true;
+							console.log(start_time+" --"+"> "+tagText);
+							break;
+				  }
+			  }
+			  if(!added)
+					 tagList.append(newTag);
+	
   $("#tagList").parent()[0].scrollTop = $("#tagList").parent()[0].scrollHeight;
 }
 $(document).ready(function(){
 	   video=$("video")[0];
-		video.onplay=function(){
-				$("#status").text("Playing...");
-		};
-		video.onpause=function(){
-				$("#status").text("Stoped");
-		};
+		
+		$("#status").html("J:Set Start Time<br>  K:Set End Time<br> Space:Play/Pause <br> H:Back <br> L:Forward");
+		
+		
+		$("#currentTag").val($("#typeList").val());
 	    setStartTime();
 	    setEndTime();
 		window.setInterval("showTime();",100);
@@ -192,11 +258,13 @@ function  shortKey(e) {
             }	
             return false;
         }
-        if(code==70) {    // f
- 			  setStartTime();
-		}
         if(code==74) {    // j
+ 			  setStartTime();
+ 			  
+		}
+        if(code==75) {    // k
  			  setEndTime();
+ 			   addTag();
 		}
 		if(code==32){    // space
 				if(video.paused){
@@ -205,14 +273,20 @@ function  shortKey(e) {
 					    video.pause();
 				}
 		}
-		if(code==37){  // <-
-			  video.currentTime-=1;
+		if(code==37||code==72){  // <-  H
+			 if(video.paused)
+			       video.currentTime-=0.2;
+			 else
+			       video.currentTime-=1;
 		}
-		if(code==39){  // ->
-			  video.currentTime+=1;
+		if(code==39||code==76){  // ->   L
+			if(video.paused)
+			       video.currentTime+=0.2;
+			 else
+			       video.currentTime+=1;
 		}
 		
-       // console.log("shortKey:"+code);
+       console.log("shortKey:"+code);
         return true;
     }
 </script>
