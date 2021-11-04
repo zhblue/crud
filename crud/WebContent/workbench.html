@@ -23,13 +23,15 @@
 <script src="ckeditor/adapters/jquery.js"></script>
  <style>
   #subtitle { 
-	  width: 200px; 
-	  height: 30px; 
-	  padding: 0.5em; 
-	  background-color: rgba(0,0,0,0.2);
-	  color:rgb(255,255,255);
-	  position: absolute; 
-	  left: 155px; top: 320px;
+				  width: 200px; 
+				  height: 30px; 
+				  padding: 0.5em; 
+				  background-color: rgba(0,0,0,0.2);
+				  color:rgb(255,255,255);
+				  position: absolute; 
+				  left: 155px; top: 300px;
+	      text-align:left;
+	      font-weight:bolder;
 	  }
 	  
 	  #preview,#mapper{
@@ -121,17 +123,18 @@
 						 <th scope="col">删除</th>
 						</tr>
 					  </thead>
-					  <tbody id="tagList" >
+					<tbody id="tagList">
 						<!--    测试数据   -->
-					
-					  <tr start_time="00:00:03,600" end_time="00:00:06,739" tagtext="交谈"><td><button class="btn" onclick="jump($(this).text())">00:00:03,600</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:06,739</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">交谈</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:07,942" end_time="00:00:12,957" tagtext="伪3D"><td><button class="btn" onclick="jump($(this).text())">00:00:07,942</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:12,957</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">伪3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:13,157" end_time="00:00:18,536" tagtext="爆炸"><td><button class="btn" onclick="jump($(this).text())">00:00:13,157</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:18,536</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">爆炸</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:19,602" end_time="00:00:24,885" tagtext="伪3D"><td><button class="btn" onclick="jump($(this).text())">00:00:19,602</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:24,885</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">伪3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:25,451" end_time="00:00:30,743" tagtext="地图"><td><button class="btn" onclick="jump($(this).text())">00:00:25,451</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:30,743</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">地图</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:33,523" end_time="00:00:42,390" tagtext="卡通"><td><button class="btn" onclick="jump($(this).text())">00:00:33,523</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:42,390</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">卡通</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:43,439" end_time="00:00:48,994" tagtext="赛车"><td><button class="btn" onclick="jump($(this).text())">00:00:43,439</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:48,994</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">赛车</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:52,434" end_time="00:00:55,026" tagtext="3D"><td><button class="btn" onclick="jump($(this).text())">00:00:52,434</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:55,026</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:55,816" end_time="00:01:00,980" tagtext="射击"><td><button class="btn" onclick="jump($(this).text())">00:00:55,816</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:00,980</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">射击</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr>
+					  <tr start_time="00:00:03,600" end_time="00:00:06,739" tagtext="交谈" x="176" y="59"><td><button class="btn" onclick="jump($(this).text())">00:00:03,600</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:06,739</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">交谈</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:07,942" end_time="00:00:12,957" tagtext="伪3D" x="111" y="200"><td><button class="btn" onclick="jump($(this).text())">00:00:07,942</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:12,957</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">伪3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:13,157" end_time="00:00:18,536" tagtext="爆炸" x="127" y="184"><td><button class="btn" onclick="jump($(this).text())">00:00:13,157</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:18,536</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">爆炸</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:19,602" end_time="00:00:24,885" tagtext="伪3D" x="220" y="182"><td><button class="btn" onclick="jump($(this).text())">00:00:19,602</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:24,885</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">伪3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:25,451" end_time="00:00:30,743" tagtext="地图" x="177" y="81"><td><button class="btn" onclick="jump($(this).text())">00:00:25,451</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:30,743</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">地图</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:33,523" end_time="00:00:42,390" tagtext="卡通" x="346" y="192"><td><button class="btn" onclick="jump($(this).text())">00:00:33,523</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:42,390</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">卡通</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:43,439" end_time="00:00:48,994" tagtext="赛车" x="208" y="191"><td><button class="btn" onclick="jump($(this).text())">00:00:43,439</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:48,994</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">赛车</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:52,434" end_time="00:00:55,026" tagtext="3D" x="174" y="186"><td><button class="btn" onclick="jump($(this).text())">00:00:52,434</button></td><td><button class="btn" onclick="jump($(this).text())">00:00:55,026</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">3D</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:00:55,816" end_time="00:01:00,980" tagtext="射击" x="180" y="253"><td><button class="btn" onclick="jump($(this).text())">00:00:55,816</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:00,980</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">射击</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr>
 							<!--    测试数据   -->
-					  </tbody>
+					  <tr start_time="00:01:01,347" end_time="00:01:06,870" tagtext="地图" x="117" y="146"><td><button class="btn" onclick="jump($(this).text())">00:01:01,347</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:06,870</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">地图</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:01:07,882" end_time="00:01:08,578" tagtext="射击" x="195" y="234"><td><button class="btn" onclick="jump($(this).text())">00:01:07,882</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:08,578</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">射击</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:01:13,804" end_time="00:01:18,672" tagtext="赛车" x="195" y="234"><td><button class="btn" onclick="jump($(this).text())">00:01:13,804</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:18,672</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">赛车</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr><tr start_time="00:01:19,537" end_time="00:01:21,939" tagtext="迷宫" x="369" y="142"><td><button class="btn" onclick="jump($(this).text())">00:01:19,537</button></td><td><button class="btn" onclick="jump($(this).text())">00:01:21,939</button></td><td ondblclick="fastEdit(this)" class="text-center" style="vertical-align:middle">迷宫</td><td class="text-center" style="vertical-align:middle"><span class="glyphicon glyphicon-trash" onclick="$(this).parent().parent().remove()"></span></td></tr></tbody>
 					</table>
   </div>
 </div>
 <div class="row"  style="height:100px">
-  <div class="col-md-2 label-warning"  style="height:100%">当前时间：<span id="time"></span> s
+  <div class="col-md-2 label-warning"  style="height:100%">
+		当前时间：<span id="time"></span> s  <br>
+		当前坐标：<span id="statusXY"></span>
   	 <button  class="btn btn-default" type="button" onclick="download()">Save</button>
   </div>
   <div class="col-md-8 label-success"  style="height:100%;">
@@ -205,6 +208,7 @@
 <script>
 var video=null;
 var useShort=true;
+var X=0,Y=0;
 function pad(n) {
     if (n < 10)
         return "0" + n;
@@ -259,16 +263,24 @@ function getCurrentTag(){
 				   start_time=str2sec($(tag).attr("start_time"));
 				   end_time=str2sec($(tag).attr("end_time"));
 				  if(start_time<=now   &&  end_time>=now){
-							return $(tag).attr("tagText");
+							return $(tag);
 				   } 
 			  }
-              return "";
+              return  Object.create({attr:function(){return "";}});
+}
+function showTag(){
+		let tag=getCurrentTag();
+	  $("#subtitle").text(tag.attr("tagText"));
+	  $("#subtitle").css("left",tag.attr("x")+"px");
+	  $("#subtitle").css("top",tag.attr("y")+"px");
 }
 function showTime(){
 			  //console.log(video.currentTime);
 		
 	    $("#time").text(sec2str(video.currentTime));
-	    $("#subtitle").text(getCurrentTag());
+	    $("#statusXY").text("("+X+","+Y+")");
+	           showTag();
+	   
 	    
 	    		$( "#mapper" ).css("height",parseInt($(video).css("height"))-60);
 		   $( "#mapper" ).css("width",$(video).css("width"));
@@ -303,7 +315,7 @@ function addTag(){
      let end_time=$("#end_time").val();
      let tagText=$("#currentTag").val();
 
-     let newTag="<tr start_time='"+start_time+"' end_time='"+end_time+"' tagText='"+tagText+"'>"
+     let newTag="<tr start_time='"+start_time+"' end_time='"+end_time+"' tagText='"+tagText+"' x='"+X+"' y='"+Y+"'>"
                                  +"<td><button class='btn' onclick='jump($(this).text())' >"+start_time+"</button></td>"
                                  +"<td><button class='btn' onclick='jump($(this).text())' >"+end_time+"</button></td><td onDblClick='fastEdit(this)' class='text-center' style='vertical-align:middle'>"+ tagText+"</td>"
                                  +"<td  class='text-center' style='vertical-align:middle'><span class='glyphicon glyphicon-trash' onclick='$(this).parent().parent().remove()'></span></td>"
@@ -339,7 +351,17 @@ function showXY(e){
 		let y=parseInt(e.clientY-$("#zero").position().top);
 		XY.text("("+x+","+y+")");
 		XY.css("left",x);
-		XY.css("top",y);
+		XY.css("top",y-parseInt(XY.css("height")));
+}
+function setXY(e){
+		let XY=$("#XY");
+		let x=parseInt(e.clientX-$("#zero").position().left);
+		let y=parseInt(e.clientY-$("#zero").position().top);
+		X=x;
+		Y=y;
+		getCurrentTag().attr("X",x);
+		getCurrentTag().attr("Y",y);
+		
 }
 $(document).ready(function(){
 	   video=$("video")[0];
@@ -354,6 +376,7 @@ $(document).ready(function(){
 		$( "#subtitle" ).draggable();
 		$(video).css("margin","0px");
    $("#mapper").mousemove(function(e){showXY(e)});
+   $("#mapper").mousedown(function(e){setXY(e)});
 
 		//$( "#mapper" ).css("top","-"+$(video).css("height"));
 		
