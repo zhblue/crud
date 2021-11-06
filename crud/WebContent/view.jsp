@@ -10,8 +10,10 @@
 <body>
 	<%
 		request.setCharacterEncoding("UTF-8");
-		String tbname = request.getParameter("tbname");
+		String tbname = request.getParameter("tb");
 		String sid = request.getParameter("id");
+		
+		
 		int user_id=Tools.getUserId(session);
 		int id = -1;
 		if (sid != null) {
@@ -20,6 +22,9 @@
 			} catch (Exception e) {
 			//	e.printStackTrace();
 			}
+		}
+		if("tb_manual_task".equals(tbname)){
+			response.sendRedirect("workbench.jsp?id="+id);
 		}
 	
 		tbname = request.getParameter("tb");
@@ -51,12 +56,6 @@
  			} 
 		%>
 		
-<img width="150px" height="150px" id="qc" src="http://qr.liantu.com/api.php?text=x"/>
-<script>
-   //alert(document.getElementById("qc").src);
-   document.getElementById("qc").src="http://qr.liantu.com/api.php?text="+
-		   encodeURIComponent(window.location.href);
-   
-</script>
+
 </body>
 </html>
