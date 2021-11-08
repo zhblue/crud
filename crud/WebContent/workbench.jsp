@@ -134,8 +134,8 @@ System.out.println("video_url:"+video_url);
 		<div class="row" style="height: 100px">
 			<div class="col-md-2 label-warning" style="height: 100%">
 				当前时间：<span id="time"></span> s <br> 当前坐标：<span id="statusXY"></span>
-				<button class="btn btn-default" type="button" onclick="download()">Download</button>
-				<button class="btn btn-default" type="button" onclick="fastsave(<%=id%>)">Save</button>
+				<button class="btn btn-default" type="button" onclick="download()"><span class='glyphicon glyphicon-download-alt'/></button>
+				<button class="btn btn-default" type="button" onclick="fastsave(<%=id%>)"><span class='glyphicon glyphicon-floppy-disk'/></button>
 			</div>
 			<div class="col-md-8 label well" style="height: 100%;">
 
@@ -143,6 +143,7 @@ System.out.println("video_url:"+video_url);
 					<div class="row" style="margin: 3px;">
 						<div class="col-md-9">
 							<div class="input-group">
+		<button class="btn" type="button" id="space" ></button>
 		<button class="btn btn-primary" type="button" onclick="video.paused?video.play():video.pause()">运行</button>
 								<span class="input-group-addon" id="sizing-addon2">标签</span> <input
 									id="currentTag" type="text" class="form-control"
@@ -155,7 +156,7 @@ System.out.println("video_url:"+video_url);
 						</div>
 						<div class="col-md-3">
 							<select id="typeList" class="form-control"
-								onChange='$("#currentTag").val(this.value)'>
+								onChange='$("#currentTag").val(this.value);$("#space").focus()'>
 								<option>交谈</option>
 								<option>伪3D</option>
 								<option>射击</option>
@@ -264,7 +265,7 @@ System.out.println("video_url:"+video_url);
 	function download() {
 		let srt = mksrt();
 		let blob = new Blob([ srt ], {
-			type : "application/vnd.openblox.game-binary"
+			type : "text/plain"
 		});
 		saveAs(blob, "tagList.srt");
 	}
@@ -339,7 +340,7 @@ System.out.println("video_url:"+video_url);
 		$("#statusXY").text("(" + X + "," + Y + ")" + "[" + W + "," + H + "]");
 		showTag();
 
-		$("#mapper").css("height", parseInt($(video).css("height")) - 60);
+		$("#mapper").css("height", parseInt($(video).css("height")) - 30);
 		$("#mapper").css("width", $(video).css("width"));
 	}
 

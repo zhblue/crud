@@ -51,11 +51,14 @@
 	
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
-		var buttons="<td>"+
-		"<span class='glyphicon glyphicon-eye-open'></span>"+
+		var buttons="<td>";
+		if(tableName=='tb_manual_task'){
+			buttons+="<span class='btn btn-primary' onclick='view(dbid(window.event))' >打开</span>";	
+
+		}	
+		buttons+="<span class='glyphicon glyphicon-eye-open'></span>"+
 		"<span class='glyphicon glyphicon-edit'></span>"
 								+"<span class='glyphicon glyphicon-trash' ></span>";
-		
 		buttons+="</td>";
 		
 		$("#main tr").append(buttons);
