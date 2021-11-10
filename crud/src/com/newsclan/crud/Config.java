@@ -19,7 +19,7 @@ public class Config implements ServletContextListener {
 	public static int pageSize;
 	public static boolean loginCheck;
 	public static String sysPrefix = "";
-
+	public static String path = "/";
 	@Override
 	public void contextDestroyed(ServletContextEvent arg0) {
 		// TODO Auto-generated method stub
@@ -30,7 +30,7 @@ public class Config implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent sce) {
 		// TODO Auto-generated method stub
 		ServletContext context = sce.getServletContext();
-		String path = context.getRealPath("/");
+		path = context.getRealPath("/");
 		Config.configFilePath = path + "/WEB-INF/db.prop";
 		try {
 			Tools.log("loading..." + path);
@@ -50,45 +50,7 @@ public class Config implements ServletContextListener {
 
 	}
 
-	private static Thread agent;
-	static {
-		agent = new Thread(new Runnable() {
-
-			@Override
-			public void run() {
-				// TODO Auto-generated method stub
-				while (true) {
-					try {
-						Thread.sleep(800);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					List<List> tasks = DAO.queryList("select id,title from news where content='' ", false);
-					//System.out.println("task:" + tasks.size());
-					for (List task : tasks) {
-						String url = (String) (task.get(1));
-						if (url != null) {
-
-							String content=null;
-							try {
-								content = Tools.http(url);
-							} catch (Exception e) {
-							}
-
-							if (content == null)
-								content = "fail";
-
-							DAO.update("update news set content=?  where id=?", content, task.get(0));
-						}
-					}
-				}
-			}
-
-		});
-		agent.start();
-	}
-
+	
 	public static String get(String key) {
 		// TODO Auto-generated method stub
 		return prop.getProperty(key);
