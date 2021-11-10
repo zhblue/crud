@@ -48,13 +48,23 @@
 			});
 		}
 	}
-	
+	function build(rid){
+		
+		$.post("callStatic.jsp",{"c":"com.newsclan.crud.VTM","m":"build",
+				"id":rid
+				},function(data,status,xhr){
+		 	if(data.indexOf("任务启动")!=-1) alert("启动成功!");   	
+		    	else alert("任务异常!");
+		});
+      }
 	function addButton(main){
 		//$("#main tr :last-child").css("background","#eeeeee");
 		var buttons="<td>";
 		if(tableName=='tb_manual_task'){
 			buttons+="<span class='btn btn-primary' onclick='view(dbid(window.event))' >打开</span>";	
-
+		}	
+		if(tableName=='tb_build_task'){
+			buttons+="<span class='btn btn-primary' onclick='build(dbid(window.event))' >启动</span>";	
 		}	
 		buttons+="<span class='glyphicon glyphicon-eye-open'></span>"+
 		"<span class='glyphicon glyphicon-edit'></span>"

@@ -126,7 +126,7 @@ System.out.println("video_url:"+video_url);
 						</tr>
 					</thead>
 					<tbody id="tagList">
-					<%=fastsave%>
+					<%=VTM.srt2html(fastsave)%>
 					</tbody>
 				</table>
 			</div>
@@ -223,9 +223,12 @@ System.out.println("video_url:"+video_url);
 	var X = 0, Y = 0;
 	var W = 0, H = 0;
 	var mouseDown = false;
+      function reload(){
+	 alert("成功");
+      }
       function fastsave(rid){
 		let tagList=$("#tagList");
-		var newValue=$(tagList).html();
+		var newValue=mksrt();//$(tagList).html();
 		let tableName="tb_manual_task";
 		let fdname="fastsave";
 		//alert(fdname);
@@ -235,8 +238,9 @@ System.out.println("video_url:"+video_url);
 			"value":newValue,
 			"id":rid
 				
-				},new function(){
-		 	alert("保存成功!");   	
+				},function(data,status,xhr){
+		 	if(data.indexOf("reload();")!=-1) alert("保存成功!");   	
+		    	else alert("保存失败!");
 		});
       }
 	function pad(n) {
@@ -256,7 +260,7 @@ System.out.println("video_url:"+video_url);
 			ret += (i + 1) + "\n";
 			ret += tag.attr("start_time") + " --" + "> " + tag.attr("end_time")
 					+ "\n";
-			ret += tag.attr("tagText")+"("+tag.attr("x")+","+tag.attr("y")+")-["+tag.attr("w")+","+tag.attr("h")+"]" + "\n\n";
+			ret += tag.attr("tagText")+"\n("+tag.attr("x")+","+tag.attr("y")+")-["+tag.attr("w")+","+tag.attr("h")+"]" + "\n\n";
 
 		}
 
