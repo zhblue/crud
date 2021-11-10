@@ -159,7 +159,11 @@ public class VTM {
 						cmdarray[2] +=" "+ output; // tagText
 						executeCMD( cmdarray,envp, dir);
 						i++;
-						DAO.update("insert into tb_clips(tag_name,update_time,clip_file) values(?,now(),?)",tagText,output.substring(Config.path.length()));
+						List<List>already=DAO.queryList("select id from tb_clips where clip_file=?",false, output.substring(Config.path.length()));
+						if(already.size()>0)
+							DAO.executeUpdate("update tb_clips set tag_name=?,update_time=now() where id=?",tagText, already.get(0).get(0).toString());
+						else
+							DAO.update("insert into tb_clips(tag_name,update_time,clip_file) values(?,now(),?)",tagText,output.substring(Config.path.length()));
 						DAO.update("update tb_build_task set finished_task_num=? where id=?",i,build_task_id);
 						DAO.update("update tb_build_task set percent=finished_task_num*100/sub_task_num where id=?",build_task_id);
 						
