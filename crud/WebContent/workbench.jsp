@@ -99,7 +99,7 @@ System.out.println("video_url:"+video_url);
 
 
 
-	<div id="main" class="container">
+	<div id="workbench" class="container">
 
 		<div class="row" style="height: 340px">
 			<div id="zero"
@@ -144,7 +144,7 @@ System.out.println("video_url:"+video_url);
 						<div class="col-md-9">
 							<div class="input-group">
 		<button class="btn" type="button" id="space" ></button>
-		<button class="btn btn-primary" type="button" onclick="video.paused?video.play():video.pause()">运行</button>
+		<button class="btn btn-primary" type="button" onclick="video.paused?video.play():video.pause();$('#space').focus()">运行</button>
 								<span class="input-group-addon" id="sizing-addon2">标签</span> <input
 									id="currentTag" type="text" class="form-control"
 									aria-label="..." onfocus="useShort=false;"
@@ -157,6 +157,13 @@ System.out.println("video_url:"+video_url);
 						<div class="col-md-3">
 							<select id="typeList" class="form-control"
 								onChange='$("#currentTag").val(this.value);$("#space").focus()'>
+								<% List<List> tags=DAO.queryList("select tag_name from tb_tag order by id desc",false);
+								   for(List tag:tags){
+
+									out.println("<option>"+tag.get(0)+"</option>");
+								   }
+
+								%>
 								<option>交谈</option>
 								<option>伪3D</option>
 								<option>射击</option>
