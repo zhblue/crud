@@ -34,50 +34,87 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-       public static void ZipOneFile(String target,String source){
+     public static void ZipOneFile(String target, String source) {
+		FileOutputStream outputStream = null;
+		ZipOutputStream zipOutputStream = null;
+		FileInputStream input = null;
+		try {
+			outputStream = new FileOutputStream(target);
+			zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
+			input = new FileInputStream(source);
 
+			zipOutputStream.putNextEntry(new ZipEntry(source));
 
-                try{
-                         FileOutputStream outputStream = new FileOutputStream(target);
-                         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
-                         FileInputStream input=new FileInputStream(source);
+			int readLen = 0;
+			byte[] buffer = new byte[1024 * 8];
+			while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
+				zipOutputStream.write(buffer, 0, readLen);
+			}
 
-                         zipOutputStream.putNextEntry(new ZipEntry(source));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			if (zipOutputStream != null)
+				zipOutputStream.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if (input != null)
+				input.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-                        int readLen = 0;
-                        byte[] buffer = new byte[1024 * 8];
-                        while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
-                            zipOutputStream.write(buffer, 0, readLen);
-                        }
-                    input.close();
-                    zipOutputStream.close();
-               }catch(Exception e){
-                     e.printStackTrace();
-               }
-        }
-          public static void ZipFiles(String target,String sources[]){
+	}
 
+	public static void ZipFiles(String target, String sources[]) {
 
-                try{
-                         FileOutputStream outputStream = new FileOutputStream(target);
-                         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
+		FileOutputStream outputStream = null;
+		ZipOutputStream zipOutputStream = null;
+		FileInputStream input = null;
+		try {
+			outputStream = new FileOutputStream(target);
+			zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
 
-                         for(String source:sources){
-                                     FileInputStream input=new FileInputStream(source);
-                                     zipOutputStream.putNextEntry(new ZipEntry(source));
-                                    int readLen = 0;
-                                    byte[] buffer = new byte[1<<20];
-                                    while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
-                                        zipOutputStream.write(buffer, 0, readLen);
-                                    }
-                                   input.close();
-                    }
+			for (String source : sources) {
 
-                    zipOutputStream.close();
-               }catch(Exception e){
-                     e.printStackTrace();
-               }
-        }
+				try {
+					input = new FileInputStream(source);
+					zipOutputStream.putNextEntry(new ZipEntry(source));
+					int readLen = 0;
+					byte[] buffer = new byte[1 << 20];
+					while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
+						zipOutputStream.write(buffer, 0, readLen);
+					}
+					input.close();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+
+			zipOutputStream.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		try {
+			if (zipOutputStream != null)
+				zipOutputStream.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			if (input != null)
+				input.close();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	public static String http_taobao(String url, String referer) {
 		// TODO Auto-generated method stub
