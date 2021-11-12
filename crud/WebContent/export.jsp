@@ -1,5 +1,5 @@
-<%@ page language="java" contentType="application/csv; charset=GBK"
-	pageEncoding="GBK"%><%@ page import="com.newsclan.crud.*,java.sql.*,jxl.*,jxl.write.*,java.io.*"%><%
+<%@ page language="java" contentType="application/csv; charset=UTF-8"
+	pageEncoding="UTF-8"%><%@ page import="com.newsclan.crud.*,java.sql.*,jxl.*,jxl.write.*,java.io.*"%><%
 	int user_id=(Integer)session.getAttribute("user_id");
 	if (!(
 			Auth.isAdmin(user_id)||
@@ -10,7 +10,7 @@
     String name=(String) session.getAttribute("report_name");
 	response.setContentType("binary/octet-stream");
 	response.setHeader("Content-Disposition", "attachment; filename="
-			+ new String((name+".xls").getBytes("gb2312"), "iso8859-1"));
+			+ new String((name+".xls").getBytes("UTF-8"), "iso8859-1"));
 	System.out.println(sql);
 	Field[] fds = DAO.getFields(sql);
 	Connection conn = DB.getConnection();
@@ -50,5 +50,8 @@
 	book.close();
 	os.close();
 	DB.close(conn);
-	
+	if(sql.contains("clip_file from tb_clips")){
+		VTM.exportClipsBySQL(sql);
+		
+	}
 %>
