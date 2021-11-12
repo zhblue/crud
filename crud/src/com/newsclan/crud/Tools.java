@@ -1,10 +1,5 @@
 package com.newsclan.crud;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -14,14 +9,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import java.util.Properties;
 import java.util.Map.Entry;
-
+import java.util.*;
+import java.io.*;
+import java.util.zip.*;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -41,6 +34,50 @@ public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
+       public static void ZipOneFile(String target,String source){
+
+
+                try{
+                         FileOutputStream outputStream = new FileOutputStream(target);
+                         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
+                         FileInputStream input=new FileInputStream(source);
+
+                         zipOutputStream.putNextEntry(new ZipEntry(source));
+
+                        int readLen = 0;
+                        byte[] buffer = new byte[1024 * 8];
+                        while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
+                            zipOutputStream.write(buffer, 0, readLen);
+                        }
+                    input.close();
+                    zipOutputStream.close();
+               }catch(Exception e){
+                     e.printStackTrace();
+               }
+        }
+          public static void ZipFiles(String target,String sources[]){
+
+
+                try{
+                         FileOutputStream outputStream = new FileOutputStream(target);
+                         ZipOutputStream zipOutputStream = new ZipOutputStream(new BufferedOutputStream(outputStream));
+
+                         for(String source:sources){
+                                     FileInputStream input=new FileInputStream(source);
+                                     zipOutputStream.putNextEntry(new ZipEntry(source));
+                                    int readLen = 0;
+                                    byte[] buffer = new byte[1<<20];
+                                    while ((readLen = input.read(buffer, 0, 1024 * 8)) != -1) {
+                                        zipOutputStream.write(buffer, 0, readLen);
+                                    }
+                                   input.close();
+                    }
+
+                    zipOutputStream.close();
+               }catch(Exception e){
+                     e.printStackTrace();
+               }
+        }
 
 	public static String http_taobao(String url, String referer) {
 		// TODO Auto-generated method stub
