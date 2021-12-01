@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8" import="com.newsclan.crud.*,java.util.*"%>
-<%@ include file="checkLogin.jsp" %><%
+	pageEncoding="UTF-8" import="com.newsclan.crud.*,java.util.*"%><%@ include file="checkLogin.jsp" %><%
 		request.setCharacterEncoding("UTF-8");
 		String tbname = request.getParameter("tbname");
 		String value=request.getParameter("value");
@@ -15,4 +14,4 @@
 			out.println(Tools.toSelect(tbname,value,keyword,keyvalue,input_name)); 
 		} 
 		
-	%>
+	%><a href="#" onclick="add_value('<%=tbname%>')">Add</a>
