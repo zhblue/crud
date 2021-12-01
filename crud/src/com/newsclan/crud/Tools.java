@@ -354,7 +354,19 @@ public class Tools {
 			e.printStackTrace();
 		}
 	}
-
+	public static String insert(HttpServletRequest request){
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String newValue=request.getParameter("newValue");
+		String tbname=request.getParameter("tbname");
+		String fieldname=DAO.getFirstCharFieldName(tbname);
+		String sql="insert into `"+tbname+"`("+fieldname+") values(?)";
+		return "{\"id\":"+String.valueOf(DAO.executeUpdate(sql, newValue))+"}";
+	}
 	public static String update(HttpServletRequest request) {
 		Long id = Long.parseLong(request.getParameter("id"));
 		String tbname = request.getParameter("tbname").replace("`", "");
