@@ -16,16 +16,18 @@
  }
 	function add_value(tbname){
 		let newValue=prompt(tbname,"");	
-		$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"insert",
-                        "tbname":tbname,
-                        "newValue":newValue,
-                                },
-		    function(data,status,xhr){
-			console.log("new_id:"+data.id);
-		    	let newOption="<option value='"+data.id+"' selected >"+newValue+"</option>";
-		    	$("select[name="+tbname+"_id]").append(newOption);
-		    }
-                ,"json");
+		if(newValue!=null){
+			$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"insert",
+				"tbname":tbname,
+				"newValue":newValue,
+					},
+			    function(data,status,xhr){
+				console.log("new_id:"+data.id);
+				let newOption="<option value='"+data.id+"' selected >"+newValue+"</option>";
+				$("select[name="+tbname+"_id]").append(newOption);
+			    }
+			,"json");
+		}
 
 	}
 	function dbid(evt){
