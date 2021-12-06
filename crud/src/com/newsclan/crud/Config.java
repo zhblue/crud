@@ -86,7 +86,7 @@ public class Config implements ServletContextListener {
 			}
 
 		});
-		agent.start();
+		//  agent.start();  // 如果要用再打开
 	}
 
 	public static String get(String key) {
