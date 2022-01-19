@@ -45,13 +45,16 @@
 		j++;
 	//	out.println();
 
-	}
+	} 
 	book.write();
 	book.close();
 	os.close();
 	DB.close(conn);
-	if(sql.contains("clip_file from tb_clips")){
-		VTM.exportClipsBySQL(sql);
-		
+	if(sql.contains("clip_file from")){
+		VTM.exportClipsBySQL(name,sql);  	
 	}
+	if(name.contains("演员")){
+		VTM.exportActorsBySQL(name,sql);  	
+	}
+	
 %>

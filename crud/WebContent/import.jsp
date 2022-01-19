@@ -17,14 +17,24 @@
 		System.out.println(path);
 		System.out.println(realpath);
 		if(realpath!=null){
-			Tools.importXLS(realpath); 
+			if(realpath.endsWith(".xls"))
+				Tools.importXLS(realpath); 
+ 			if(realpath.endsWith(".srt")){
+ 				String tb_manual_task_id=request.getParameter("tb_manual_task_id");
+ 				int id=Integer.parseInt(tb_manual_task_id);
+ 				VTM.importSRT(id,realpath);  
+ 			} 
 		}
 	}
 %>
 <form id="frm_import" action="import.jsp" method="post" >
 <table  width="82%">
+<tr><td>
+<input name="tb_manual_task_id" >
+</td>
+</tr>
 <tr><td width="82%">
-<input id="xls_file" name="xls_file" type="text" onLoad="loadFile($(this))">
+<input id="" name="xls_file" type="text" >
 </td></tr>
 <tr><td>
 <input type="button" onclick="do_import()" value="导入">
@@ -39,6 +49,9 @@ function do_import(){
 	});
 	
 }
-
+$(document).ready(function(){
+	
+	//reformatform();
+});
 </script>
 </html>

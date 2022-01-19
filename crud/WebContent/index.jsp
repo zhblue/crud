@@ -94,12 +94,12 @@
 		<!-- /.navbar-collapse -->
 	</div>
 
-	<div id="main" class="container"></div>
+	<div id="main" class="container" style="width:98%"></div>
 
 
 </body>
-<script src="main.js?v=0.2"></script>
-<script src="LodopFuncs.js"></script>
-<script src="printTemple.js?v=0.1" type="text/javascript">
+<script src="main.js?v=0.22"></script>
+<!-- <script src="LodopFuncs.js"></script> -->
+<!-- <script src="printTemple.js?v=0.1" type="text/javascript"> -->
 </script>
 </html>

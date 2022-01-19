@@ -1,17 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8" import="com.newsclan.crud.*,java.util.*"%>
 <%@ include file="checkLogin.jsp" %>
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Add/Edit</title>
-</head>
-<body>
 	<%
 		request.setCharacterEncoding("UTF8");
 		String tbname = request.getParameter("tbname");
 		String sid = request.getParameter("id");
+		String m=request.getParameter("m");
 		int user_id=Tools.getUserId(session);
 		int id = -1;
 		if (sid != null) {
@@ -30,15 +24,28 @@
 				String name = names.nextElement();
 				values.put(name, request.getParameter(name));
 			}
+			int newid=0;
 			if (sid != null && id != -1) {
+			
 				if (DAO.update(user_id,tbname, id, values) ==0)
-					DAO.insert(user_id,tbname, values);
-				response.sendRedirect("list.jsp?tb=" + tbname);
-			} else { 
-				if (DAO.insert(user_id,tbname, values) > 0)
+					newid=DAO.insert(user_id,tbname, values);
+				if("json".equals(m)){
+					out.println("{\"id\":"+newid+"}");
+					return;
+				}else{
 					response.sendRedirect("list.jsp?tb=" + tbname);
-				else
+				}
+			} else { 
+				if ((newid=DAO.insert(user_id,tbname, values)) > 0){
+					if("json".equals(m)){
+						out.println("{\"id\":"+newid+"}");
+						return;
+					}else{
+						response.sendRedirect("list.jsp?tb=" + tbname);
+					}
+				}else{
 					out.println("fail");
+				}
 			}
 		}
 		tbname = request.getParameter("tb");
@@ -47,6 +54,14 @@
 
 		tbname = Tools.toHTML(tbname);
 	%>
+	
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Add/Edit</title>
+</head>
+<body>
 	<form id=addForm action=add.jsp method=post>
 		
 		<input type=hidden name=tbname value="<%=tbname%>">
