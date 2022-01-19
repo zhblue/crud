@@ -203,7 +203,11 @@ public class DAO {
 			List row = new LinkedList();
 			row.add(field.label);
 			if (values.length > 0) {
-				row.add(getInputForm(field, String.valueOf(values[0].get(i++))));
+				Object v=null;
+				if(values[0]!=null&&(v=values[0].get(i++))!=null)
+					row.add(getInputForm(field, String.valueOf(v)));
+				else
+					row.add(getInputForm(field));
 			} else {
 				row.add(getInputForm(field));
 			}
@@ -552,12 +556,16 @@ public class DAO {
 		Connection conn = DB.getConnection();
 		PreparedStatement pstmt = null;
 		try {
-			pstmt = conn.prepareStatement(sql);
+			pstmt = conn.prepareStatement(sql,Statement.RETURN_GENERATED_KEYS);
 			int i = 1;
 			for (Object object : values) {
 				pstmt.setObject(i++, object);
 			}
 			ret = pstmt.executeUpdate();
+			if (sql.startsWith("insert")){
+				ResultSet rs=pstmt.getGeneratedKeys();
+				if(rs.next()) ret=rs.getInt(1);
+			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
