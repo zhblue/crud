@@ -16,12 +16,50 @@ public class VTM {
 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
-		String filepath = "demo.srt";
+		//String filepath = "demo.srt";
 		//readSrtFile(filepath);
 
-		String sql = "select c.id,c.tag_name,m.movie_name,c.start_time,c.end_time,c.clip_file from tb_clips c inner join tb_movie m on c.tb_movie_id=m.id";
-		exportClipsBySQL("report_name",sql);
+		//String sql = "select c.id,c.tag_name,m.movie_name,c.start_time,c.end_time,c.clip_file from tb_clips c inner join tb_movie m on c.tb_movie_id=m.id";
+		//exportClipsBySQL("report_name",sql);
+		System.out.println(timeStampAdd("01:01:00,200",-1000000));
 		System.exit(0);
+	}
+	public static long TimeStamp2MS(String stamp) {
+		long ret=0l;
+		// TODO Auto-generated method stub
+		try{
+			String s=".";
+			if(stamp.contains(",")) s=",";
+			String []tm=stamp.split(s);
+			String [] hms=tm[0].split(":");
+			int hh = Integer.parseInt(hms[0]);
+			int mm = Integer.parseInt(hms[1]);
+			int ss = Integer.parseInt(hms[2]);
+			int ms = Integer.parseInt(tm[1]);
+			ret=hh*60+mm;
+			ret=ret*60+ss;
+			ret=ret*1000+ms;
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	public static String MS2TimeStamp(long in){
+		String ret="";
+		long ms=in%1000;
+		in/=1000;
+		long ss=in%60;
+		in/=60;
+		long mm=in%60;
+		in/=60;
+		long hh=in;
+		ret=String.format("%02d:%02d:%02d.%03d", hh,mm,ss,ms);
+		return ret;
+	}
+	public static String timeStampAdd(String timestamp,long ms){
+		long result=TimeStamp2MS(timestamp)+ms;
+		if (result<0) result=0l;
+		return MS2TimeStamp(result);
 	}
 	public static String getTagListOfManualTask(String tbname,int id){
 		StringBuilder sb=new StringBuilder();
