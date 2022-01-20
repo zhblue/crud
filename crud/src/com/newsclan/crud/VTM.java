@@ -7,6 +7,8 @@ import java.util.zip.*;
 
 import javax.imageio.ImageIO;
 
+import org.apache.commons.lang3.StringEscapeUtils;
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SequenceWriter;
 
@@ -22,6 +24,7 @@ public class VTM {
 		//String sql = "select c.id,c.tag_name,m.movie_name,c.start_time,c.end_time,c.clip_file from tb_clips c inner join tb_movie m on c.tb_movie_id=m.id";
 		//exportClipsBySQL("report_name",sql);
 		System.out.println(timeStampAdd("01:01:00,200",-1000000));
+		System.out.println(StringEscapeUtils.escapeJson("'asdf'"));
 		System.exit(0);
 	}
 	public static long TimeStamp2MS(String stamp) {
@@ -450,8 +453,8 @@ public class VTM {
 						cmdarray[1] = "-c";
 						cmdarray[2] = Config.path + "WEB-INF/cut.sh";
 						cmdarray[2] += " " + Config.path + movie_path; // input
-						start_time =  ((String) subtask.get(1)).replace(',', '.');
-						end_time = ((String) subtask.get(2)).replace(',', '.');
+						start_time =  timeStampAdd( (String)subtask.get(1),-100);  // ffmpeg cut compensation
+						end_time = timeStampAdd((String) subtask.get(2),+100);     // ffmpeg cut compensation
 						cmdarray[2] += " " + start_time; // start
 						cmdarray[2] += " " + end_time; // end
 						cmdarray[2] += " " + output; // tagText

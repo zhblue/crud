@@ -796,7 +796,7 @@ public class Tools {
 	}
 
 	public static String toHTML(String text) {
-		return StringEscapeUtils.escapeHtml4(text);
+		return StringEscapeUtils.escapeHtml4(text).replace("'", "&#39;");
 	}
 
 	public static String toTable(List<List> list, String... css) {
