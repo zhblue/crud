@@ -322,7 +322,7 @@ public class Tools {
 		return buffer.toString();
 
 	}
-
+	
 	public static void mail(String who, String title, String content) {
 		Properties properties = Config.prop;
 		// 得到回话对象
@@ -366,6 +366,28 @@ public class Tools {
 		String fieldname=DAO.getFirstCharFieldName(tbname);
 		String sql="insert into `"+tbname+"`("+fieldname+") values(?)";
 		return "{\"id\":"+String.valueOf(DAO.executeUpdate(sql, newValue))+"}";
+	}
+	public static String copy(HttpServletRequest request){
+		try {
+			request.setCharacterEncoding("UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String id=request.getParameter("id");
+		String tbname=request.getParameter("tbname");
+		Field[] fields =DAO.getFieldsOfTable(tbname);
+		StringBuilder sb=new StringBuilder();
+		for (int i = 1; i < fields.length; i++) {
+			sb.append(fields[i].name);
+			sb.append(",");
+		}
+		sb.deleteCharAt(sb.length()-1);
+		String sql="insert into `"+tbname+"`("+sb.toString()+") select "+sb.toString();
+		sql+=" from `"+tbname+"` where id="+Integer.parseInt(id);
+		System.out.println(sql);
+		
+		return "{\"id\":"+String.valueOf(DAO.executeUpdate(sql))+"}";
 	}
 	public static String update(HttpServletRequest request) {
 		Long id = Long.parseLong(request.getParameter("id"));
@@ -796,7 +818,7 @@ public class Tools {
 	}
 
 	public static String toHTML(String text) {
-		return StringEscapeUtils.escapeHtml4(text);
+		return StringEscapeUtils.escapeHtml4(text).replace("'", "&#39;");
 	}
 
 	public static String toTable(List<List> list, String... css) {
