@@ -104,7 +104,15 @@ public class DAO {
 	}
 
 	public static String getPrimaryKeyFieldName(String tbname) {
-		String ret = getFieldsOfTable(tbname)[0].name;
+		String ret =null;
+		try{
+			ret= getFieldsOfTable(tbname)[0].name;
+		}catch(Exception e){
+			System.out.println("fail to get ["+tbname+"] pk ");
+			System.err.println("fail to get ["+tbname+"] pk ");
+			
+			ret= "id";
+		}
 		return ret;
 	}
 
@@ -564,7 +572,11 @@ public class DAO {
 			ret = pstmt.executeUpdate();
 			if (sql.startsWith("insert")){
 				ResultSet rs=pstmt.getGeneratedKeys();
-				if(rs.next()) ret=rs.getInt(1);
+				if(rs.next()) {
+					ret=rs.getInt(1);
+				}else{
+					ret=-1;
+				}
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block

@@ -79,6 +79,7 @@ public class VTM {
 			sb.append("<td><button class='btn' onclick='jump($(this).text())'>"+row.get(3)+"</button></td>\n");
 			sb.append("<td><button class='btn' onclick='add_tb_data($(this).parent().parent())'>"+row.get(4)+"</button></td>\n");
 			sb.append("<td><span class='glyphicon glyphicon-trash' onclick='del_tb_data($(this).parent().parent())'></span></td>\n");
+			sb.append("<td><span class='glyphicon glyphicon-repeat' onclick='copy_tb_data($(this).parent().parent())'></span></td>\n");
 			sb.append("</tr>"); 
 		}
 		return sb.toString();
@@ -248,6 +249,9 @@ public class VTM {
 			}
 			String fieldname="";
 			switch(tbname){
+			case "tb_cam_detail":
+				fieldname = "cam_description";
+				break;
 			case "tb_camara":
 				fieldname = "cam_description";
 				break;
