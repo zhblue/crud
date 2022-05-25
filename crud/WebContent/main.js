@@ -397,6 +397,7 @@
 	$(document).ready(function(){
 	  $("a").click(function(){
 	    $(this).attr("used","yes");
+	    $(this).css("font-weight","bold");	  
 	  });
 	});
 
