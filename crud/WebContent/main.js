@@ -376,11 +376,27 @@
  			$("#main").load("report_select.jsp?id="+id+"&filter="+filter);
  		}
 	}
-    document.onkeydown=keyDownSearch;
-	var inter=null;
-	//var stid=null;
-	var tableName="userdata";
-	var searchKeyword="";
-	var thepage=0;
-	var lastLoad="";
-	var menu_id=0;
+        function autoHide(){
+                if(fullMenu){
+                  $("#menu a").hide();
+                  $("#menu a[used=yes]").show();
+                }else{
+                  $("#menu a").show();
+                }
+                fullMenu=!fullMenu;
+        }
+   	document.onkeydown=keyDownSearch;
+        var inter=null;
+        //var stid=null;
+        var tableName="userdata";
+        var searchKeyword="";
+        var thepage=0;
+        var lastLoad="";
+        var menu_id=0;
+        var fullMenu=true;
+	$(document).ready(function(){
+	  $("a").click(function(){
+	    $(this).attr("used","yes");
+	  });
+	});
+
