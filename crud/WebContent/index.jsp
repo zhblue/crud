@@ -28,11 +28,11 @@
 <body>
 
 
-	<div class="navbar navbar-default" role="navigation">
+	<div class="navbar navbar-default" role="navigation" ondblclick="$('#menu').toggle()">
 		<!-- Brand and toggle get grouped for better mobile display -->
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="navbar bs-navbar">
+		<div id="menu" class="navbar bs-navbar">
 			<a class="navbar-brand" href="." target='_blank'><%=Config.get("system.name")%></a>
 			<%
 				int user_id = Tools.getUserId(session);
