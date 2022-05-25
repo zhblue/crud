@@ -28,7 +28,7 @@
 <body>
 
 
-	<div class="navbar navbar-default" role="navigation" ondblclick="$('#menu').toggle()">
+	<div class="navbar navbar-default" role="navigation" ondblclick="autoHide();">
 		<!-- Brand and toggle get grouped for better mobile display -->
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
