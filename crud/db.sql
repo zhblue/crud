@@ -174,7 +174,31 @@ INSERT INTO `user` (`id`,`name`,`password`) VALUES
  (1,0x61646D696E,0x36633061363235376634393063633535663163666565366262353638623332363437323130336466);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 
-
+DROP TABLE IF EXISTS `tb_cam_detail`;
+ CREATE TABLE `tb_cam_detail` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tb_manual_task_id` int DEFAULT NULL,
+  `start_time` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `end_time` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `cam_description` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `tb_cam_move_id` int DEFAULT NULL,
+  `tb_cam_held_id` int DEFAULT NULL,
+  `cam_held_desc` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `tb_cam_angle_id` int DEFAULT NULL,
+  `tb_cam_h_wide_id` int DEFAULT NULL,
+  `tb_cam_v_wide_id` int DEFAULT NULL,
+  `tb_cam_fade_id` int DEFAULT NULL,
+  `object_name` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `tb_object_position_id` int DEFAULT NULL,
+  `object_h_scale` varchar(32) COLLATE utf8_bin DEFAULT '',
+  `object_v_scale` varchar(32) COLLATE utf8_bin DEFAULT '',
+  `tb_object_face_id` int DEFAULT NULL,
+  `tb_object_head_id` int DEFAULT NULL,
+  `object_part` varchar(32) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT NULL,
+  `clip_file` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin DEFAULT '',
+  `input_user` int DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin ;
 
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
