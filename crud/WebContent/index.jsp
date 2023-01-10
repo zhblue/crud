@@ -28,12 +28,12 @@
 <body>
 
 
-	<div class="navbar navbar-default" role="navigation">
+	<div class="navbar navbar-default" role="navigation" title="双击隐藏本次登录未使用过的菜单" ondblclick="autoHide();">
 		<!-- Brand and toggle get grouped for better mobile display -->
 
 		<!-- Collect the nav links, forms, and other content for toggling -->
-		<div class="navbar bs-navbar">
-			<a class="navbar-brand" href="." target='_blank'><%=Config.get("system.name")%></a>
+		<div id="menu" class="navbar bs-navbar">
+			<a class="navbar-brand" href="." target='_blank' used="yes"><%=Config.get("system.name")%></a>
 			<%
 				int user_id = Tools.getUserId(session);
 
@@ -98,7 +98,7 @@
 
 
 </body>
-<script src="main.js?v=0.22"></script>
+<script src="main.js?v=0.24"></script>
 <!-- <script src="LodopFuncs.js"></script> -->
 <!-- <script src="printTemple.js?v=0.1" type="text/javascript"> -->
 </script>

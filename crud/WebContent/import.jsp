@@ -17,8 +17,12 @@
 		System.out.println(path);
 		System.out.println(realpath);
 		if(realpath!=null){
-			if(realpath.endsWith(".xls"))
-				Tools.importXLS(realpath); 
+			if(realpath.endsWith(".xls")){
+				System.out.println("import as xls");
+				Tools.importXLS(realpath);
+			
+				
+			}
  			if(realpath.endsWith(".srt")){
  				String tb_manual_task_id=request.getParameter("tb_manual_task_id");
  				int id=Integer.parseInt(tb_manual_task_id);

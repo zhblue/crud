@@ -128,6 +128,7 @@ System.out.println("video_url:"+video_url);
 							<th class='text-center' scope="col col-md-1" style="width: 125px">结束</th>
 							<th class='text-center' scope="col" style="width: 125px">标签</th>
 							<th class='text-center' scope="col"><span class='glyphicon glyphicon-trash' ></span></th>
+							<th class='text-center' scope="col"><span class='glyphicon glyphicon-repeat' ></span></th>
 						</tr>
 					</thead>
 					<tbody id="tagList">
@@ -254,26 +255,48 @@ System.out.println("video_url:"+video_url);
 		$("#space").focus();
 		$("#start_time").val(timestr);
 	}
-	function mksrt() {
-		let tagList = $("#tagList");
-		let tag = null;
-		let ret = "";
-		for (let i = 0; i < tagList.children().size(); i++) {
-			tag = $(tagList.children()[i]);
-			ret += (i + 1) + "\n";
-			ret += tag.attr("start_time") + " --" + "> " + tag.attr("end_time")
-					+ "\n";
-			ret += tag.attr("tagText")+"\n("+tag.attr("x")+","+tag.attr("y")+")-["+tag.attr("w")+","+tag.attr("h")+"]" + "\n\n";
+// 	function mksrt() {
+// 		let tagList = $("#tagList");
+// 		let tag = null;
+// 		let ret = "";
+// 		for (let i = 0; i < tagList.children().size(); i++) {
+// 			tag = $(tagList.children()[i]);
+// 			ret += (i + 1) + "\n";
+// 			ret += tag.attr("start_time") + " --" + "> " + tag.attr("end_time")
+// 					+ "\n";
+// 			ret += tag.attr("tagText")+"\n("+tag.attr("x")+","+tag.attr("y")+")-["+tag.attr("w")+","+tag.attr("h")+"]" + "\n\n";
 
-		}
+// 		}
 
-		return ret;
-	}
+// 		return ret;
+// 	}
 	function del_tb_data(tag){
 		let row_id=tag.attr(tbname+"_id");
 		$.post("del.jsp",{"tbname":tbname,"id":row_id},function(){
 			tag.remove();
 		});
+		return false;
+	}
+	
+	function copy_tb_data(tag){
+		let row_id=tag.attr(tbname+"_id");
+		let copy=$(tag.prop ("outerHTML"));
+		
+		if(row_id!=null){
+			$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"copy",
+				"tbname":tbname,
+				"id":row_id,
+					},
+			    function(data,status,xhr){
+					console.log("new_id:"+data.id);
+					copy.attr(tbname+"_id",data.id);
+					console.log(copy);
+					tag.after(copy);
+			    }
+			,"json");
+		}
+		
+		
 		return false;
 	}
 	function add_value(tbname){
@@ -405,33 +428,37 @@ System.out.println("video_url:"+video_url);
 		return null;
 	}
 	function showTag() {
-		let tag = getCurrentTag();
-		if (tag != null) {
-			$("#subtitle").text(tag.attr("tagText"));
-			$("#currentTag").val(tag.attr("tagText"));
-			$("#subtitle").css("left", tag.attr("x") + "px");
-			$("#subtitle").css("top", tag.attr("y") + "px");
-			w = parseInt(tag.attr("W"));
-			h = parseInt(tag.attr("H"));
-			if (w <= 0)
-				w = 120;
-			if (h <= 0)
-				h = 30;
-			$("#subtitle").css("width", w + "px");
-			$("#subtitle").css("height", h + "px");
-		} else if (mouseDown) {
-			//      setStartTime();
-			let tagText = $("#currentTag").val();
-			$("#subtitle").text(tagText);
-			$("#subtitle").css("left", X + "px");
-			$("#subtitle").css("top", Y + "px");
-			$("#subtitle").css("width", W + "px");
-			$("#subtitle").css("height", H + "px");
-		} else { //无
-			$("#subtitle").text("");
-			$("#subtitle").css("width", "0px");
-			$("#subtitle").css("height", "0px");
-
+		try{
+			let tag = getCurrentTag();
+			if (tag != null) {
+				$("#subtitle").text(tag.attr("tagText"));
+				$("#currentTag").val(tag.attr("tagText"));
+				$("#subtitle").css("left", tag.attr("x") + "px");
+				$("#subtitle").css("top", tag.attr("y") + "px");
+				w = parseInt(tag.attr("W"));
+				h = parseInt(tag.attr("H"));
+				if (w <= 0)
+					w = 480;
+				if (h <= 0)
+					h = 30;
+				$("#subtitle").css("width", w + "px");
+				$("#subtitle").css("height", h + "px");
+			} else if (mouseDown) {
+				//      setStartTime();
+				let tagText = $("#currentTag").val();
+				$("#subtitle").text(tagText);
+				$("#subtitle").css("left", X + "px");
+				$("#subtitle").css("top", Y + "px");
+				$("#subtitle").css("width", W + "px");
+				$("#subtitle").css("height", H + "px");
+			} else { //无
+				$("#subtitle").text("");
+				$("#subtitle").css("width", "0px");
+				$("#subtitle").css("height", "0px");
+	
+			}
+		}catch(e){
+			
 		}
 	}
 	function showTime() {
@@ -489,7 +516,12 @@ System.out.println("video_url:"+video_url);
 				+ "</button></td><td onDblClick='fastEdit(this)' class='text-left' style='vertical-align:middle'>"
 				+ tagText
 				+ "</td>"
-				+ "<td  class='text-center' style='vertical-align:middle'><span class='glyphicon glyphicon-trash' onclick='$(this).parent().parent().remove()'></span></td>"
+				+ "<td  class='text-center' style='vertical-align:middle'>"
+				+ "<span class='glyphicon glyphicon-trash' onclick='del_tb_data($(this).parent().parent())'></span>"
+				+ "</td>"
+				+ "<td  class='text-center' style='vertical-align:middle'>"
+				+ "<span class='glyphicon glyphicon-repeat' onclick='copy_tb_data($(this).parent().parent())'></span>"
+				+ "</td>"
 				+ "</tr>";
 
 		let tagList = $("#tagList");

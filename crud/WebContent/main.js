@@ -124,6 +124,9 @@
 		
 	}
 	function reformatform(){
+		$("input[name=description]").dblclick(function(){
+			fastFill();
+		});
 		$("input[name$=_file]").each(function(){
 			loadFile($(this));
 		});
@@ -314,7 +317,7 @@
 	}
 	function addColumn(){
 		var row="<tr>";
-		row+="<td><input name=fd_name type=text></td>";
+		row+="<td><input name=fd_name type=text value='name'></td>";
 		row+="<td><input name=fd_type type=text value='varchar(32)'></td>";
 		row+="<td><input name=fd_title type=text></td>";
 		row+="</tr>";
@@ -358,6 +361,10 @@
         }
         return true;
     }
+	function fastFill(){
+$("input[name=description]").val($("option[value="+$('select[name=tb_movie_id]').val()+"]").text()+"-"+$("select[name=tb_tag_type_id] option[value="+$('select[name=tb_tag_type_id]').val()+"]").text());
+
+	}
  	function selectMenu(id){
  		menu_id=id;
  		if(arguments.length==1){
@@ -373,6 +380,15 @@
  			$("#main").load("report_select.jsp?id="+id+"&filter="+filter);
  		}
 	}
+	function autoHide(){
+		if(fullMenu){
+		  $("#menu a").hide();
+		  $("#menu a[used=yes]").show();
+		}else{
+		  $("#menu a").show();
+		}
+		fullMenu=!fullMenu;
+	}
     document.onkeydown=keyDownSearch;
 	var inter=null;
 	//var stid=null;
@@ -381,3 +397,11 @@
 	var thepage=0;
 	var lastLoad="";
 	var menu_id=0;
+	var fullMenu=true;
+$(document).ready(function(){
+
+  $("a").click(function(){
+    $(this).attr("used","yes");
+    $(this).css("font-weight","bold");
+  });
+});
