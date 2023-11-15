@@ -2,15 +2,17 @@ package com.newsclan.crud;
 
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
+import java.net.InetAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-
-import java.util.Properties;
 import java.util.Map.Entry;
 import java.util.*;
 import java.io.*;
@@ -30,11 +32,16 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 public class Tools {
 	public static void log(String msg) {
 		System.out.println(msg);
 	}
-     public static void ZipOneFile(String target, String source) {
+
+	public static void ZipOneFile(String target, String source) {
 		FileOutputStream outputStream = null;
 		ZipOutputStream zipOutputStream = null;
 		FileInputStream input = null;
@@ -222,107 +229,185 @@ public class Tools {
 	}
 
 	public static String http(String url, Map<String, String> params) {
-
 		URL u = null;
-
 		HttpURLConnection con = null;
-
 		StringBuffer sb = new StringBuffer();
-
 		if (params != null) {
-
 			for (Entry<String, String> e : params.entrySet()) {
-
 				sb.append(e.getKey());
-
 				sb.append("=");
-
 				sb.append(e.getValue());
-
 				sb.append("&");
-
 			}
-
 			sb.substring(0, sb.length() - 1);
-
 		}
-
 		System.out.println("send_url:" + url);
-
 		System.out.println("send_data:" + sb.toString());
-
 		// 尝试发送请求
+		return http_post_raw(url, sb.toString());
+	}
 
+	public static String http_post_raw(String url, String raw) {
+		URL u = null;
+		HttpURLConnection con = null;
+		// 尝试发送请求
 		try {
-
 			u = new URL(url);
-
 			con = (HttpURLConnection) u.openConnection();
-
 			con.setRequestMethod("POST");
-
 			con.setDoOutput(true);
-
 			con.setDoInput(true);
-
 			con.setUseCaches(false);
-
 			con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
-
 			OutputStreamWriter osw = new OutputStreamWriter(con.getOutputStream(), "UTF-8");
-
-			osw.write(sb.toString());
-
+			System.out.println(raw);
+			osw.write(raw);
 			osw.flush();
-
 			osw.close();
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		} finally {
-
 			if (con != null) {
 				try {
 					con.disconnect();
 				} finally {
 				}
-
 			}
-
 		}
-
 		// 读取返回内容
 
 		StringBuffer buffer = new StringBuffer();
-
 		try {
-
-			BufferedReader br = new BufferedReader(new InputStreamReader(con
-
-					.getInputStream(), "UTF-8"));
-
+			BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "UTF-8"));
 			String temp;
-
 			while ((temp = br.readLine()) != null) {
-
 				buffer.append(temp);
-
 				buffer.append("\n");
-
 			}
-
 		} catch (Exception e) {
-
 			e.printStackTrace();
-
 		}
-
 		return buffer.toString();
+	}
+
+	public static void main(String[] args) {
+		
+		Map para=new HashMap();
+		//para.put("read_number", "1");
+		String text=getFileContent("mum.txt");
+		TTS(text,"test.wav",para);
+		
+	}
+	public static void TTS(String text, String file, Map para) {
+		// TODO Auto-generated method stub
+		WavFileWriter wavFileWriter = new WavFileWriter();
+		wavFileWriter.open(file, 16000, (short) 1);
+
+		String[] msgs = text.split("\n");
+		int i=0;
+		for(String msg:msgs){
+			msg=msg.trim();
+			if(!msg.equals("")){
+				i++;
+				List <byte[]>line=TTS_short(msg,para);
+				for (byte[] d : line) {
+					wavFileWriter.writeData(d);
+				}
+			}	
+		}
+		wavFileWriter.close();
+	}
+	public static String getFileContent(String file){
+		StringBuffer sb=new StringBuffer();
+		try {
+			FileReader fr=new FileReader(file);
+			Scanner sc=new Scanner(fr);
+			while(sc.hasNextLine()){
+				sb.append(sc.nextLine());
+				sb.append("\n");
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return sb.toString();
+	}
+    private static List<byte[]> TTS_short(String text,Map para){
+    	String url = "http://10.1.251.5:10011/createRec";
+    	if(!para.containsKey("sid"))
+			try {
+				para.put("sid", "["+InetAddress.getLocalHost().getHostName()+"]" +now()+String.format("%4.0f", Math.random()*1000) );
+			} catch (UnknownHostException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+    	ObjectMapper om = new ObjectMapper();
+		String raw="";
+		
+		try {
+			//System.out.println(om.writeValueAsString(para));
+			raw = "{" + "\"sessionParam\":"+om.writeValueAsString(para)+"," 
+			          + "\"text\":\""+text.replace("\"", "\\\"")+"\",\"endFlag\":true}";
+		} catch (JsonProcessingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		String response = http_post_raw(url, raw);
+		//System.out.println(response);
+		List<byte[]> rawData = getRawData(response);
+		return rawData;
+    }
+	private static void writeFile(String file, List<byte[]> rawData) {
+		// TODO Auto-generated method stub
+		WavFileWriter wavFileWriter = new WavFileWriter();
+		wavFileWriter.open(file, 16000, (short) 1);
+
+		for (byte[] d : rawData) {
+			wavFileWriter.writeData(d);
+		}
+		wavFileWriter.close();
 
 	}
-	
+
+	public static List<byte[]> getRawData(String response) {
+		ObjectMapper om = new ObjectMapper();
+		// TODO Auto-generated method stub
+
+		List<byte[]> ret = new Vector<byte[]>();
+		BufferedReader br = new BufferedReader(new StringReader(response));
+		String temp;
+		try {
+			while ((temp = br.readLine()) != null) {
+				JsonNode tree = om.readTree(temp);
+				if(tree!=null&&tree.get("result")!=null&&tree.get("result").get("data")!=null){
+					String part = tree.get("result").get("data").asText();
+					if (part != null)
+						ret.add(Base64.getDecoder().decode(part));
+				}else{
+					
+					//System.err.println(temp);
+				}
+				// rawVoice.append("\n");
+			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		try {
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return ret;
+
+	}
+
 	public static void mail(String who, String title, String content) {
 		Properties properties = Config.prop;
 		// 得到回话对象
@@ -354,41 +439,44 @@ public class Tools {
 			e.printStackTrace();
 		}
 	}
-	public static String insert(HttpServletRequest request){
+
+	public static String insert(HttpServletRequest request) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String newValue=request.getParameter("newValue");
-		String tbname=request.getParameter("tbname");
-		String fieldname=DAO.getFirstCharFieldName(tbname);
-		String sql="insert into `"+tbname+"`("+fieldname+") values(?)";
-		return "{\"id\":"+String.valueOf(DAO.executeUpdate(sql, newValue))+"}";
+		String newValue = request.getParameter("newValue");
+		String tbname = request.getParameter("tbname");
+		String fieldname = DAO.getFirstCharFieldName(tbname);
+		String sql = "insert into `" + tbname + "`(" + fieldname + ") values(?)";
+		return "{\"id\":" + String.valueOf(DAO.executeUpdate(sql, newValue)) + "}";
 	}
-	public static String copy(HttpServletRequest request){
+
+	public static String copy(HttpServletRequest request) {
 		try {
 			request.setCharacterEncoding("UTF-8");
 		} catch (UnsupportedEncodingException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		String id=request.getParameter("id");
-		String tbname=request.getParameter("tbname");
-		Field[] fields =DAO.getFieldsOfTable(tbname);
-		StringBuilder sb=new StringBuilder();
+		String id = request.getParameter("id");
+		String tbname = request.getParameter("tbname");
+		Field[] fields = DAO.getFieldsOfTable(tbname);
+		StringBuilder sb = new StringBuilder();
 		for (int i = 1; i < fields.length; i++) {
 			sb.append(fields[i].name);
 			sb.append(",");
 		}
-		sb.deleteCharAt(sb.length()-1);
-		String sql="insert into `"+tbname+"`("+sb.toString()+") select "+sb.toString();
-		sql+=" from `"+tbname+"` where id="+Integer.parseInt(id);
+		sb.deleteCharAt(sb.length() - 1);
+		String sql = "insert into `" + tbname + "`(" + sb.toString() + ") select " + sb.toString();
+		sql += " from `" + tbname + "` where id=" + Integer.parseInt(id);
 		System.out.println(sql);
-		
-		return "{\"id\":"+String.valueOf(DAO.executeUpdate(sql))+"}";
+
+		return "{\"id\":" + String.valueOf(DAO.executeUpdate(sql)) + "}";
 	}
+
 	public static String update(HttpServletRequest request) {
 		Long id = Long.parseLong(request.getParameter("id"));
 		String tbname = request.getParameter("tbname").replace("`", "");
@@ -668,26 +756,26 @@ public class Tools {
 	private static boolean isDate(String data) {
 		// TODO Auto-generated method stub
 		String split[];
-		if(data.contains("/")){
-			split=data.split("/");
-			if(split.length == 3){
-				if(split[0].length()==4 || split[0].length()==2){
-					if(split[1].length()==2 || split[1].length()==1){
-						return split[2].length()==2 || split[2].length()==1;
+		if (data.contains("/")) {
+			split = data.split("/");
+			if (split.length == 3) {
+				if (split[0].length() == 4 || split[0].length() == 2) {
+					if (split[1].length() == 2 || split[1].length() == 1) {
+						return split[2].length() == 2 || split[2].length() == 1;
 					}
 				}
 			}
-		}else if(data.contains("-")){
-			split=data.split("-");
-			if(split.length == 3){
-				if(split[0].length()==4 || split[0].length()==2){
-					if(split[1].length()==2 || split[1].length()==1){
-						return split[2].length()==2 || split[2].length()==1;
+		} else if (data.contains("-")) {
+			split = data.split("-");
+			if (split.length == 3) {
+				if (split[0].length() == 4 || split[0].length() == 2) {
+					if (split[1].length() == 2 || split[1].length() == 1) {
+						return split[2].length() == 2 || split[2].length() == 1;
 					}
 				}
 			}
-		}else{
-			return isInt(data) && data.length()== 8;
+		} else {
+			return isInt(data) && data.length() == 8;
 		}
 		return false;
 	}
@@ -911,6 +999,12 @@ public class Tools {
 		return new java.text.SimpleDateFormat("yyyy-MM-dd").format(cal.getTime());
 	}
 
+	public static String now() {
+		Calendar cal = Calendar.getInstance();
+		// cal.set(cal.DATE, cal.getActualMaximum(cal.DATE));
+		return new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(cal.getTime());
+	}
+
 	public static void debug(String msg) {
 		// TODO Auto-generated method stub
 		if (Config.debug)
@@ -985,12 +1079,6 @@ public class Tools {
 
 		return buffer.toString();
 
-	}
-
-	public static void main(String[] args) {
-		String url = "https://item.taobao.com/item.htm?spm=a1z10.5-c-s.w4002-21768955287.13.7fdc6374rE4jwf&id=596049223621";
-		Map data = getTaobao(url);
-		System.out.println(data.toString());
 	}
 
 	public static Map getTaobao(String url) {
