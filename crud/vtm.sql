@@ -284,6 +284,18 @@ INSERT INTO `user` VALUES (0,'guest','4143ee6ed7ff640f2dc9a15271ff304d4bb5f117')
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+
+CREATE TABLE `tb_tts` (
+  `id` bigint(20) unsigned NOT NULL auto_increment,
+  `name` varchar(32) collate utf8mb4 default NULL,
+  `content` mediumtext collate utf8mb4,
+  `wav_file` varchar(255) collate utf8mb4 default NULL,
+  `done` tinyint(3) unsigned default '0',
+  `speed` mediumint(8) default '0',
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8_bin ;
+
+
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
