@@ -22,3 +22,5 @@ mail.smtp.ssl.enable=false
 mail.debug=false
 mail.account=test@test.com
 mail.password=123456
+#此网关仅限浙传内网使用
+ifly.tts=http://10.1.251.5:10011
