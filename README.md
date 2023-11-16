@@ -12,7 +12,7 @@ TTS for zjicm
 TTS API调用代码的样例
 --
 ```
-	Map para=new HashMap();
+  Map para=new HashMap();
   map.put("speed",-180);                         //控制语速-180
   String text=Tools.getFileContent("mum.txt");   //读取mum.txt的内容
   TTS.tts(text,"test.wav",para);                 //调用API转换为音频，存入test.wav文件
