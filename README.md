@@ -1,4 +1,4 @@
-VTM
+TTS for zjicm
 ====
 这是一个基于科大讯飞私有服务实现的文本转语音工具
 ----
@@ -9,8 +9,19 @@ VTM
 * tomcat
 * mysql
 
+TTS API调用代码的样例
+--
+```
+	Map para=new HashMap();
+  map.put("speed",-180);                         //控制语速-180
+  String text=Tools.getFileContent("mum.txt");   //读取mum.txt的内容
+  TTS.tts(text,"test.wav",para);                 //调用API转换为音频，存入test.wav文件
+
+```
 
 
+CRUD基本使用
+--
 [安装使用图文说明](https://mp.weixin.qq.com/s?__biz=MzI1MTAwMTI2NA==&mid=2656402150&idx=1&sn=0ae818d2984e51e22cb79f54c81a7d42&scene=21#wechat_redirect)
 
 CRUD is Really Urgly coDed -- 快速原型系统与通用后台
