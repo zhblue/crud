@@ -257,12 +257,16 @@ public class DAO {
 		ret.append("value='");
 		if (value.length > 0)
 			ret.append(Tools.toHTML(value[0]));
+		else if (isFieldNumber(field)){
+			ret.append("0");
+		}
 		ret.append("' type='text' class='");
 		ret.append(getFormType(field));
 		if (field.ftable != null && !field.ftable.equals(""))
 			ret.append("' postLoad='1' fr='" + field.ftable);
 		ret.append("'>");
 	}
+
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub
