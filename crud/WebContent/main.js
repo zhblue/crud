@@ -291,7 +291,53 @@
 		lastLoad="reportPage(0);";
 		return false;
 	}
-	
+	        var cdInter;
+        function countDown(id){
+            let old=parseInt($("span[tb=tb_tts][fd=done][rid="+id+"]").text());
+            if(old>1){
+                    old--;
+                    $("span[tb=tb_tts][fd=done][rid="+id+"]").text(old)
+            }else{
+                window.clearInterval(cdInter);
+            }
+
+        }
+        function buildTTS(id){
+                if(id!=null){
+                        $.post("callStatic.jsp",{"c":"com.newsclan.crud.TTS","m":"buildTTS",
+                                "id":id
+                                        },
+                            function(data,status,xhr){
+                                        console,log("done");
+                            }
+                        ,"json");
+                        let ETA=$("span[tb=tb_tts][fd=content][rid="+id+"]").text().length*50+5000;
+                        console.log("TTS ETA:"+ETA);
+                        $("span[tb=tb_tts][fd=done][rid="+id+"]").text(ETA/1000);
+                        cdInter=window.setInterval("countDown("+id+")",1000);
+                        window.clearTimeout(inter);
+                        inter=window.setTimeout('refresh()',ETA);
+                }
+        }
+        function playAudio(ele,src){
+                let code="<audio src='"+src+"' controls ></audio>";
+                $(ele).html(code);
+        }
+        function add_value(tbname){
+                let newValue=prompt(tbname,"");
+                if(newValue!=null){
+                        $.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"insert",
+                                "tbname":tbname,
+                                "newValue":newValue,
+                                        },
+                            function(data,status,xhr){
+                                console.log("new_id:"+data.id);
+                                let newOption="<option value='"+data.id+"' selected >"+newValue+"</option>";
+                                $("select[name="+tbname+"_id]").append(newOption);
+                            }
+                        ,"json");
+                }
+        }
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
 		$.post("add.jsp",data,new function(){
