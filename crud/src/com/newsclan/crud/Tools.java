@@ -2,9 +2,7 @@ package com.newsclan.crud;
 
 import java.math.BigDecimal;
 import java.net.HttpURLConnection;
-import java.net.InetAddress;
 import java.net.URL;
-import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
 import java.security.MessageDigest;
@@ -32,7 +30,6 @@ import org.apache.commons.lang3.StringEscapeUtils;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -292,30 +289,8 @@ public class Tools {
 
 	public static void main(String[] args) {
 		
-		Map para=new HashMap();
-		//para.put("read_number", "1");
-		String text=getFileContent("mum.txt");
-		TTS(text,"test.wav",para);
+	
 		
-	}
-	public static void TTS(String text, String file, Map para) {
-		// TODO Auto-generated method stub
-		WavFileWriter wavFileWriter = new WavFileWriter();
-		wavFileWriter.open(file, 16000, (short) 1);
-
-		String[] msgs = text.split("\n");
-		int i=0;
-		for(String msg:msgs){
-			msg=msg.trim();
-			if(!msg.equals("")){
-				i++;
-				List <byte[]>line=TTS_short(msg,para);
-				for (byte[] d : line) {
-					wavFileWriter.writeData(d);
-				}
-			}	
-		}
-		wavFileWriter.close();
 	}
 	public static String getFileContent(String file){
 		StringBuffer sb=new StringBuffer();
@@ -336,44 +311,7 @@ public class Tools {
 		
 		return sb.toString();
 	}
-    private static List<byte[]> TTS_short(String text,Map para){
-    	String url = "http://10.1.251.5:10011/createRec";
-    	if(!para.containsKey("sid"))
-			try {
-				para.put("sid", "["+InetAddress.getLocalHost().getHostName()+"]" +now()+String.format("%4.0f", Math.random()*1000) );
-			} catch (UnknownHostException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-    	ObjectMapper om = new ObjectMapper();
-		String raw="";
-		
-		try {
-			//System.out.println(om.writeValueAsString(para));
-			raw = "{" + "\"sessionParam\":"+om.writeValueAsString(para)+"," 
-			          + "\"text\":\""+text.replace("\"", "\\\"")+"\",\"endFlag\":true}";
-		} catch (JsonProcessingException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		String response = http_post_raw(url, raw);
-		//System.out.println(response);
-		List<byte[]> rawData = getRawData(response);
-		return rawData;
-    }
-	private static void writeFile(String file, List<byte[]> rawData) {
-		// TODO Auto-generated method stub
-		WavFileWriter wavFileWriter = new WavFileWriter();
-		wavFileWriter.open(file, 16000, (short) 1);
-
-		for (byte[] d : rawData) {
-			wavFileWriter.writeData(d);
-		}
-		wavFileWriter.close();
-
-	}
-
-	public static List<byte[]> getRawData(String response) {
+    public static List<byte[]> getRawData(String response) {
 		ObjectMapper om = new ObjectMapper();
 		// TODO Auto-generated method stub
 
@@ -684,7 +622,30 @@ public class Tools {
 		return ret;
 
 	}
+	public static void executeCMD(String[] cmdarray, String[] envp, File dir) {
+		System.out.format("%s %s %s\n", cmdarray[0], cmdarray[1], cmdarray[2]);
+		try {
+			Process proc = Runtime.getRuntime().exec(cmdarray, envp, dir);
+			InputStream stdin = proc.getInputStream();
+			InputStreamReader isr = new InputStreamReader(stdin);
 
+			BufferedReader br = new BufferedReader(isr);
+			String line = null;
+
+			while ((line = br.readLine()) != null)
+				System.out.println(line);
+			System.out.println("");
+			int exitVal = proc.waitFor();
+			System.out.println("Process exitValue: " + exitVal);
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	private static void addTable(Sheet sheet) {
 		// TODO Auto-generated method stub
 		String tbname = cleanChars(sheet.getName());

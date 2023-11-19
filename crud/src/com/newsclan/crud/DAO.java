@@ -236,7 +236,11 @@ public class DAO {
 	}
 
 	private static void getTextArea(Field field, StringBuffer ret, String[] value) {
-		ret.append("<textarea class=ckeditor name='");
+		if(field.table.equals("tb_tts")){
+			ret.append("<textarea class=not_ckeditor name='");
+		}else{
+			ret.append("<textarea class=ckeditor name='");
+		}
 		ret.append(field.name);
 		ret.append("' ");
 		ret.append(">");
@@ -257,6 +261,9 @@ public class DAO {
 		ret.append("value='");
 		if (value.length > 0)
 			ret.append(Tools.toHTML(value[0]));
+		else if (isFieldNumber(field)){
+			ret.append("0");
+		}
 		ret.append("' type='text' class='");
 		ret.append(getFormType(field));
 		if (field.ftable != null && !field.ftable.equals(""))
