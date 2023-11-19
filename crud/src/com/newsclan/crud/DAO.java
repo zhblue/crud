@@ -236,7 +236,11 @@ public class DAO {
 	}
 
 	private static void getTextArea(Field field, StringBuffer ret, String[] value) {
-		ret.append("<textarea class=ckeditor name='");
+		if(field.table.equals("tb_tts")){
+			ret.append("<textarea class=not_ckeditor name='");
+		}else{
+			ret.append("<textarea class=ckeditor name='");
+		}
 		ret.append(field.name);
 		ret.append("' ");
 		ret.append(">");
@@ -266,7 +270,6 @@ public class DAO {
 			ret.append("' postLoad='1' fr='" + field.ftable);
 		ret.append("'>");
 	}
-
 
 	public static String getFormType(Field f) {
 		// TODO Auto-generated method stub

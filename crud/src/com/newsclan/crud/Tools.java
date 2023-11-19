@@ -622,7 +622,25 @@ public class Tools {
 		return ret;
 
 	}
+	public static void executeCMD(String[] cmdarray, String[] envp, File dir) {
+		
+		try {
+			Process proc = Runtime.getRuntime().exec(cmdarray, envp, dir);
+			InputStream stdin = proc.getInputStream();
+			InputStreamReader isr = new InputStreamReader(stdin);
 
+			BufferedReader br = new BufferedReader(isr);
+			String line = null;
+			
+			while((line=br.readLine())!=null){
+                System.out.println(line);
+            }
+			br.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} 
+	}
 	private static void addTable(Sheet sheet) {
 		// TODO Auto-generated method stub
 		String tbname = cleanChars(sheet.getName());
@@ -1043,5 +1061,17 @@ public class Tools {
 		ret.put("description", description);
 
 		return ret;
+	}
+
+	public static void writeFile(String file, String content) {
+		// TODO Auto-generated method stub
+		try {
+			PrintStream ps=new PrintStream(new FileOutputStream(file));
+			ps.println(content);
+			ps.close();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
