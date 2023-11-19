@@ -284,6 +284,20 @@ INSERT INTO `user` VALUES (0,'guest','4143ee6ed7ff640f2dc9a15271ff304d4bb5f117')
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
+alter table tb_manual_task add column output_file varchar(255) default '' after user_id;
+
+ CREATE TABLE `tb_ai_voice` (
+  `id` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `tb_manual_task_id` bigint unsigned DEFAULT '0',
+  `start_time` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `end_time` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  `lines` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `clip_file` varchar(255) COLLATE utf8_bin DEFAULT NULL,
+  `input_user` varchar(32) COLLATE utf8_bin DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=191 DEFAULT CHARSET=utf8mb3 COLLATE=utf8_bin 
+
+   
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
 /*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
