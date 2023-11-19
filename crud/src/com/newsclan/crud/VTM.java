@@ -34,7 +34,7 @@ public class VTM {
 		long ret = 0l;
 		// TODO Auto-generated method stub
 		try {
-			String s = ".";
+			String s = "\\.";
 			if (stamp.contains(","))
 				s = ",";
 			String[] tm = stamp.split(s);
@@ -48,6 +48,7 @@ public class VTM {
 			ret = ret * 1000 + ms;
 		} catch (Exception e) {
 			e.printStackTrace();
+			System.err.println("Do NOT understand:"+stamp);
 		}
 		return ret;
 	}

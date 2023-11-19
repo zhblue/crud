@@ -72,7 +72,8 @@ public class TTS implements Runnable{
 		String text=DAO.queryString("select content from tb_tts where id=?", id);
 		String speed=DAO.queryString("select speed from tb_tts where id=?", id);
 		para.put("speed", speed);
-		para.put("vid", "0");
+		para.put("volume", "10");
+		para.put("read_number", "3");
 		new Thread(new TTS(text,targetFile,para,id)).start();	
 	}
 	public static void buildAIVoice(Long id){
