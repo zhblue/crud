@@ -61,10 +61,14 @@
 		//$("#main tr :last-child").css("background","#eeeeee");
 		var buttons="<td>";
 		if(tableName=='tb_manual_task'){
+			buttons+="<span class='btn btn-primary' onclick='buildAIVoice(dbid(window.event))' >AI配音</span>";	
 			buttons+="<span class='btn btn-primary' onclick='view(dbid(window.event))' >打开</span>";	
 		}	
 		if(tableName=='tb_build_task'){
 			buttons+="<span class='btn btn-primary' onclick='build(dbid(window.event))' >启动</span>";	
+		}	
+		if(tableName=='tb_tts'){
+			buttons+="<span class='btn btn-primary' onclick='buildTTS(dbid(window.event))' >启动TTS</span>";	
 		}	
 		buttons+="<span class='glyphicon glyphicon-eye-open'></span>"+
 		"<span class='glyphicon glyphicon-edit'></span>"
@@ -144,7 +148,7 @@
 		            stepMinute: 1,
 		            stepSecond: 1
 		        });
-		if(tableName.endsWith('config')){
+		if(tableName.endsWith('config')||tableName.endsWith('tb_tts')){
 			$("textarea").attr("rows",20).attr("cols",80);
 		}else{
 				$("textarea").ckeditor();
@@ -224,6 +228,7 @@
 			}
 		});
 	}
+
 	function reformatview(){
 		$("span[name$=_id]").each(function(){
 			loadSelect($(this));
@@ -291,7 +296,70 @@
 		lastLoad="reportPage(0);";
 		return false;
 	}
-	
+	var cdInter;
+	function countDown(id){
+	    let old=parseInt($("span[tb=tb_tts][fd=done][rid="+id+"]").text());
+	    if(old>1){
+		    old--;
+		    $("span[tb=tb_tts][fd=done][rid="+id+"]").text(old)
+	    }else{
+		window.clearInterval(cdInter);
+	    }
+
+	}
+	function buildAIVoice(id){
+		if(id!=null){
+			$.post("callStatic.jsp",{"c":"com.newsclan.crud.TTS","m":"buildAIVoice",
+				"id":id
+					},
+			    function(data,status,xhr){
+					console,log("done");	
+			    }
+			,"json");
+			let ETA=$("span[fd=fastsave][rid="+id+"]").text().length*25+5000;
+			console.log("TTS ETA:"+ETA);
+			$("span[fd=fastsave][rid="+id+"]").text(ETA/1000);
+			cdInter=window.setInterval("countDown("+id+")",1000);
+			window.clearTimeout(inter);
+			inter=window.setTimeout('refresh()',ETA);
+		}
+	}
+	function buildTTS(id){
+		if(id!=null){
+			$.post("callStatic.jsp",{"c":"com.newsclan.crud.TTS","m":"buildTTS",
+				"id":id
+					},
+			    function(data,status,xhr){
+					console,log("done");	
+			    }
+			,"json");
+			let ETA=$("span[tb=tb_tts][fd=content][rid="+id+"]").text().length*25+5000;
+			console.log("TTS ETA:"+ETA);
+			$("span[tb=tb_tts][fd=done][rid="+id+"]").text(ETA/1000);
+			cdInter=window.setInterval("countDown("+id+")",1000);
+			window.clearTimeout(inter);
+			inter=window.setTimeout('refresh()',ETA);
+		}
+	}
+	function playAudio(ele,src){
+		let code="<audio src='"+src+"' controls ></audio>";
+		$(ele).html(code);
+	}
+	function add_value(tbname){
+		let newValue=prompt(tbname,"");	
+		if(newValue!=null){
+			$.post("callStatic.jsp",{"c":"com.newsclan.crud.Tools","m":"insert",
+				"tbname":tbname,
+				"newValue":newValue,
+					},
+			    function(data,status,xhr){
+				console.log("new_id:"+data.id);
+				let newOption="<option value='"+data.id+"' selected >"+newValue+"</option>";
+				$("select[name="+tbname+"_id]").append(newOption);
+			    }
+			,"json");
+		}
+	}
 	function submitAdd(tbname){
 		var data=$("#addForm").serialize();
 		$.post("add.jsp",data,new function(){
@@ -306,6 +374,7 @@
 			 window.setTimeout("mainLoad('"+tbname+"',0,'"+searchKeyword+"')",1000);
 		});
 	}
+	
 	function addTable(){
 		$("#main").empty();
 		$("#main").append("<form method=post onSubmit='submitTable()' id='frmAddTable'><table id='tb_adding' class='table table-striped table-hover'></table></form>");
@@ -323,6 +392,7 @@
 		row+="</tr>";
 		$("#tb_adding").append(row);
 	}
+	
 	function search(keyword){
 		window.clearTimeout(inter);
 		if(lastLoad.indexOf("selectMenu")!=-1){
@@ -353,11 +423,12 @@
             if(theEvent.target==$("#keyword")[0]){
             		search($("#keyword").val());
             		$("#keyword")[0].select();
+            		return false;
             }
             if(theEvent.target.tagName=="INPUT"){
          	   $(theEvent.target).parent().parent().next("tr").find("input").focus();
+            		return false;
             }	
-            return false;
         }
         return true;
     }
