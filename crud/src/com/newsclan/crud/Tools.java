@@ -652,10 +652,20 @@ public class Tools {
 	public static void executeCMD(String[] cmdarray, String[] envp, File dir) {
 
 		try {
+			System.out.print("Executing...  :\n\t");
+			for(String cmd:cmdarray){
+				System.out.print(" "+cmd);
+			}
+			System.out.println();
 			Process proc = Runtime.getRuntime().exec(cmdarray, envp, dir);
 			purgeStream(proc.getInputStream());
 			purgeStream(proc.getErrorStream());
+			proc.waitFor();
+			proc.destroy();
 		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

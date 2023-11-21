@@ -67,16 +67,16 @@ public class AIVoiceRunner implements Runnable {
 	private static String attachVoice(String movie_file, List<String> start_time, List<String> mp3File, String newFile) {
 		// TODO Auto-generated method stub
 		String[] envp = new String[] {};
-		String[] cmdarray = new String[2];
+		String[] cmdarray = new String[3];
 		cmdarray[0] = "/bin/bash";
-		//cmdarray[1] = "-c";
+		cmdarray[1] = "-c";
 		String targetDir=Config.path+"output/"+Tools.today();
 		File dir=new File(targetDir);
 		if(!dir.exists()) dir.mkdirs();
-		cmdarray[1] = Config.path + "WEB-INF/attach_"+Tools.today()+Math.random()+".sh";
-		System.out.format("execute:%s %s\n",cmdarray[0] ,cmdarray[1]);
-		Tools.writeFile(cmdarray[1],"/usr/bin/ffmpeg -loglevel quiet "+videoAddWav(movie_file,start_time,mp3File,newFile));
+		cmdarray[2] = Config.path + "WEB-INF/attach.sh";
+		cmdarray[2] += videoAddWav(movie_file,start_time,mp3File,newFile);
 		Tools.executeCMD(cmdarray, envp, dir);
+		//new File(cmdarray[1]).delete();
 		return newFile;
 	}
 	public static void main(String [] args){
@@ -88,7 +88,7 @@ public class AIVoiceRunner implements Runnable {
 	}
 	public static String videoAddWav(String mp4Path, List<String>time_list,List<String> wav_list,String newFile) {
 		
-        StringBuffer cmd = new StringBuffer("-y -i "+mp4Path);
+        StringBuffer cmd = new StringBuffer(" -y -i "+mp4Path);
         StringBuffer cmd2 = new StringBuffer(" -filter_complex \'");
         StringBuffer cmd3 = new StringBuffer("[0]");
         for(int i=0;i<wav_list.size();i++){
