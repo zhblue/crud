@@ -98,7 +98,8 @@
 
 
 </body>
-<script src="main.js?v=0.24"></script>
+<script src="main.js?v=0.263"></script>
+
 <!-- <script src="LodopFuncs.js"></script> -->
 <!-- <script src="printTemple.js?v=0.1" type="text/javascript"> -->
 </script>
