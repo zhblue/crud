@@ -288,16 +288,15 @@ public class Tools {
 	}
 
 	public static void main(String[] args) {
-		
-	
-		
+
 	}
-	public static String getFileContent(String file){
-		StringBuffer sb=new StringBuffer();
+
+	public static String getFileContent(String file) {
+		StringBuffer sb = new StringBuffer();
 		try {
-			FileReader fr=new FileReader(file);
-			Scanner sc=new Scanner(fr);
-			while(sc.hasNextLine()){
+			FileReader fr = new FileReader(file);
+			Scanner sc = new Scanner(fr);
+			while (sc.hasNextLine()) {
 				sb.append(sc.nextLine());
 				sb.append("\n");
 			}
@@ -308,10 +307,11 @@ public class Tools {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		return sb.toString();
 	}
-    public static List<byte[]> getRawData(String response) {
+
+	public static List<byte[]> getRawData(String response) {
 		ObjectMapper om = new ObjectMapper();
 		// TODO Auto-generated method stub
 
@@ -321,13 +321,13 @@ public class Tools {
 		try {
 			while ((temp = br.readLine()) != null) {
 				JsonNode tree = om.readTree(temp);
-				if(tree!=null&&tree.get("result")!=null&&tree.get("result").get("data")!=null){
+				if (tree != null && tree.get("result") != null && tree.get("result").get("data") != null) {
 					String part = tree.get("result").get("data").asText();
 					if (part != null)
 						ret.add(Base64.getDecoder().decode(part));
-				}else{
-					
-					//System.err.println(temp);
+				} else {
+
+					// System.err.println(temp);
 				}
 				// rawVoice.append("\n");
 			}
@@ -622,25 +622,55 @@ public class Tools {
 		return ret;
 
 	}
-	public static void executeCMD(String[] cmdarray, String[] envp, File dir) {
-		
-		try {
-			Process proc = Runtime.getRuntime().exec(cmdarray, envp, dir);
-			InputStream stdin = proc.getInputStream();
-			InputStreamReader isr = new InputStreamReader(stdin);
 
-			BufferedReader br = new BufferedReader(isr);
-			String line = null;
-			
-			while((line=br.readLine())!=null){
-                System.out.println(line);
-            }
-			br.close();
+	public static void purgeStream(final InputStream inputStream) {
+		new Thread() {
+			public void run() {
+
+				InputStream stdin = inputStream;
+				InputStreamReader isr = new InputStreamReader(stdin);
+				BufferedReader br = new BufferedReader(isr);
+				String line = null;
+				try {
+					while ((line = br.readLine()) != null) {
+						System.out.println(line);
+					}
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				try {
+					br.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}.start();
+	}
+
+	public static void executeCMD(String[] cmdarray, String[] envp, File dir) {
+
+		try {
+			System.out.print("Executing...  :\n\t");
+			for(String cmd:cmdarray){
+				System.out.print(" "+cmd);
+			}
+			System.out.println();
+			Process proc = Runtime.getRuntime().exec(cmdarray, envp, dir);
+			purgeStream(proc.getInputStream());
+			purgeStream(proc.getErrorStream());
+			proc.waitFor();
+			proc.destroy();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		} 
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
+
 	private static void addTable(Sheet sheet) {
 		// TODO Auto-generated method stub
 		String tbname = cleanChars(sheet.getName());
@@ -1066,7 +1096,7 @@ public class Tools {
 	public static void writeFile(String file, String content) {
 		// TODO Auto-generated method stub
 		try {
-			PrintStream ps=new PrintStream(new FileOutputStream(file));
+			PrintStream ps = new PrintStream(new FileOutputStream(file));
 			ps.println(content);
 			ps.close();
 		} catch (FileNotFoundException e) {
