@@ -298,11 +298,12 @@ public class DAO {
 		Connection conn = DB.getConnection();
 		try {
 			DatabaseMetaData dbmd = conn.getMetaData();
-			ResultSet tbs = dbmd.getTables(null, null, null, null);
+			Statement stmt=conn.createStatement();
+			ResultSet tbs = stmt.executeQuery("show tables"); //dbmd.getTables(null, null, null, null);
 			while (tbs.next()) {
-				if(!Character.isUpperCase(tbs.getString("TABLE_NAME").charAt(0)))
-					ret.add(tbs.getString("TABLE_NAME"));
-			}
+				if(!Character.isUpperCase(tbs.getString(1).charAt(0)))
+					ret.add(tbs.getString(1));
+			} 
 			DB.close(tbs);
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
