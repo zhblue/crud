@@ -46,7 +46,7 @@ CREATE TABLE party_material (
     party_activity_id INT COMMENT '关联活动ID',
     material_type_id INT NOT NULL COMMENT '材料类型ID',
     submit_time DATETIME NOT NULL COMMENT '提交时间',
-    original_file VARCHAR(200) NOT NULL COMMENT '文件路径',
+    original_file VARCHAR(200) NOT NULL COMMENT '附件文件',
     INDEX idx_material (material_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
