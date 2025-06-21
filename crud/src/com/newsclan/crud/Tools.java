@@ -18,8 +18,8 @@ import java.util.zip.*;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 
 import jxl.Cell;
 import jxl.Sheet;
@@ -988,9 +988,27 @@ public class Tools {
 	}
 
 	public static void main(String[] args) {
-		String url = "https://item.taobao.com/item.htm?spm=a1z10.5-c-s.w4002-21768955287.13.7fdc6374rE4jwf&id=596049223621";
-		Map data = getTaobao(url);
-		System.out.println(data.toString());
+		Config.prop=new Properties();
+		try {
+			Config.prop.load(new FileInputStream("WebContent/WEB-INF/db.prop"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println("start");
+		List <List> data=DAO.queryList("select plan,baseline,rank,school_num,special_code from zj2023pt1 limit 10000000000000", false);
+		System.out.println("...");
+		for(List row:data) {
+			System.out.println(row.get(0));
+			DAO.update("update zj2024pt1 set plan23=?,baseline23=?,rank23=? where school_num=? and special_code=?",
+					row.get(0),row.get(1),row.get(2),row.get(3),row.get(4));
+			System.out.println(row.get(1));
+		}
+		System.out.println("end");
+		System.exit(0);
 	}
 
 	public static Map getTaobao(String url) {
