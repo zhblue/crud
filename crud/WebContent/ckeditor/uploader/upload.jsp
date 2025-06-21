@@ -21,7 +21,7 @@
 <body>   
 <%  
 int user_id=-1;
-int year=Calendar.getInstance().get(Calendar.YEAR);
+int year=Calendar.getInstance().get(Calendar.YEAR); 
 
 try{
 	user_id=Tools.getUserId(session);
@@ -29,7 +29,7 @@ try{
 }catch(Exception e){return;}
 
 String path = request.getContextPath() ;  
-if(ServletFileUpload.isMultipartContent(request)){  
+if(ServletFileUpload.isMultipartContent(new RC(request))){  
     String type = "";  
     String input_name=request.getParameter("input_name");
 
@@ -39,7 +39,7 @@ if(ServletFileUpload.isMultipartContent(request)){
     FileItemFactory factory = new DiskFileItemFactory();  
     ServletFileUpload servletFileUpload = new ServletFileUpload(factory);  
     servletFileUpload.setHeaderEncoding("UTF-8");//解决文件名乱码的问题  
-    List<FileItem> fileItemsList = servletFileUpload.parseRequest(request);  
+    List<FileItem> fileItemsList = servletFileUpload.parseRequest(new RC(request));  
     for (FileItem item : fileItemsList) {  
         if (!item.isFormField()) {  
         	String fileName = item.getName(); 
