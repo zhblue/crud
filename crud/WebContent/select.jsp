@@ -9,9 +9,12 @@
 		
 		if (tbname != null) {
 			tbname=tbname.replace("`", "");
+			if(!DAO.hasTable(tbname)&&DAO.hasTable(Config.sysPrefix+tbname))
+				tbname=Config.sysPrefix+tbname;
 			if(!DAO.hasTable(tbname)&&DAO.hasTable(DAO.table_prefix+tbname))
 				tbname=DAO.table_prefix+tbname;
 			out.println(Tools.toSelect(tbname,value,keyword,keyvalue,input_name)); 
 		} 
 		
 	%><a href="#" onclick="add_value('<%=tbname%>')">Add</a>
+
